@@ -11,6 +11,7 @@ use Ydnnov\Catalog\Models\Filter;
  * @property int $filter_id
  * @property string $name
  * @property string $description
+ * @property int $sort_order
  */
 class FilteroptionBase extends Model
 {

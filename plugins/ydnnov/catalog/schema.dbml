@@ -54,6 +54,7 @@ table filteroption{
   filter_id int
   name varchar
   description text
+  sort_order int
 }
 
 table filteroption_product{
