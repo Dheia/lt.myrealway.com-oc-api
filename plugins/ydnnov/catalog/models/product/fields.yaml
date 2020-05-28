@@ -1,17 +1,21 @@
 fields:
-    id:
-        label: id
-        span: auto
-        type: text
-    main_category_id:
-        label: main_category_id
-        span: auto
-        type: text
     name:
         label: name
         span: auto
         type: text
-    description:
-        label: description
+    main_category:
+        label: Main category
         span: auto
-        type: text
+        type: relation
+tabs:
+    fields:
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
+        main_image:
+            label: Main image
+            span: left
+            type: fileupload
+            tab: Images

@@ -1,29 +1,22 @@
 fields:
-    id:
-        label: id
-        span: auto
-        type: text
-    parent_id:
-        label: parent_id
-        span: auto
-        type: text
-    nest_left:
-        label: nest_left
-        span: auto
-        type: text
-    nest_right:
-        label: nest_right
-        span: auto
-        type: text
-    nest_depth:
-        label: nest_depth
-        span: auto
-        type: text
     name:
-        label: name
-        span: auto
+        label: Name
+        span: left
         type: text
-    description:
-        label: description
-        span: auto
-        type: text
+    parent:
+        label: Parent
+        span: right
+        type: relation
+        emptyOption: '-- None --'
+tabs:
+    fields:
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
+        main_image:
+            label: Main image
+            span: full
+            type: fileupload
+            tab: Images

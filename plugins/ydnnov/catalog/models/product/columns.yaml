@@ -2,9 +2,14 @@ columns:
     id:
         label: id
         type: text
-    main_category_id:
-        label: main_category_id
-        type: text
+    main_image:
+        label: Main image
+        type: partial
+        path: $/ydnnov/ocext/partials/column_image.htm
+    main_category:
+        label: main category
+        relation: main_category
+        select: name
     name:
         label: name
         type: text

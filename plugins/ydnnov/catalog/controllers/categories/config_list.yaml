@@ -4,7 +4,8 @@ title: Categories
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true
 showCheckboxes: true
-recordsPerPage: 20
+showTree: true
+#recordsPerPage: 20
 toolbar:
     buttons: list_toolbar
     search:

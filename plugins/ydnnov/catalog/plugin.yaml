@@ -18,27 +18,11 @@ navigation:
                 label: Products
                 url: ydnnov/catalog/products
                 icon: icon-sitemap
-            side-menu-categories-products:
-                label: 'Categories Products'
-                url: ydnnov/catalog/categoriesproducts
-                icon: icon-sitemap
             side-menu-bundles:
                 label: Bundles
                 url: ydnnov/catalog/bundles
                 icon: icon-sitemap
-            side-menu-bundles-products:
-                label: 'Bundles Products'
-                url: ydnnov/catalog/bundlesproducts
-                icon: icon-sitemap
             side-menu-filters:
                 label: Filters
                 url: ydnnov/catalog/filters
-                icon: icon-sitemap
-            side-menu-filteroptions:
-                label: Filteroptions
-                url: ydnnov/catalog/filteroptions
-                icon: icon-sitemap
-            side-menu-filteroptions-products:
-                label: 'Filteroptions Products'
-                url: ydnnov/catalog/filteroptionsproducts
                 icon: icon-sitemap

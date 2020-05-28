@@ -2,18 +2,10 @@ columns:
     id:
         label: id
         type: text
-    parent_id:
-        label: parent_id
-        type: text
-    nest_left:
-        label: nest_left
-        type: text
-    nest_right:
-        label: nest_right
-        type: text
-    nest_depth:
-        label: nest_depth
-        type: text
+    main_image:
+        label: Main image
+        type: partial
+        path: $/ydnnov/ocext/partials/column_image.htm
     name:
         label: name
         type: text

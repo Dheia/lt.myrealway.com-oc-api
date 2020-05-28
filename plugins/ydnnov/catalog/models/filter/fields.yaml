@@ -1,17 +1,31 @@
 fields:
-    id:
-        label: id
-        span: auto
-        type: text
-    type:
-        label: type
-        span: auto
-        type: text
+#    type:
+#        label: type
+#        span: auto
+#        type: text
     name:
-        label: name
-        span: auto
+        label: Name
+        span: left
         type: text
-    description:
-        label: description
-        span: auto
-        type: text
+tabs:
+    fields:
+        options_repeater:
+            label: Options
+            span: full
+            type: repeater
+            form:
+                fields:
+                    id:
+                        type: text
+                        containerAttributes:
+                            style: 'display: none'
+                    name:
+                        label: Option
+                        span: full
+                        type: text
+            tab: Options
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
