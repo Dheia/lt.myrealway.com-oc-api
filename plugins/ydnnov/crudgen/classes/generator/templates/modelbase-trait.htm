@@ -1,0 +1,36 @@
+<?php namespace {{ model.getNamespace() }}base;
+
+use October\Rain\Database\Model;
+{% for relation in model.hasMany %}
+use {{ relation.relatedModel.getQualifiedClassname() }};
+{% endfor %}
+{% for relation in model.belongsTo %}
+use {{ relation.relatedModel.getQualifiedClassname() }};
+{% endfor %}
+
+/**
+ * Class {{ model.getClassName() }}Base
+ * @package {{ model.getNamespace() }}base
+{% for column in model.columns %}
+ * @property {{ column.getPhpType() }} ${{ column.column.name }}
+{% endfor %}
+ */
+class {{ model.getClassName() }}Base extends Model
+{
+    public $timestamps = false;
+
+    public $table = '{{ model.getQualifiedTableName() }}';
+
+    public $hasMany = [
+{% for relation in model.hasMany %}
+        '{{ relation.getRelationKey() }}' => [{{ relation.relatedModel.getClassname() }}::class],
+{% endfor %}
+    ];
+
+    public $belongsTo = [
+{% for relation in model.belongsTo %}
+        '{{ relation.getRelationKey() }}' => [{{ relation.relatedModel.getClassname() }}::class],
+{% endfor %}
+    ];
+
+}

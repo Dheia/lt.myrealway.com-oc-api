@@ -1,0 +1,7 @@
+\Schema::create('{{ table_prefix }}_{{ table_name }}', function($table)
+{
+{{ "    $table->engine = 'InnoDB'" }};
+{% for column in columns %}
+    $table->{{ column.method }}('{{ column.name }}'){{ column.nullable | raw }};
+{% endfor %}
+});

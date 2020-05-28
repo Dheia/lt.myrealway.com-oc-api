@@ -1,0 +1,55 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "344962cb5103551e47af35aae20c5429",
+    "packages": [
+        {
+            "name": "mhd-jalilvand/php-dbml-parser",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mhd-jalilvand/php-dbml-parser.git",
+                "reference": "864eff3c9fb71d920925879a981fbe749f840293"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mhd-jalilvand/php-dbml-parser/zipball/864eff3c9fb71d920925879a981fbe749f840293",
+                "reference": "864eff3c9fb71d920925879a981fbe749f840293",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DbmlParser\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mehdi Jalilvand",
+                    "email": "mhd.jalilvand@gmail.com"
+                }
+            ],
+            "description": "PHP Parser for database markup language (dbml)",
+            "time": "2020-02-17T16:07:14+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}
