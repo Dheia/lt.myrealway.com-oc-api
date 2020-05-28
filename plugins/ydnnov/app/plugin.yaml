@@ -1,0 +1,6 @@
+plugin:
+    name: 'ydnnov.app::lang.plugin.name'
+    description: 'ydnnov.app::lang.plugin.description'
+    author: Ydnnov
+    icon: oc-icon-adjust
+    homepage: ''
