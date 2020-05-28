@@ -1,0 +1,10 @@
+name: Bundles
+form: $/ydnnov/catalog/models/bundle/fields.yaml
+modelClass: Ydnnov\Catalog\Models\Bundle
+defaultRedirect: ydnnov/catalog/bundles
+create:
+    redirect: 'ydnnov/catalog/bundles/update/:id'
+    redirectClose: ydnnov/catalog/bundles
+update:
+    redirect: ydnnov/catalog/bundles
+    redirectClose: ydnnov/catalog/bundles

@@ -1,0 +1,29 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    parent_id:
+        label: parent_id
+        span: auto
+        type: text
+    nest_left:
+        label: nest_left
+        span: auto
+        type: text
+    nest_right:
+        label: nest_right
+        span: auto
+        type: text
+    nest_depth:
+        label: nest_depth
+        span: auto
+        type: text
+    name:
+        label: name
+        span: auto
+        type: text
+    description:
+        label: description
+        span: auto
+        type: text

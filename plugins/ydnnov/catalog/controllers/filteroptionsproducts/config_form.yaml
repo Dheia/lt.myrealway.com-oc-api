@@ -1,0 +1,10 @@
+name: FilteroptionsProducts
+form: $/ydnnov/catalog/models/filteroptionproduct/fields.yaml
+modelClass: Ydnnov\Catalog\Models\FilteroptionProduct
+defaultRedirect: ydnnov/catalog/filteroptionsproducts
+create:
+    redirect: 'ydnnov/catalog/filteroptionsproducts/update/:id'
+    redirectClose: ydnnov/catalog/filteroptionsproducts
+update:
+    redirect: ydnnov/catalog/filteroptionsproducts
+    redirectClose: ydnnov/catalog/filteroptionsproducts

@@ -1,0 +1,13 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    filteroption_id:
+        label: filteroption_id
+        span: auto
+        type: text
+    product_id:
+        label: product_id
+        span: auto
+        type: text

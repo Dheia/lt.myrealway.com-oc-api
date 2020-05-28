@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: id
+        type: text
+    bundle_id:
+        label: bundle_id
+        type: text
+    product_id:
+        label: product_id
+        type: text

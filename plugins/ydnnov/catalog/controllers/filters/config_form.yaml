@@ -1,0 +1,10 @@
+name: Filters
+form: $/ydnnov/catalog/models/filter/fields.yaml
+modelClass: Ydnnov\Catalog\Models\Filter
+defaultRedirect: ydnnov/catalog/filters
+create:
+    redirect: 'ydnnov/catalog/filters/update/:id'
+    redirectClose: ydnnov/catalog/filters
+update:
+    redirect: ydnnov/catalog/filters
+    redirectClose: ydnnov/catalog/filters

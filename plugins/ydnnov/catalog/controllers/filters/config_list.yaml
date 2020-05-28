@@ -1,0 +1,12 @@
+list: $/ydnnov/catalog/models/filter/columns.yaml
+modelClass: Ydnnov\Catalog\Models\Filter
+title: Filters
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'ydnnov/catalog/filters/update/:id'

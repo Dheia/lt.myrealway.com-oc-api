@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: id
+        type: text
+    main_category_id:
+        label: main_category_id
+        type: text
+    name:
+        label: name
+        type: text
+    description:
+        label: description
+        type: text

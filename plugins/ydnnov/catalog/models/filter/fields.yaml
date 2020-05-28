@@ -1,0 +1,17 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    type:
+        label: type
+        span: auto
+        type: text
+    name:
+        label: name
+        span: auto
+        type: text
+    description:
+        label: description
+        span: auto
+        type: text

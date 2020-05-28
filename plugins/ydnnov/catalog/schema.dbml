@@ -1,0 +1,68 @@
+table category{
+  id int [pk, increment]
+  parent_id int
+  nest_left int
+  nest_right int
+  nest_depth int
+  name varchar
+  description text
+}
+
+table product{
+  id int [pk, increment]
+  main_category_id int
+  name varchar
+  description text
+}
+
+ref: product.main_category_id > category.id
+
+table category_product{
+  id int [pk, increment]
+  category_id int
+  product_id int
+}
+
+ref: category_product.category_id > category.id
+ref: category_product.product_id > product.id
+
+table bundle{
+  id int [pk, increment]
+  name varchar
+  description text
+  price_override int
+}
+
+table bundle_product{
+  id int [pk, increment]
+  bundle_id int
+  product_id int
+}
+
+ref: bundle_product.bundle_id > bundle.id
+ref: bundle_product.product_id > product.id
+
+table filter{
+  id int [pk, increment]
+  type varchar
+  name varchar
+  description text
+}
+
+table filteroption{
+  id int [pk, increment]
+  filter_id int
+  name varchar
+  description text
+}
+
+table filteroption_product{
+  id int [pk, increment]
+  filteroption_id int
+  product_id int
+}
+
+ref: filteroption.filter_id > filter.id
+ref: filteroption_product.filteroption_id > filteroption.id
+ref: filteroption_product.product_id > product.id
+
