@@ -15,14 +15,18 @@ tabs:
             type: repeater
             form:
                 fields:
-                    id:
-                        type: text
-                        containerAttributes:
-                            style: 'display: none'
                     name:
                         label: Option
                         span: full
                         type: text
+                    id:
+                        type: text
+                        containerAttributes:
+                            style: 'display: none'
+                    sort_order:
+                        type: text
+                        containerAttributes:
+                            style: 'display: none'
             tab: Options
         description:
             label: Description
