@@ -1,16 +1,21 @@
 <?php namespace Ydnnov\Crudgen\Classes;
 
+use Illuminate\Support\Collection;
 use RainLab\Builder\Classes\PluginCode;
 
 class DbmlModel
 {
+    /** @var PluginCode */
     public $pluginCodeObj;
 
+    /** @var string */
     public $tableName;
 
-    public $hasMany = [];
+    /** @var Collection */
+    public $hasMany;
 
-    public $belongsTo = [];
+    /** @var Collection */
+    public $belongsTo;
 
     public $columns = [];
 
@@ -22,6 +27,8 @@ class DbmlModel
     {
         $this->pluginCodeObj = $pluginCodeObj;
         $this->tableName = $tableName;
+        $this->hasMany = new Collection();
+        $this->belongsTo = new Collection();
     }
 
     public function getQualifiedTableName()

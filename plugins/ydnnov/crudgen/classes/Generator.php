@@ -124,7 +124,7 @@ class Generator
 
             foreach ($this->parser->tables as $table)
             {
-                if ($thisTableName === $table->name)
+                if ($table->name === $thisTableName)
                 {
                     $model = $models[$thisTableName];
 
@@ -135,7 +135,7 @@ class Generator
                         $foreignColumnName
                     );
                 }
-                elseif ($foreignTableName === $table->name)
+                elseif ($table->name === $foreignTableName)
                 {
                     $model = $models[$foreignTableName];
 

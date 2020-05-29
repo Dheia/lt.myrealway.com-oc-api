@@ -7,12 +7,21 @@ use {{ relation.relatedModel.getQualifiedClassname() }};
 {% for relation in model.belongsTo %}
 use {{ relation.relatedModel.getQualifiedClassname() }};
 {% endfor %}
+{% if model.hasMany.count() %}
+use October\Rain\Database\Collection;
+{% endif %}
 
 /**
  * Class {{ model.getClassName() }}Base
  * @package {{ model.getNamespace() }}base
 {% for column in model.columns %}
  * @property {{ column.getPhpType() }} ${{ column.column.name }}
+{% endfor %}
+{% for relation in model.hasMany %}
+ * @property Collection ${{ relation.getRelationKey() }};
+{% endfor %}
+{% for relation in model.belongsTo %}
+ * @property {{ relation.relatedModel.getClassname() }} ${{ relation.getRelationKey() }};
 {% endfor %}
  */
 class {{ model.getClassName() }}Base extends Model
