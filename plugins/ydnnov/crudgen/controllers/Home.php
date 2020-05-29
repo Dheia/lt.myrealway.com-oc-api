@@ -25,7 +25,8 @@ class Home extends Controller
 
     public function index()
     {
-        return;
+        return '<a href="' . \Backend::url('ydnnov/crudgen/home/updatemodelsbase') . '">updateModelsbase</a>';
+
         $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
 
 //        return $this->createTables($generator);
@@ -35,6 +36,13 @@ class Home extends Controller
 //        return $generator->generateControllers();
 
         $this->cleanStart($generator);
+    }
+
+    public function updateModelsbase()
+    {
+        $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
+
+        $generator->generateModels();
     }
 
     /**

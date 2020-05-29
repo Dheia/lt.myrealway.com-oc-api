@@ -149,7 +149,7 @@ class Generator
             }
         }
 
-        $baseStubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/modelbase-trait.htm');
+        $baseStubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/modelbase.htm');
 
         $stubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/model.htm');
 
