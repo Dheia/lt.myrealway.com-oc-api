@@ -10,6 +10,8 @@ use Ydnnov\Catalog\Models\Product;
  * @property int $id
  * @property int $filteroption_id
  * @property int $product_id
+ * @property Filteroption $filteroption;
+ * @property Product $product;
  */
 class FilteroptionProductBase extends Model
 {

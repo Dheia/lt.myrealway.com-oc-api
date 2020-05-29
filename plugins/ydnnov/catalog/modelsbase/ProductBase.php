@@ -5,6 +5,7 @@ use Ydnnov\Catalog\Models\CategoryProduct;
 use Ydnnov\Catalog\Models\BundleProduct;
 use Ydnnov\Catalog\Models\FilteroptionProduct;
 use Ydnnov\Catalog\Models\Category;
+use October\Rain\Database\Collection;
 
 /**
  * Class ProductBase
@@ -13,6 +14,10 @@ use Ydnnov\Catalog\Models\Category;
  * @property int $main_category_id
  * @property string $name
  * @property string $description
+ * @property Collection $product_categories;
+ * @property Collection $product_bundles;
+ * @property Collection $product_filteroptions;
+ * @property Category $main_category;
  */
 class ProductBase extends Model
 {

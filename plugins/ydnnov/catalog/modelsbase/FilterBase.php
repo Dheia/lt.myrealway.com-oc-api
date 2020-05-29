@@ -2,6 +2,7 @@
 
 use October\Rain\Database\Model;
 use Ydnnov\Catalog\Models\Filteroption;
+use October\Rain\Database\Collection;
 
 /**
  * Class FilterBase
@@ -10,6 +11,7 @@ use Ydnnov\Catalog\Models\Filteroption;
  * @property string $type
  * @property string $name
  * @property string $description
+ * @property Collection $filteroptions;
  */
 class FilterBase extends Model
 {

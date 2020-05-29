@@ -3,6 +3,7 @@
 use October\Rain\Database\Model;
 use Ydnnov\Catalog\Models\Product;
 use Ydnnov\Catalog\Models\CategoryProduct;
+use October\Rain\Database\Collection;
 
 /**
  * Class CategoryBase
@@ -14,6 +15,8 @@ use Ydnnov\Catalog\Models\CategoryProduct;
  * @property int $nest_depth
  * @property string $name
  * @property string $description
+ * @property Collection $products;
+ * @property Collection $category_products;
  */
 class CategoryBase extends Model
 {

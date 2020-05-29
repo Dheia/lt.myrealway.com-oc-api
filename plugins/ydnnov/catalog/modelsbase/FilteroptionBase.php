@@ -3,6 +3,7 @@
 use October\Rain\Database\Model;
 use Ydnnov\Catalog\Models\FilteroptionProduct;
 use Ydnnov\Catalog\Models\Filter;
+use October\Rain\Database\Collection;
 
 /**
  * Class FilteroptionBase
@@ -12,6 +13,8 @@ use Ydnnov\Catalog\Models\Filter;
  * @property string $name
  * @property string $description
  * @property int $sort_order
+ * @property Collection $filteroption_products;
+ * @property Filter $filter;
  */
 class FilteroptionBase extends Model
 {

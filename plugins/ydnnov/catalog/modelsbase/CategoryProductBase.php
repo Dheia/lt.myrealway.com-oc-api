@@ -10,6 +10,8 @@ use Ydnnov\Catalog\Models\Product;
  * @property int $id
  * @property int $category_id
  * @property int $product_id
+ * @property Category $category;
+ * @property Product $product;
  */
 class CategoryProductBase extends Model
 {

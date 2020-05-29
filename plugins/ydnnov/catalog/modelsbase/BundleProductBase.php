@@ -10,6 +10,8 @@ use Ydnnov\Catalog\Models\Product;
  * @property int $id
  * @property int $bundle_id
  * @property int $product_id
+ * @property Bundle $bundle;
+ * @property Product $product;
  */
 class BundleProductBase extends Model
 {

@@ -2,6 +2,7 @@
 
 use October\Rain\Database\Model;
 use Ydnnov\Catalog\Models\BundleProduct;
+use October\Rain\Database\Collection;
 
 /**
  * Class BundleBase
@@ -10,6 +11,7 @@ use Ydnnov\Catalog\Models\BundleProduct;
  * @property string $name
  * @property string $description
  * @property int $price_override
+ * @property Collection $bundle_products;
  */
 class BundleBase extends Model
 {
