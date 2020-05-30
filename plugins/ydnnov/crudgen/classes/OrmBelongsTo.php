@@ -1,27 +1,27 @@
 <?php namespace Ydnnov\Crudgen\Classes;
 
-class DbmlBelongsTo
+class OrmBelongsTo
 {
-    /** @var DbmlModel */
+    /** @var OrmModel */
     public $model;
 
     /** @var string */
     public $modelForeignKey;
 
-    /** @var DbmlModel */
+    /** @var OrmModel */
     public $relatedModel;
 
     /** @var string */
     public $relatedKey;
 
     /**
-     * DbmlBelongsTo constructor.
-     * @param DbmlModel $model
+     * OrmBelongsTo constructor.
+     * @param OrmModel $model
      * @param string $modelForeignKey
-     * @param DbmlModel $relatedModel
+     * @param OrmModel $relatedModel
      * @param string $relatedKey
      */
-    public function __construct(DbmlModel $model, $modelForeignKey, DbmlModel $relatedModel, $relatedKey)
+    public function __construct(OrmModel $model, string $modelForeignKey, OrmModel $relatedModel, string $relatedKey)
     {
         $this->model = $model;
         $this->modelForeignKey = $modelForeignKey;

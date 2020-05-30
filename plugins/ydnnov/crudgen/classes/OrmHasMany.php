@@ -1,27 +1,27 @@
 <?php namespace Ydnnov\Crudgen\Classes;
 
-class DbmlHasMany
+class OrmHasMany
 {
-    /** @var DbmlModel */
+    /** @var OrmModel */
     public $model;
 
     /** @var string */
     public $modelKey;
 
-    /** @var DbmlModel */
+    /** @var OrmModel */
     public $relatedModel;
 
     /** @var string */
     public $relatedForeignKey;
 
     /**
-     * DbmlHasMany constructor.
-     * @param DbmlModel $model
+     * OrmHasMany constructor.
+     * @param OrmModel $model
      * @param string $modelKey
-     * @param DbmlModel $relatedModel
+     * @param OrmModel $relatedModel
      * @param string $relatedForeignKey
      */
-    public function __construct(DbmlModel $model, $modelKey, DbmlModel $relatedModel, $relatedForeignKey)
+    public function __construct(OrmModel $model, string $modelKey, OrmModel $relatedModel, string $relatedForeignKey)
     {
         $this->model = $model;
         $this->modelKey = $modelKey;

@@ -2,15 +2,6 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
-use DbmlParser\Parser;
-use RainLab\Builder\Classes\ModelModel;
-use RainLab\Builder\Classes\PluginCode;
-use System\Classes\PluginBase;
-use System\Classes\PluginManager;
-use Ydnnov\Crudgen\Classes\DbmlBelongsTo;
-use Ydnnov\Crudgen\Classes\DbmlColumn;
-use Ydnnov\Crudgen\Classes\DbmlHasMany;
-use Ydnnov\Crudgen\Classes\DbmlModel;
 use Ydnnov\Crudgen\Classes\Generator;
 
 class Home extends Controller
@@ -25,61 +16,63 @@ class Home extends Controller
 
     public function index()
     {
-        return '<a href="' . \Backend::url('ydnnov/crudgen/home/updatemodelsbase') . '">updateModelsbase</a>';
-
-        $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
-
-//        return $this->createTables($generator);
-//        return $generator->prettyPrint();
-//        $generator->generateModels();
-//        return $generator->generateMenus();
-//        return $generator->generateControllers();
-
-        $this->cleanStart($generator);
+        return collect((new \ReflectionClass($this))->getMethods(\ReflectionMethod::IS_PUBLIC))
+            ->filter(function ($item) {
+                /** @var \ReflectionMethod $item */
+                return $item->getDeclaringClass()->getName() === static::class &&
+                    $item->getName() !== '__construct';
+            })
+            ->map(function ($item) {
+                /** @var \ReflectionMethod $item */
+                $lname = strtolower($name = $item->getName());
+                return '<p><a href="' . \Backend::url("ydnnov/crudgen/home/$lname") . '">' . $name . '</a></p>';
+            })
+            ->implode('');
     }
 
-    public function updateModelsbase()
+    public function createTables()
     {
         $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
 
-        $generator->generateModels();
-    }
+        $migrationModels = $generator->generateMigrationModels();
 
-    /**
-     * @param Generator $generator
-     * @return string
-     */
-    protected function cleanStart($generator)
-    {
-        $this->createTables($generator, false);
-        $generator->generateModels();
-        $generator->generateMenus();
-        $generator->generateControllers();
-    }
+        $code = "<?php return [\n"
+            . collect($migrationModels)
+                ->map(function ($item) {
+                    return "new class {\n$item->code\n}";
+                })
+                ->implode(",\n")
+            . '];';
 
-    /**
-     * @param Generator $generator
-     * @return string
-     */
-    protected function createTables($generator, $dry = true)
-    {
-        $migrationsCode = implode("\n", $generator->generateMigrations());
+        file_put_contents(plugins_path('ydnnov/catalog/_migrations.php'), $code);
 
-        if (!$dry)
+        $migrations = require(plugins_path('ydnnov/catalog/_migrations.php'));
+
+        foreach ($migrations as $migration)
         {
-            file_put_contents(plugins_path('ydnnov/catalog/_schema.php'), <<<EOT
-<?php return function() {
-$migrationsCode
-};
-EOT
-            );
-
-            $migrationFn = require(plugins_path('ydnnov/catalog/_schema.php'));
-
-            $migrationFn();
+            $migration->up();
         }
+    }
 
-        return '<pre>' . $migrationsCode . '</pre>';
+    public function generateOrUpdateModels()
+    {
+        $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
+
+        $generator->generateOrmModels();
+    }
+
+    public function generateMenus()
+    {
+        $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
+
+        $generator->generateMenus();
+    }
+
+    public function generateControllers()
+    {
+        $generator = new Generator('Ydnnov.Catalog', plugins_path('ydnnov/catalog/schema.dbml'));
+
+        $generator->generateControllers();
     }
 
 }

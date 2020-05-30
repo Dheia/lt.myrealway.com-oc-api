@@ -3,7 +3,7 @@
 use Illuminate\Support\Collection;
 use RainLab\Builder\Classes\PluginCode;
 
-class DbmlModel
+class OrmModel
 {
     /** @var PluginCode */
     public $pluginCodeObj;

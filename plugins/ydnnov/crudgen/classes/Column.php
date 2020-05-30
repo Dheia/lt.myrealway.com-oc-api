@@ -1,23 +1,21 @@
 <?php namespace Ydnnov\Crudgen\Classes;
 
-use DbmlParser\Parser\Column;
-
-class DbmlColumn
+class Column
 {
     public static $dbmlToPhpTypes = [
-        'int'     => 'int',
-        'varchar' => 'string',
+        'integer' => 'int',
+        'string'  => 'string',
         'text'    => 'string',
     ];
 
-    /** @var Column */
+    /** @var object */
     public $column;
 
     /**
-     * DbmlColumn constructor.
-     * @param Column $column
+     * Column constructor.
+     * @param object $column
      */
-    public function __construct(Column $column)
+    public function __construct(object $column)
     {
         $this->column = $column;
     }

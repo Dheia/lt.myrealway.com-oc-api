@@ -2,23 +2,17 @@
 
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
-use DbmlParser\Parser;
 use RainLab\Builder\Classes\ControllerModel;
+use RainLab\Builder\Classes\DatabaseTableModel;
 use RainLab\Builder\Classes\PluginCode;
 
 class Generator
 {
-    /** @var string */
-    protected $pluginCode;
-
-    /** @var string */
-    protected $sourceDbmlFilePath;
-
-    /** @var Parser */
-    protected $parser;
-
     /** @var PluginCode */
     protected $pluginCodeObj;
+
+    /** @var DbmlSchema */
+    protected $schema;
 
     /**
      * Generator constructor.
@@ -27,132 +21,49 @@ class Generator
      */
     public function __construct($pluginCode, $sourceDbmlFilePath)
     {
-        $this->pluginCode = $pluginCode;
-        $this->sourceDbmlFilePath = $sourceDbmlFilePath;
-
-        $this->parser = new Parser($this->sourceDbmlFilePath);
         $this->pluginCodeObj = new PluginCode($pluginCode);
+
+        $this->schema = new DbmlSchema($sourceDbmlFilePath);
     }
 
-    public function generateMigrations()
+    public function generateMigrationModels()
     {
-        $methodMap = [
-            'int'     => 'integer',
-            'varchar' => 'string',
-            'text'    => 'text',
-        ];
+        $result = [];
 
         $tablePrefix = $this->pluginCodeObj->toDatabasePrefix();
 
-        $result = [];
-
-        foreach ($this->parser->tables as $table)
+        foreach ($this->schema->getTables() as $table)
         {
-            $migrationVars = [
-                'table_name'   => $table->name,
-                'table_prefix' => $tablePrefix,
-                'columns'      => [],
-            ];
+            $model = new DatabaseTableModel();
+
+            $model->setPluginCode($this->pluginCodeObj->toCode());
+
+            $model->name = $tablePrefix . '_' . $table->name;
+
+            $model->columns = [];
 
             foreach ($table->columns as $column)
             {
-                /** @var Parser\Column $column */
-
-                if ($column->PK && $column->Increment)
-                {
-                    $method = 'increments';
-                }
-                else
-                {
-                    $method = $methodMap[$column->type];
-                }
-
-                $migrationVars['columns'][] = [
-                    'name'     => $column->name,
-                    'method'   => $method,
-                    'nullable' => ($column->NotNull || $method === 'increments') ? '' : '->nullable()',
+                $model->columns[] = [
+                    'name'           => $column->name,
+                    'type'           => $column->type,
+                    'length'         => '',
+                    'unsigned'       => '',
+                    'allow_null'     => $column->nullable ? '1' : '',
+                    'auto_increment' => $column->auto_increment ? '1' : '',
+                    'primary_key'    => $column->pk ? '1' : '',
+                    'default'        => '',
                 ];
             }
 
-            $result[] = \Twig::parse(
-                file_get_contents(plugins_path('ydnnov/crudgen/classes/generator/templates/migrations.htm')),
-                $migrationVars
-            );
+            $result[] = $model->generateCreateOrUpdateMigration();
         }
 
         return $result;
     }
 
-    public function generateModels()
+    public function generateOrmModels()
     {
-        $models = [];
-
-        foreach ($this->parser->tables as $table)
-        {
-            /** @var Parser\Table $table */
-
-            $models[$table->name] = new DbmlModel($this->pluginCodeObj, $table->name);
-
-            foreach ($table->columns as $column)
-            {
-                $models[$table->name]->columns[] = new DbmlColumn($column);
-            }
-        }
-
-        foreach ($this->parser->relations as $relation)
-        {
-            $relationTypeStr = $relation->type->__toString();
-
-            if ($relationTypeStr === '>')
-            {
-                $thisTableName = $relation->table->name;
-                $thisColumnName = $relation->column->name;
-                $foreignTableName = $relation->foreign_table->name;
-                $foreignColumnName = $relation->foreign_column->name;
-            }
-            elseif ($relationTypeStr === '<')
-            {
-                $thisTableName = $relation->foreign_table->name;
-                $thisColumnName = $relation->foreign_column->name;
-                $foreignTableName = $relation->table->name;
-                $foreignColumnName = $relation->column->name;
-            }
-            else
-            {
-                throw new \Exception("Relation '$relationTypeStr' not implemented yet!");
-            }
-
-            foreach ($this->parser->tables as $table)
-            {
-                if ($table->name === $thisTableName)
-                {
-                    $model = $models[$thisTableName];
-
-                    $model->belongsTo[] = new DbmlBelongsTo(
-                        $model,
-                        $thisColumnName,
-                        $models[$foreignTableName],
-                        $foreignColumnName
-                    );
-                }
-                elseif ($table->name === $foreignTableName)
-                {
-                    $model = $models[$foreignTableName];
-
-                    $model->hasMany[] = new DbmlHasMany(
-                        $model,
-                        $foreignColumnName,
-                        $models[$thisTableName],
-                        $thisColumnName
-                    );
-                }
-            }
-        }
-
-        $baseStubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/modelbase.htm');
-
-        $stubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/model.htm');
-
         $pluginPath = plugins_path($this->pluginCodeObj->toFilesystemPath());
 
         if (!is_dir("$pluginPath/modelsbase"))
@@ -165,9 +76,15 @@ class Generator
             mkdir("$pluginPath/models");
         }
 
+        $baseStubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/modelbase.htm');
+
+        $stubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/model.htm');
+
+        $models = $this->prepareOrmModels();
+
         foreach ($models as $model)
         {
-            /** @var DbmlModel $model */
+            /** @var OrmModel $model */
 
             file_put_contents(
                 "$pluginPath/modelsbase/" . $model->getClassname() . 'Base.php',
@@ -202,7 +119,7 @@ class Generator
             {
                 $fields = collect($model->columns)->mapWithKeys(function ($item) {
 
-                    /** @var DbmlColumn $item */
+                    /** @var Column $item */
 
                     return [$item->column->name => [
                         'label' => $item->column->name,
@@ -224,7 +141,7 @@ class Generator
             {
                 $columns = collect($model->columns)->mapWithKeys(function ($item) {
 
-                    /** @var DbmlColumn $item */
+                    /** @var Column $item */
 
                     return [$item->column->name => [
                         'label' => $item->column->name,
@@ -236,6 +153,52 @@ class Generator
                 file_put_contents($columnsFilename, \Yaml::render(['columns' => $columns]));
             }
         }
+    }
+
+    protected function prepareOrmModels()
+    {
+        $result = [];
+
+        foreach ($this->schema->getTables() as $table)
+        {
+            $result[$table->name] = new OrmModel($this->pluginCodeObj, $table->name);
+
+            foreach ($table->columns as $column)
+            {
+                $result[$table->name]->columns[] = new Column($column);
+            }
+        }
+
+        foreach ($this->schema->getRelations() as $relation)
+        {
+            foreach ($this->schema->getTables() as $table)
+            {
+                if ($table->name === $relation->table)
+                {
+                    $model = $result[$relation->table];
+
+                    $model->belongsTo[] = new OrmBelongsTo(
+                        $model,
+                        $relation->foreign_key,
+                        $result[$relation->foreign_table],
+                        $relation->foreign_table_key
+                    );
+                }
+                elseif ($table->name === $relation->foreign_table)
+                {
+                    $model = $result[$relation->foreign_table];
+
+                    $model->hasMany[] = new OrmHasMany(
+                        $model,
+                        $relation->foreign_table_key,
+                        $result[$relation->table],
+                        $relation->foreign_key
+                    );
+                }
+            }
+        }
+
+        return array_values($result);
     }
 
     public function generateMenus()
@@ -255,7 +218,7 @@ class Generator
 
         $sideMenuItems = [];
 
-        foreach ($this->parser->tables as $table)
+        foreach ($this->schema->getTables() as $table)
         {
             $parts = array_map(['\Str', 'plural'], explode('_', $table->name));
 
@@ -282,7 +245,7 @@ class Generator
 
     public function generateControllers()
     {
-        foreach ($this->parser->tables as $table)
+        foreach ($this->schema->getTables() as $table)
         {
             $parts = array_map(['\Str', 'plural'], explode('_', $table->name));
 
@@ -299,7 +262,7 @@ class Generator
 
             $model->setPluginCode($this->pluginCodeObj->toCode());
 
-            $dbmlModel = new DbmlModel($this->pluginCodeObj, $table->name);
+            $ormModel = new OrmModel($this->pluginCodeObj, $table->name);
 
             $model->fill([
                 'controller'         => $controllerClassname,
@@ -307,20 +270,12 @@ class Generator
                     ListController::class,
                     FormController::class,
                 ],
-                'baseModelClassName' => $dbmlModel->getClassname(),
+                'baseModelClassName' => $ormModel->getClassname(),
                 'menuItem'           => $this->getMainMenuKey() . '||' . $this->getSideMenuKey($table->name),
             ]);
 
             $model->save();
         }
-    }
-
-    public function prettyPrint()
-    {
-        return \Twig::parse(
-            file_get_contents(plugins_path('ydnnov/crudgen/classes/generator/templates/prettyprint.htm')),
-            ['tables' => $this->parser->tables]
-        );
     }
 
     protected function getMainMenuKey()
