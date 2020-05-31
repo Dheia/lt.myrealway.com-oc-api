@@ -12,6 +12,10 @@ use October\Rain\Database\Collection;
  * @package Ydnnov\Catalog\Modelsbase
  * @property int $id
  * @property int $main_category_id
+ * @property string $path
+ * @property string $h1_title
+ * @property string $seo_title
+ * @property string $seo_desc
  * @property string $name
  * @property string $description
  * @property Collection $product_categories;

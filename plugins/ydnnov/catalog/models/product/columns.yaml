@@ -13,6 +13,9 @@ columns:
     name:
         label: name
         type: text
+    path:
+        label: path
+        type: text
     description:
         label: description
         type: text

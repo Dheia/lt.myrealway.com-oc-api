@@ -15,3 +15,7 @@ fields:
         label: description
         span: auto
         type: text
+    sort_order:
+        label: sort_order
+        span: auto
+        type: text

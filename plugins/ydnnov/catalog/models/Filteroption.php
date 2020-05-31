@@ -8,4 +8,19 @@ class Filteroption extends FilteroptionBase
 
     public $rules = [];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::extend(function ($model) {
+
+            /** @var Filteroption $model */
+
+            ////////////////////////////////////////////////////////////////////////////////
+            /// Auto delete related
+            ////////////////////////////////////////////////////////////////////////////////
+            $model->hasMany['filteroption_products']['delete'] = true;
+        });
+    }
+
 }

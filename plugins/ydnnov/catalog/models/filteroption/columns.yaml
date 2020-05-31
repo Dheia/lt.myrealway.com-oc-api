@@ -11,3 +11,6 @@ columns:
     description:
         label: description
         type: text
+    sort_order:
+        label: sort_order
+        type: text

@@ -20,3 +20,23 @@ tabs:
             span: full
             type: fileupload
             tab: Images
+        path:
+            label: path
+            span: auto
+            type: text
+            tab: Page
+        h1_title:
+            label: h1_title
+            span: auto
+            type: text
+            tab: Page
+        seo_title:
+            label: seo_title
+            span: auto
+            type: text
+            tab: Page
+        seo_desc:
+            label: seo_desc
+            span: auto
+            type: textarea
+            tab: Page

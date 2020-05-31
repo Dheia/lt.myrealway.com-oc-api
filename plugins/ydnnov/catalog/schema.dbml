@@ -1,66 +1,79 @@
+table _nested_tree{
+  parent_id integer
+  nest_left integer
+  nest_right integer
+  nest_depth integer
+}
+
+table _webpage{
+  path string
+  h1_title string
+  seo_title string
+  seo_desc string
+}
+
 table category{
-  id int [pk, increment]
-  parent_id int
-  nest_left int
-  nest_right int
-  nest_depth int
-  name varchar
+  id integer [pk, increment]
+  _nested_tree _nested_tree
+  _webpage _webpage
+  name string
   description text
 }
 
 table product{
-  id int [pk, increment]
-  main_category_id int
-  name varchar
+  id integer [pk, increment]
+  main_category_id integer
+  _webpage _webpage
+  name string
   description text
 }
 
 ref: product.main_category_id > category.id
 
 table category_product{
-  id int [pk, increment]
-  category_id int
-  product_id int
+  id integer [pk, increment]
+  category_id integer
+  product_id integer
 }
 
 ref: category_product.category_id > category.id
 ref: category_product.product_id > product.id
 
 table bundle{
-  id int [pk, increment]
-  name varchar
+  id integer [pk, increment]
+  name string
   description text
-  price_override int
+  price_override integer
 }
 
 table bundle_product{
-  id int [pk, increment]
-  bundle_id int
-  product_id int
+  id integer [pk, increment]
+  bundle_id integer
+  product_id integer
 }
 
 ref: bundle_product.bundle_id > bundle.id
 ref: bundle_product.product_id > product.id
 
 table filter{
-  id int [pk, increment]
-  type varchar
-  name varchar
+  id integer [pk, increment]
+  type string
+  name string
   description text
 }
 
 table filteroption{
-  id int [pk, increment]
-  filter_id int
-  name varchar
+  id integer [pk, increment]
+  filter_id integer
+  name string
   description text
-  sort_order int
+  sort_order integer
 }
 
 table filteroption_product{
-  id int [pk, increment]
-  filteroption_id int
-  product_id int
+  id integer [pk, increment]
+  filteroption_id integer
+  product_id integer
 }
 
 ref: filteroption.filter_id > filter.id

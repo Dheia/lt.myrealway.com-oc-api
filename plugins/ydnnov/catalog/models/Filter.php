@@ -17,7 +17,7 @@ class Filter extends FilterBase
             /** @var Filter $model */
 
             ////////////////////////////////////////////////////////////////////////////////
-            /// Delete related filteroptions
+            /// Auto delete related
             ////////////////////////////////////////////////////////////////////////////////
             $model->hasMany['filteroptions']['delete'] = true;
 
@@ -51,11 +51,12 @@ class Filter extends FilterBase
         ////////////////////////////////////////////////////////////////////////////////
         foreach ($existingOptions as $existingOption)
         {
+            // Can't delete them using where(...)->delete() because we need to trigger
+            // the deletion of related models records
+
             /** @var Filteroption $existingOption */
             if (!$requestedOptions->firstWhere('id', $existingOption->id))
             {
-                // TODO check if any products have this option assigned (through filteroption_product).
-                // TODO Probably this can be handled automatically if eloquent is set up
                 $existingOption->delete();
             }
         }

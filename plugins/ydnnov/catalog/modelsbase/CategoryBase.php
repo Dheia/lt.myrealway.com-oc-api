@@ -13,6 +13,10 @@ use October\Rain\Database\Collection;
  * @property int $nest_left
  * @property int $nest_right
  * @property int $nest_depth
+ * @property string $path
+ * @property string $h1_title
+ * @property string $seo_title
+ * @property string $seo_desc
  * @property string $name
  * @property string $description
  * @property Collection $products;
