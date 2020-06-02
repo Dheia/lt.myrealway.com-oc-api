@@ -1,4 +1,4 @@
-<?php namespace Ydnnov\Crudgen\Classes;
+<?php namespace Qcsoft\Crudgen\Classes;
 
 class OrmHasMany
 {

@@ -1,0 +1,14 @@
+<select class="form-control custom-select"
+        data-request="onSelectAuthor"
+        name="author"
+>
+    <option <?= !$activeAuthor ? 'selected' : '' ?> value="">-- Select author --</option>
+    <?php foreach($authors as $author) : ?>
+    <option value="<?= $author ?>" <?= $author === $activeAuthor ? 'selected' : '' ?>><?= $author ?></option>
+    <?php endforeach ?>
+</select>
+<div id="plugin_select" class="p-t">
+    <?php if($activeAuthor) : ?>
+    <?= $this->makePartial('plugin_select'); ?>
+    <?php endif ?>
+</div>

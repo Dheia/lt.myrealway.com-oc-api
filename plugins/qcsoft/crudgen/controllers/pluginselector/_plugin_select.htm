@@ -1,0 +1,9 @@
+<select class="form-control custom-select"
+        data-request="onSelectPlugin"
+        name="plugin"
+>
+    <option <?= !$activePlugin ? 'selected' : '' ?> value="">-- Select plugin --</option>
+    <?php foreach($plugins as $plugin) : ?>
+    <option value="<?= $plugin ?>" <?= $plugin === $activePlugin ? 'selected' : '' ?>><?= $plugin ?></option>
+    <?php endforeach ?>
+</select>

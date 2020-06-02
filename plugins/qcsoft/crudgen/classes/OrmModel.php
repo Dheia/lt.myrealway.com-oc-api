@@ -1,4 +1,4 @@
-<?php namespace Ydnnov\Crudgen\Classes;
+<?php namespace Qcsoft\Crudgen\Classes;
 
 use Illuminate\Support\Collection;
 use RainLab\Builder\Classes\PluginCode;

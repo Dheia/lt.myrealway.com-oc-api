@@ -1,4 +1,4 @@
-<?php namespace Ydnnov\Crudgen;
+<?php namespace Qcsoft\Crudgen;
 
 use System\Classes\PluginBase;
 

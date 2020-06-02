@@ -1,4 +1,4 @@
-<?php namespace Ydnnov\Crudgen\Classes;
+<?php namespace Qcsoft\Crudgen\Classes;
 
 use Backend\Behaviors\FormController;
 use Backend\Behaviors\ListController;
@@ -26,9 +26,15 @@ class Generator
         $this->schema = new DbmlSchema($sourceDbmlFilePath);
     }
 
-    public function generateMigrationModels()
+    public function generateMigrations()
     {
         $result = [];
+
+        $columnLength = [
+            'integer' => '10',
+            'string'  => '191',
+            'text'    => '',
+        ];
 
         $tablePrefix = $this->pluginCodeObj->toDatabasePrefix();
 
@@ -36,9 +42,16 @@ class Generator
         {
             $model = new DatabaseTableModel();
 
-            $model->setPluginCode($this->pluginCodeObj->toCode());
+            if (\Schema::hasTable($tablePrefix . '_' . $table->name))
+            {
+                $model->load($tablePrefix . '_' . $table->name);
+            }
+            else
+            {
+                $model->name = $tablePrefix . '_' . $table->name;
+            }
 
-            $model->name = $tablePrefix . '_' . $table->name;
+            $model->setPluginCode($this->pluginCodeObj->toCode());
 
             $model->columns = [];
 
@@ -47,8 +60,8 @@ class Generator
                 $model->columns[] = [
                     'name'           => $column->name,
                     'type'           => $column->type,
-                    'length'         => '',
-                    'unsigned'       => '',
+                    'length'         => $columnLength[$column->type],
+                    'unsigned'       => $column->auto_increment ? true : false,
                     'allow_null'     => $column->nullable ? '1' : '',
                     'auto_increment' => $column->auto_increment ? '1' : '',
                     'primary_key'    => $column->pk ? '1' : '',
@@ -76,9 +89,9 @@ class Generator
             mkdir("$pluginPath/models");
         }
 
-        $baseStubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/modelbase.htm');
+        $baseStubPath = plugins_path('qcsoft/crudgen/classes/generator/templates/modelbase.htm');
 
-        $stubPath = plugins_path('ydnnov/crudgen/classes/generator/templates/model.htm');
+        $stubPath = plugins_path('qcsoft/crudgen/classes/generator/templates/model.htm');
 
         $models = $this->prepareOrmModels();
 
@@ -209,7 +222,7 @@ class Generator
 
         if (isset($pluginConfig['navigation']))
         {
-            throw new \Exception('Plugin already has menu configuration');
+            return;
         }
 
         $mainMenuKey = $this->getMainMenuKey();

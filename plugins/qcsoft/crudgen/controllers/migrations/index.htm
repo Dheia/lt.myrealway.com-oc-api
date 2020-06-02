@@ -1,0 +1,15 @@
+<div class="layout-row">
+    <h5><?= $this->activePluginDbmlStatus ?></h5>
+
+    <?php if(!$this->activePluginDbmlIsError) : ?>
+
+    <?= $this->widget->form->render() ?>
+
+    <button type="button"
+            class="btn btn-primary"
+            data-request="onApplyPendingMigrations"
+    >Apply migrations
+    </button>
+
+    <?php endif ?>
+</div>
