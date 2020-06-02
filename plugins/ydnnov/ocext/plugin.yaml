@@ -1,6 +1,0 @@
-plugin:
-    name: 'ydnnov.ocext::lang.plugin.name'
-    description: 'ydnnov.ocext::lang.plugin.description'
-    author: Ydnnov
-    icon: oc-icon-adjust
-    homepage: ''

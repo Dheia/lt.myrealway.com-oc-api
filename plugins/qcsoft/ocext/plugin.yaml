@@ -1,0 +1,6 @@
+plugin:
+    name: 'qcsoft.ocext::lang.plugin.name'
+    description: 'qcsoft.ocext::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''

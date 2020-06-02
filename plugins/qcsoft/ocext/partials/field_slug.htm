@@ -1,0 +1,25 @@
+<!-- Text -->
+<?php if ($this->previewMode): ?>
+<span class="form-control"><?= $field->value ? e($field->value) : '&nbsp;' ?></span>
+<?php else: ?>
+<div style="position: relative; padding-right: 52px">
+    <input
+            type="text"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId() ?>"
+            value="<?= e($field->value) ?>"
+            placeholder="<?= e(trans($field->placeholder)) ?>"
+            class="form-control"
+            autocomplete="off"
+    <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
+    <?= $field->getAttributes() ?>
+    />
+<button type="button"
+        class="btn btn-secondary icon icon-refresh"
+        style="position: absolute; right: 0; top: 0; height: 100%;"
+        data-request="onMakeSlug"
+        data-request-data="fromField: '<?= $field->config['fromField'] ?>'"
+        data-request-success="$('#<?= $field->getId() ?>').val(data.result)"
+></button>
+</div>
+<?php endif ?>

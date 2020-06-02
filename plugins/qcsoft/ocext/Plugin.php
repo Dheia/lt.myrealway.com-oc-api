@@ -1,4 +1,4 @@
-<?php namespace Ydnnov\Ocext;
+<?php namespace Qcsoft\Ocext;
 
 use System\Classes\PluginBase;
 
