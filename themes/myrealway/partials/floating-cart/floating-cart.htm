@@ -1,0 +1,14 @@
+==
+<div class="floating-cart" data-app>
+    <a class="btn btn-secondary"
+       href="{{ url('cart') }}"
+    >Cart</a>
+    <div class="" v-text="'Total items: ' + app.cart.total_count"></div>
+    <div class="" v-for="item in app.cart.items">
+        <div class="item-image">
+            <img :src="item.sellable.main_image"/>
+        </div>
+        <span v-text="item.sellable.name"></span>
+        <strong v-text="'x ' + item.quantity"></strong>
+    </div>
+</div>

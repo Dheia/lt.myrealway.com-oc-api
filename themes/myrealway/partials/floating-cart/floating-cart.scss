@@ -1,0 +1,15 @@
+.floating-cart {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  padding: 10px 12px;
+
+  .item-image {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+    display: inline-block;
+  }
+}

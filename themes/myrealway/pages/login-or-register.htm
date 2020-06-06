@@ -1,0 +1,45 @@
+title = "home"
+url = "/login"
+layout = "default"
+is_hidden = 0
+
+[account]
+==
+<div class="container">
+    <h1>User</h1>
+    {{ __SELF__ }}
+
+    {% if not user %}
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <h3>Sign in</h3>
+                {% partial __SELF__ ~ '::signin' %}
+            </div>
+
+            <div class="col-md-6">
+                {% partial __SELF__ ~ '::register' %}
+            </div>
+
+        </div>
+
+    {% else %}
+
+        {% partial __SELF__ ~ '::activation_check' %}
+
+        {% partial __SELF__ ~ '::update' %}
+
+        {% partial __SELF__ ~ '::deactivate_link' %}
+
+        <div class="pt-3">
+            <button type="button"
+                    class="btn btn-primary"
+                    data-request="session::onLogout"
+            >Logout
+            </button>
+        </div>
+
+    {% endif %}
+
+</div>

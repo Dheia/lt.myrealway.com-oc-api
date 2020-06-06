@@ -1,0 +1,25 @@
+==
+<div class="card" data-app="productListCard" data-id="{{ product.id }}">
+    <img src="{{ product.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
+         alt="{{ product.name }}">
+    <div class="card-body">
+        <h5 class="card-title">{{ product.name }}</h5>
+        <p class="card-text">{{ product.desc }}</p>
+        {% for filteroption in product.product_filteroptions().with('filteroption').get().pluck('filteroption') %}
+            <div>{{ filteroption.name }}</div>
+        {% endfor %}
+
+        <div class="input-group mt-3">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-primary" @click="quantityDec">-</button>
+            </div>
+            <input type="text" v-model="quantity" class="form-control" value="1"/>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-primary" @click="quantityInc">+</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary mt-3" @click="addToCart">
+            Add to cart</button>
+    </div>
+</div>

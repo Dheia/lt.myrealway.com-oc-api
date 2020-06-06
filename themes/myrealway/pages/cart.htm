@@ -1,0 +1,17 @@
+title = "home"
+url = "/cart"
+layout = "default"
+is_hidden = 0
+==
+<div class="container">
+    <h1>Cart</h1>
+    <div data-app>
+        <div class="" v-for="item in app.cart.items">
+            <div class="">
+                <img :src="item.sellable.main_image"/>
+            </div>
+            <span v-text="item.sellable.name"></span>
+            <strong v-text="'x ' + item.quantity"></strong>
+        </div>
+    </div>
+</div>

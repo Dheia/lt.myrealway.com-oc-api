@@ -1,0 +1,23 @@
+title = "home"
+url = "/product-catalog"
+layout = "default"
+is_hidden = 0
+
+[productList]
+==
+<div class="container">
+    <h1>Product catalog</h1>
+    <div class="row">
+        <div class="col-4">
+            {% partial 'product-list/product-list-filters' %}
+        </div>
+        <div class="col-8">
+            {% partial 'catalog-top-slider/catalog-top-slider' %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {% partial 'product-list/product-list' %}
+        </div>
+    </div>
+</div>
