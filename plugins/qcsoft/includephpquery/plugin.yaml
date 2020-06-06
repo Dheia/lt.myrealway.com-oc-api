@@ -1,0 +1,6 @@
+plugin:
+    name: 'qcsoft.includephpquery::lang.plugin.name'
+    description: 'qcsoft.includephpquery::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''
