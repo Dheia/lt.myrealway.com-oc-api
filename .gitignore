@@ -6,6 +6,7 @@ index.php
 modules
 server.php
 storage
+themes/myrealway/assets/dist
 themes/myrealway/node_modules
 themes/myrealway/package-lock.json
 vendor
