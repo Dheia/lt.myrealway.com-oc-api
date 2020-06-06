@@ -1,11 +1,18 @@
+[session]
+
+[cart]
 ==
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ ['main.scss'] | theme }}">
 </head>
 <body>
+<div data-app="cart"></div>
+{% partial 'header/header' %}
+{% partial 'floating-cart/floating-cart' %}
 {% page %}
 {#<script src="{{ 'assets/dist/main.js' | theme }}"></script>#}
 <script src="http://178.19.16.34:8080/main.js"></script>
