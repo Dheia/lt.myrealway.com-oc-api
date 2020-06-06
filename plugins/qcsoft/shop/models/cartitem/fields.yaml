@@ -1,0 +1,21 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    cart_id:
+        label: cart_id
+        span: auto
+        type: text
+    sellable_type:
+        label: sellable_type
+        span: auto
+        type: text
+    sellable_id:
+        label: sellable_id
+        span: auto
+        type: text
+    quantity:
+        label: quantity
+        span: auto
+        type: text

@@ -1,0 +1,34 @@
+columns:
+    id:
+        label: id
+        type: text
+    parent_id:
+        label: parent_id
+        type: text
+    nest_left:
+        label: nest_left
+        type: text
+    nest_right:
+        label: nest_right
+        type: text
+    nest_depth:
+        label: nest_depth
+        type: text
+    path:
+        label: path
+        type: text
+    h1_title:
+        label: h1_title
+        type: text
+    seo_title:
+        label: seo_title
+        type: text
+    seo_desc:
+        label: seo_desc
+        type: text
+    name:
+        label: name
+        type: text
+    description:
+        label: description
+        type: text

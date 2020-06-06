@@ -1,0 +1,16 @@
+columns:
+    id:
+        label: id
+        type: text
+    cart_id:
+        label: cart_id
+        type: text
+    sellable_type:
+        label: sellable_type
+        type: text
+    sellable_id:
+        label: sellable_id
+        type: text
+    quantity:
+        label: quantity
+        type: text

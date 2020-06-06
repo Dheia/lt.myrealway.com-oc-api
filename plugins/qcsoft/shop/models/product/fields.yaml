@@ -1,0 +1,43 @@
+fields:
+    name:
+        label: name
+        span: auto
+        type: text
+    main_category:
+        label: Main category
+        span: auto
+        type: relation
+tabs:
+    fields:
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
+        main_image:
+            label: Main image
+            span: left
+            type: fileupload
+            tab: Images
+        path:
+            label: path
+            span: auto
+            type: partial
+            path: $/qcsoft/ocext/partials/field_slug.htm
+            fromField: name
+            tab: Page
+        h1_title:
+            label: h1_title
+            span: auto
+            type: text
+            tab: Page
+        seo_title:
+            label: seo_title
+            span: auto
+            type: text
+            tab: Page
+        seo_desc:
+            label: seo_desc
+            span: auto
+            type: textarea
+            tab: Page

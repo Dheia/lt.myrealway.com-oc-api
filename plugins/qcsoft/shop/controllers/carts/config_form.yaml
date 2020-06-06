@@ -1,0 +1,10 @@
+name: Carts
+form: $/qcsoft/shop/models/cart/fields.yaml
+modelClass: Qcsoft\Shop\Models\Cart
+defaultRedirect: qcsoft/shop/carts
+create:
+    redirect: 'qcsoft/shop/carts/update/:id'
+    redirectClose: qcsoft/shop/carts
+update:
+    redirect: qcsoft/shop/carts
+    redirectClose: qcsoft/shop/carts

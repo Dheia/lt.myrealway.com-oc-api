@@ -1,0 +1,13 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    session_key:
+        label: session_key
+        span: auto
+        type: text
+    customer_id:
+        label: customer_id
+        span: auto
+        type: text

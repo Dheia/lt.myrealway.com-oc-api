@@ -1,0 +1,16 @@
+columns:
+    id:
+        label: id
+        type: text
+    filter_id:
+        label: filter_id
+        type: text
+    name:
+        label: name
+        type: text
+    description:
+        label: description
+        type: text
+    sort_order:
+        label: sort_order
+        type: text

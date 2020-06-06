@@ -1,0 +1,10 @@
+columns:
+    id:
+        label: id
+        type: text
+    session_key:
+        label: session_key
+        type: text
+    customer_id:
+        label: customer_id
+        type: text

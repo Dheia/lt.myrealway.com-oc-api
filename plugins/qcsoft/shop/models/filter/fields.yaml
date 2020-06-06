@@ -1,0 +1,35 @@
+fields:
+    #    type:
+    #        label: type
+    #        span: auto
+    #        type: text
+    name:
+        label: Name
+        span: left
+        type: text
+tabs:
+    fields:
+        options_repeater:
+            label: Options
+            span: full
+            type: repeater
+            form:
+                fields:
+                    name:
+                        label: Option
+                        span: full
+                        type: text
+                    id:
+                        type: text
+                        containerAttributes:
+                            style: 'display: none'
+                    sort_order:
+                        type: text
+                        containerAttributes:
+                            style: 'display: none'
+            tab: Options
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description

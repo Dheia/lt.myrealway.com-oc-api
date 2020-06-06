@@ -1,0 +1,10 @@
+name: Filters
+form: $/qcsoft/shop/models/filter/fields.yaml
+modelClass: Qcsoft\Shop\Models\Filter
+defaultRedirect: qcsoft/shop/filters
+create:
+    redirect: 'qcsoft/shop/filters/update/:id'
+    redirectClose: qcsoft/shop/filters
+update:
+    redirect: qcsoft/shop/filters
+    redirectClose: qcsoft/shop/filters

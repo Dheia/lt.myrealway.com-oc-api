@@ -1,0 +1,42 @@
+fields:
+    name:
+        label: Name
+        span: left
+        type: text
+    parent:
+        label: Parent
+        span: right
+        type: relation
+        emptyOption: '-- None --'
+tabs:
+    fields:
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
+        main_image:
+            label: Main image
+            span: full
+            type: fileupload
+            tab: Images
+        path:
+            label: path
+            span: auto
+            type: text
+            tab: Page
+        h1_title:
+            label: h1_title
+            span: auto
+            type: text
+            tab: Page
+        seo_title:
+            label: seo_title
+            span: auto
+            type: text
+            tab: Page
+        seo_desc:
+            label: seo_desc
+            span: auto
+            type: textarea
+            tab: Page
