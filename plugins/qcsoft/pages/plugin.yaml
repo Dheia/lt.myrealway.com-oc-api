@@ -1,6 +1,0 @@
-plugin:
-    name: 'qcsoft.pages::lang.plugin.name'
-    description: 'qcsoft.pages::lang.plugin.description'
-    author: Qcsoft
-    icon: oc-icon-adjust
-    homepage: ''

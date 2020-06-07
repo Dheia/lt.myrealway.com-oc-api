@@ -1,0 +1,6 @@
+plugin:
+    name: 'qcsoft.cms::lang.plugin.name'
+    description: 'qcsoft.cms::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''

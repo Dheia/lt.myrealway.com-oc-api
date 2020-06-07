@@ -1,4 +1,4 @@
-<?php namespace Qcsoft\Pages;
+<?php namespace Qcsoft\Cms;
 
 use System\Classes\PluginBase;
 

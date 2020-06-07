@@ -1,6 +1,6 @@
 <?php return [
     'plugin' => [
-        'name' => 'Pages',
+        'name' => 'Cms',
         'description' => ''
     ]
 ];
