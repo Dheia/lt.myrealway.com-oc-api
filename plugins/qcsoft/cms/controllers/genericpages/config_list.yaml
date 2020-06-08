@@ -1,0 +1,12 @@
+list: $/qcsoft/cms/models/genericpage/columns.yaml
+modelClass: Qcsoft\Cms\Models\Genericpage
+title: Genericpages
+noRecordsMessage: 'backend::lang.list.no_records'
+showSetup: true
+showCheckboxes: true
+recordsPerPage: 20
+toolbar:
+    buttons: list_toolbar
+    search:
+        prompt: 'backend::lang.list.search_prompt'
+recordUrl: 'qcsoft/cms/genericpages/update/:id'

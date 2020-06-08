@@ -1,0 +1,33 @@
+fields:
+    name:
+        label: Name
+        span: auto
+        type: text
+    path:
+        label: Path
+        span: auto
+        type: partial
+        path: $/qcsoft/ocext/partials/field_slug.htm
+        fromField: name
+tabs:
+    fields:
+        content:
+            label: content
+            span: full
+            type: richeditor
+            tab: Content
+        custom_h1_title:
+            label: Custom H1 title
+            span: auto
+            type: text
+            tab: Page
+        custom_seo_title:
+            label: Custom seo title
+            span: auto
+            type: text
+            tab: Page
+        seo_desc:
+            label: Seo description
+            span: auto
+            type: text
+            tab: Page
