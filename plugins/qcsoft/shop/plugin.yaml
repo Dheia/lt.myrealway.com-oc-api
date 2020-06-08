@@ -26,3 +26,11 @@ navigation:
                 label: Filters
                 url: qcsoft/shop/filters
                 icon: icon-sitemap
+            side-menu-customers:
+                label: Customers
+                url: qcsoft/shop/customers
+                icon: icon-sitemap
+            side-menu-customergroups:
+                label: Customer groups
+                url: qcsoft/shop/customergroups
+                icon: icon-sitemap

@@ -9,6 +9,11 @@ fields:
         type: relation
 tabs:
     fields:
+        Default_price:
+            label: Default price
+            span: full
+            type: number
+            tab: Price
         description:
             label: Description
             span: full
@@ -26,12 +31,12 @@ tabs:
             path: $/qcsoft/ocext/partials/field_slug.htm
             fromField: name
             tab: Page
-        h1_title:
+        custom_h1_title:
             label: h1_title
             span: auto
             type: text
             tab: Page
-        seo_title:
+        custom_seo_title:
             label: seo_title
             span: auto
             type: text

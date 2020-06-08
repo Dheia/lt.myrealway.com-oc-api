@@ -1,5 +1,6 @@
 <?php namespace Qcsoft\Shop\Models;
 
+use October\Rain\Database\Collection;
 use Qcsoft\Cms\Classes\PageModel;
 use System\Models\File;
 use Qcsoft\Shop\Modelsbase\ProductBase;
@@ -52,7 +53,111 @@ class Product extends ProductBase
 
                 $model->saveFilterOptionsToRelation($filterOptionsValue);
             });
+
+            ////////////////////////////////////////////////////////////////////////////////
+            /// Convert array of text inputs to related model records
+            ////////////////////////////////////////////////////////////////////////////////
+            $model->bindEvent('model.saveInternal', function () use ($model, &$customergroupPrices) {
+
+                $customergroupPrices = array_get($model->attributes, 'customergroup_price', []);
+
+                unset($model->attributes['customergroup_price']);
+            });
+
+            $model->bindEvent('model.afterSave', function () use ($model, &$customergroupPrices) {
+
+                $model->saveCustomergroupPrices($customergroupPrices);
+            });
         });
+    }
+
+    public function saveCustomergroupPrices($requestedItems)
+    {
+        /** @var Collection $existingItems */
+        $existingItems = CustomergroupProduct::where('product_id', $this->id)->get();
+
+        $requestedItems = collect($requestedItems)
+            ->filter(function ($price) {
+                return $price > 0;
+            });
+
+        $existingItems->keyBy('customergroup_id')
+            ->diffKeys($requestedItems)
+            ->each(function ($item) {
+                $item->delete();
+            });
+
+        foreach ($requestedItems as $requestedId => $requestedPrice)
+        {
+            if (!$saveItem = $existingItems->firstWhere('customergroup_id', $requestedId))
+            {
+                $saveItem = new CustomergroupProduct();
+
+                $saveItem->customergroup_id = $requestedId;
+                $saveItem->product_id = $this->id;
+            }
+
+            $saveItem->price = $requestedPrice * 100;
+
+            $saveItem->save();
+        }
+    }
+
+    public function getCustomergroupPriceAttribute()
+    {
+        return $this->product_customergroups
+            ->pluck('price', 'customergroup_id')
+            ->map(function ($price) {
+                return $price / 100;
+            })
+            ->toArray();
+    }
+
+    public function saveCustomergroupPricesold($requestedItems)
+    {
+        $existingItems = CustomergroupProduct::where('product_id', $this->id)->get();
+
+        $requestedItems = array_filter($requestedItems, function ($item) {
+            return $item > 0;
+        });
+
+        $requestedIds = array_keys($requestedItems);
+
+        foreach ($existingItems as $i => $item)
+        {
+            if (!in_array($item->customergroup_id, $requestedIds))
+            {
+                $item->delete();
+
+                unset($existingItems[$i]);
+            }
+        }
+
+        foreach ($requestedItems as $id => $requestedPrice)
+        {
+            $existingItem = $existingItems->firstWhere('customergroup_id', $id);
+
+            if ($existingItem)
+            {
+                if ($existingItem->price != $requestedPrice * 100)
+                {
+                    $existingItem->price = $requestedPrice * 100;
+
+                    $existingItem->save();
+                }
+            }
+            else
+            {
+                $createItem = new CustomergroupProduct();
+
+                $createItem->customergroup_id = $id;
+                $createItem->product_id = $this->id;
+                $createItem->price = $requestedPrice * 100;
+
+                $createItem->save();
+            }
+        }
+
     }
 
     public function saveFilterOptionsToRelation($requestedOptions)
@@ -60,6 +165,7 @@ class Product extends ProductBase
         $requestedOptionIds = array_filter(array_flatten($requestedOptions), function ($item) {
             return $item > 0;
         });
+
         $existingOptionIds = $this->product_filteroptions->pluck('filteroption_id')->toArray();
 
         $toDeleteIds = array_diff($existingOptionIds, $requestedOptionIds);

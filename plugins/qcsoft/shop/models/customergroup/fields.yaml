@@ -1,9 +1,5 @@
 fields:
-    id:
-        label: id
-        span: auto
-        type: text
     name:
-        label: name
-        span: auto
+        label: Name
+        span: full
         type: text

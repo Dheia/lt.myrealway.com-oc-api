@@ -10,6 +10,7 @@ use October\Rain\Database\Collection;
  * @package Qcsoft\Shop\Modelsbase
  * @property int $id
  * @property string $name
+ * @property boolean $is_default
  * @property Collection $customers;
  * @property Collection $customergroup_products;
  */

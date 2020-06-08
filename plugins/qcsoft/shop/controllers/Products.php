@@ -4,6 +4,7 @@ use Backend\Classes\Controller;
 use Backend\Widgets\Form;
 use Backend\Widgets\Lists;
 use BackendMenu;
+use Qcsoft\Shop\Models\Customergroup;
 use Qcsoft\Shop\Models\Filter;
 use Qcsoft\Ocext\Behaviors\MakeSlugController;
 use Qcsoft\Shop\Models\Filteroption;
@@ -82,6 +83,18 @@ EOT
                     })
                     ->lists('name', 'id'),
                 'tab'         => 'Filters'
+            ];
+        }
+
+        $customergroups = Customergroup::all();
+
+        foreach ($customergroups as $customergroup)
+        {
+            $form->tabs['fields']['customergroup_price[' . $customergroup->id . ']'] = [
+                'label' => 'Price for customer group "' . $customergroup->name . '" (' . $customergroup->id . ')',
+                'span'  => 'full',
+                'type'  => 'number',
+                'tab'   => 'Price'
             ];
         }
     }
