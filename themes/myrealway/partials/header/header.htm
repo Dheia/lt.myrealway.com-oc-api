@@ -1,7 +1,10 @@
 ==
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-xl">
-        <a class="navbar-brand" href="#">Container XL</a>
+        <div data-app>
+            <a class="navbar-brand" href="{{ url('/') }}" data-ajax-link>Container XL</a>
+            <b-overlay :show="app.mainLoadIndicator.loading" no-wrap></b-overlay>
+        </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#header_navbar"
                 aria-controls="header_navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,13 +23,19 @@
                             >{{ item.title }}</a>
                             <div class="dropdown-menu" aria-labelledby="headerMenu{{ loop.index }}">
                                 {% for item in item.children %}
-                                    <a class="dropdown-item" href="{{ item.url }}">{{ item.title }}</a>
+                                    <a class="dropdown-item"
+                                       href="{{ item.url }}"
+                                       data-ajax-link
+                                    >{{ item.title }}</a>
                                 {% endfor %}
                             </div>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ item.url }}">{{ item.title }}</a>
+                            <a class="nav-link"
+                               href="{{ item.url }}"
+                               data-ajax-link
+                            >{{ item.title }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}

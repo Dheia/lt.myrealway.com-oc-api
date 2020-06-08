@@ -6,16 +6,18 @@ import Vue from 'vue'
 
 import {IconsPlugin, OverlayPlugin, SpinnerPlugin} from 'bootstrap-vue/'
 
+import mainLoadIndicator from './layouts/main-load-indicator'
 import productList from './partials/product-list/product-list'
-import productListCard from './partials/product-list/product-list-card'
+import productListItem from './partials/product-list/product-list-item'
 import productListFilters from './partials/product-list/product-list-filters'
 import cart from './cart'
 import floatingCart from './partials/floating-cart/floating-cart'
 
 window.bus = {
     appDefinition: {
+        mainLoadIndicator,
         productList,
-        productListCard,
+        productListItem,
         productListFilters,
         cart,
         floatingCart,
@@ -32,6 +34,35 @@ Vue.mixin({
     {
         return bus
     }
+})
+
+$(document).on('click', '[data-ajax-link]', function (e)
+{
+    e.preventDefault()
+
+    let url = $(e.currentTarget).attr('href')
+
+    history.pushState(null, null, url)
+
+    bus.app.mainLoadIndicator.loading = true
+
+    $.ajax(url, {
+        data: {
+            noLayout: true,
+        },
+        success(data, textStatus, jqXHR)
+        {
+            bus.app.mainLoadIndicator.loading = false
+
+            setTimeout(() =>
+            {
+                $('#page').html(data)
+
+                initApps()
+
+            }, 0)
+        },
+    })
 })
 
 $(document).on('ajaxComplete', function ()

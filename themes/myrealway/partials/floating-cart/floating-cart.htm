@@ -2,6 +2,7 @@
 <div class="floating-cart" data-app>
     <a class="btn btn-secondary"
        href="{{ url('cart') }}"
+       data-ajax-link
     >Cart</a>
     <div class="" v-text="'Total items: ' + app.cart.total_count"></div>
     <div class="" v-for="item in app.cart.items">

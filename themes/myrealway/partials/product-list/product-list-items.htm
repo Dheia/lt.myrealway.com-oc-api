@@ -1,6 +1,6 @@
 ==
 {% for product in productList.getProductList() %}
     <div class="col">
-        {% partial 'product-list/product-list-card' product=product %}
+        {% partial 'product-list/product-list-item' product=product %}
     </div>
 {% endfor %}

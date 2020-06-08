@@ -1,7 +1,11 @@
 ==
-<div class="card" data-app="productListCard" data-id="{{ product.id }}">
-    <img src="{{ product.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
-         alt="{{ product.name }}">
+<div class="card" data-app="productListItem" data-id="{{ product.id }}">
+    <a href="{{ url(product.path) }}" data-ajax-link style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
+        <img src="{{ product.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
+             alt="{{ product.name }}"
+             style="position: absolute; top: 50%; left: 0; transform: translateY(-50%)"
+        >
+    </a>
     <div class="card-body">
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text">{{ product.desc }}</p>
@@ -20,6 +24,7 @@
         </div>
 
         <button type="button" class="btn btn-primary mt-3" @click="addToCart">
-            Add to cart</button>
+            Add to cart
+        </button>
     </div>
 </div>
