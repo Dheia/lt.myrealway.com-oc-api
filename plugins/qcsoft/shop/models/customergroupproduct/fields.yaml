@@ -1,0 +1,17 @@
+fields:
+    id:
+        label: id
+        span: auto
+        type: text
+    customergroup_id:
+        label: customergroup_id
+        span: auto
+        type: text
+    product_id:
+        label: product_id
+        span: auto
+        type: text
+    price:
+        label: price
+        span: auto
+        type: text

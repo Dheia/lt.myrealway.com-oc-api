@@ -6,9 +6,10 @@ table _nested_tree{
 }
 
 table _webpage{
+  name string
   path string
-  h1_title string
-  seo_title string
+  custom_h1_title string
+  custom_seo_title string
   seo_desc string
 }
 
@@ -16,7 +17,6 @@ table category{
   id integer [pk, increment]
   _nested_tree _nested_tree
   _webpage _webpage
-  name string
   description text
 }
 
@@ -24,8 +24,8 @@ table product{
   id integer [pk, increment]
   main_category_id integer
   _webpage _webpage
-  name string
   description text
+  default_price integer
 }
 
 ref: product.main_category_id > category.id
@@ -110,3 +110,13 @@ table cartitem{
 }
 
 ref: cartitem.cart_id > cart.id
+
+table customergroup_product{
+  id integer [pk, increment]
+  customergroup_id integer
+  product_id integer
+  price integer
+}
+
+ref: customergroup_product.customergroup_id > customergroup.id
+ref: customergroup_product.product_id > product.id

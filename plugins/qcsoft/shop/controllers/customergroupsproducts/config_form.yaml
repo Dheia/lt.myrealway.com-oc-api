@@ -1,0 +1,10 @@
+name: CustomergroupsProducts
+form: $/qcsoft/shop/models/customergroupproduct/fields.yaml
+modelClass: Qcsoft\Shop\Models\CustomergroupProduct
+defaultRedirect: qcsoft/shop/customergroupsproducts
+create:
+    redirect: 'qcsoft/shop/customergroupsproducts/update/:id'
+    redirectClose: qcsoft/shop/customergroupsproducts
+update:
+    redirect: qcsoft/shop/customergroupsproducts
+    redirectClose: qcsoft/shop/customergroupsproducts
