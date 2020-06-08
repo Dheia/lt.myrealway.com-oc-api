@@ -1,10 +1,13 @@
 <?php namespace Qcsoft\Shop\Models;
 
+use Qcsoft\Cms\Classes\PageModel;
 use System\Models\File;
 use Qcsoft\Shop\Modelsbase\ProductBase;
 
 class Product extends ProductBase
 {
+    use PageModel;
+
     use \October\Rain\Database\Traits\Validation;
 
     public $rules = [];
