@@ -3,6 +3,7 @@
 class Column
 {
     public static $dbmlToPhpTypes = [
+        'boolean' => 'boolean',
         'integer' => 'int',
         'string'  => 'string',
         'text'    => 'string',

@@ -31,6 +31,7 @@ class Generator
         $result = [];
 
         $columnLength = [
+            'boolean' => '',
             'integer' => '10',
             'string'  => '191',
             'text'    => '',
