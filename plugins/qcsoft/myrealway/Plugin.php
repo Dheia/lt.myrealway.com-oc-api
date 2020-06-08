@@ -1,5 +1,7 @@
 <?php namespace Qcsoft\Myrealway;
 
+use Cms\Classes\Controller;
+use Cms\Classes\Page;
 use Qcsoft\Myrealway\Classes\ImportOldSite;
 use System\Classes\PluginBase;
 
@@ -17,20 +19,9 @@ class Plugin extends PluginBase
     {
 //        (new ImportOldSite())->import();
 
-        \Event::listen('cms.beforeRoute', function () {
+        \Event::listen('cms.beforeRoute', function () use (&$pageObj, &$pageObjVarName) {
             \File::cleanDirectory(storage_path('cms/twig'));
         });
-
-//        \Event::listen('cms.page.beforeDisplay', function () {
-//            $user = \Auth::getUser();
-//            $session = \Session::get('user_auth');
-//            dump($session);
-//            $cookie = \Cookie::get('user_auth');
-//            dump($cookie);
-//
-//            dump($user);
-////            die;
-//        });
     }
 
     public function registerMarkupTags()

@@ -1,8 +1,8 @@
 <?php namespace Qcsoft\Shop;
 
 use October\Rain\Database\Relations\Relation;
-use Qcsoft\Shop\Components\ProductList;
 use Qcsoft\Shop\Components\Cart;
+use Qcsoft\Shop\Components\ProductList;
 use Qcsoft\Shop\Models\Bundle;
 use Qcsoft\Shop\Models\Category;
 use Qcsoft\Shop\Models\Product;
@@ -13,8 +13,8 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            ProductList::class    => 'productList',
-            Cart::class           => 'cart',
+            ProductList::class => 'productList',
+            Cart::class        => 'cart',
         ];
     }
 
@@ -29,7 +29,7 @@ class Plugin extends PluginBase
             'product' => Product::class,
         ]);
 
-        \Event::listen('qcsoft.app.registerPageTypes', function () {
+        \Event::listen('qcsoft.cms.registerPageTypes', function () {
             return [
                 Product::class,
                 Category::class,
