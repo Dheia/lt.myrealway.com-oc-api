@@ -8,6 +8,6 @@ columns:
     description:
         label: description
         type: text
-    price_override:
-        label: price_override
+    default_price:
+        label: default_price
         type: text

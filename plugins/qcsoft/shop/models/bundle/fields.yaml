@@ -1,8 +1,4 @@
 fields:
-    id:
-        label: id
-        span: auto
-        type: text
     name:
         label: name
         span: auto
@@ -11,7 +7,7 @@ fields:
         label: description
         span: auto
         type: text
-    price_override:
-        label: price_override
+    default_price:
+        label: default_price
         span: auto
         type: text

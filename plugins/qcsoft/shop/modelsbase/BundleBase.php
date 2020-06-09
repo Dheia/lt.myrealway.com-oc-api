@@ -10,7 +10,7 @@ use October\Rain\Database\Collection;
  * @property int $id
  * @property string $name
  * @property string $description
- * @property int $price_override
+ * @property int $default_price
  * @property Collection $bundle_products;
  */
 class BundleBase extends Model

@@ -43,7 +43,7 @@ table bundle{
   id integer [pk, increment]
   name string
   description text
-  price_override integer
+  default_price integer
 }
 
 table bundle_product{
