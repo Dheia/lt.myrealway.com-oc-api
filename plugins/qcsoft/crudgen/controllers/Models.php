@@ -29,14 +29,14 @@ class Models extends Controller
 
         $this->vars['activePluginCode'] = $this->activePluginCode;
 
-        $this->generateOrUpdateModels();
+        $this->vars['resultLog'] = $this->generateOrUpdateModels();
     }
 
     public function generateOrUpdateModels()
     {
         $generator = new Generator($this->activePluginCode, $this->activePluginDbmlFilePath);
 
-        $generator->generateOrmModels();
+        return $generator->generateOrmModels();
     }
 
 }

@@ -78,6 +78,8 @@ class Generator
 
     public function generateOrmModels()
     {
+        $resultLog = [];
+
         $pluginPath = plugins_path($this->pluginCodeObj->toFilesystemPath());
 
         if (!is_dir("$pluginPath/modelsbase"))
@@ -108,48 +110,60 @@ class Generator
                 )
             );
 
-            if (!file_exists("$pluginPath/models/" . $model->getClassname() . '.php'))
+            $modelPhpFilename = "$pluginPath/models/" . $model->getClassname() . '.php';
+
+            if (!file_exists($modelPhpFilename))
             {
                 file_put_contents(
-                    "$pluginPath/models/" . $model->getClassname() . '.php',
+                    $modelPhpFilename,
                     \Twig::parse(
                         file_get_contents($stubPath),
                         ['model' => $model]
                     )
                 );
+
+                $resultLog[] = $modelPhpFilename;
             }
 
-            if (!is_dir("$pluginPath/models/" . strtolower($model->getClassname())))
+            $modelDirPath = "$pluginPath/models/" . strtolower($model->getClassname());
+
+            if (!is_dir($modelDirPath))
             {
-                mkdir("$pluginPath/models/" . strtolower($model->getClassname()));
+                mkdir($modelDirPath);
             }
 
             ////////////////////////////////////////////////////////////////////////////////
             // Generate model fields yaml
             ////////////////////////////////////////////////////////////////////////////////
-            $fieldsFilename = "$pluginPath/models/" . strtolower($model->getClassname()) . '/fields.yaml';
+            $fieldsFilename = "$modelDirPath/fields.yaml";
 
             if (!file_exists($fieldsFilename))
             {
-                $fields = collect($model->columns)->mapWithKeys(function ($item) {
+                $fields = collect($model->columns)
+                    ->filter(function ($item) {
+                        return $item->column->name !== 'id';
+                    })
+                    ->mapWithKeys(function ($item) {
 
-                    /** @var Column $item */
+                        /** @var Column $item */
 
-                    return [$item->column->name => [
-                        'label' => $item->column->name,
-                        'span'  => 'auto',
-                        'type'  => 'text',
-                    ]];
-                })
+                        return [$item->column->name => [
+                            'label' => $item->column->name,
+                            'span'  => 'auto',
+                            'type'  => 'text',
+                        ]];
+                    })
                     ->toArray();
 
                 file_put_contents($fieldsFilename, \Yaml::render(['fields' => $fields]));
+
+                $resultLog[] = $fieldsFilename;
             }
 
             ////////////////////////////////////////////////////////////////////////////////
             // Generate model columns yaml
             ////////////////////////////////////////////////////////////////////////////////
-            $columnsFilename = "$pluginPath/models/" . strtolower($model->getClassname()) . '/columns.yaml';
+            $columnsFilename = "$modelDirPath/columns.yaml";
 
             if (!file_exists($columnsFilename))
             {
@@ -165,8 +179,12 @@ class Generator
                     ->toArray();
 
                 file_put_contents($columnsFilename, \Yaml::render(['columns' => $columns]));
+
+                $resultLog[] = $columnsFilename;
             }
         }
+
+        return $resultLog;
     }
 
     protected function prepareOrmModels()

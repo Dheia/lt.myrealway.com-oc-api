@@ -5,4 +5,13 @@
 
 
     <?php endif ?>
+
+    <?php if(count($resultLog)) : ?>
+        <p>Generated:</p>
+        <?php foreach($resultLog as $record) : ?>
+            <p><?= $record ?></p>
+        <?php endforeach ?>
+    <?php else : ?>
+        <p>Nothing new generated</p>
+    <?php endif ?>
 </div>
