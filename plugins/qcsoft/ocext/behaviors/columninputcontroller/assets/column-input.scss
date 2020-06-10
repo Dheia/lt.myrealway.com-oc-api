@@ -1,0 +1,29 @@
+.column-input {
+  display: flex;
+  position: relative;
+  padding-right: 0;
+
+  .column-input-controls {
+    display: flex;
+    margin-right: -70px;
+  }
+
+  .btn {
+    margin-left: 3px;
+  }
+
+  .btn-outline-success {
+    padding: 5px 8px;
+    background: #31ac5f;
+  }
+
+  .btn-outline-danger {
+    padding: 5px 10px;
+    background: #ab2a1c;
+    color: white;
+  }
+
+  .column-input-spinner {
+    margin-left: 5px;
+  }
+}

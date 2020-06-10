@@ -1,0 +1,35 @@
+<div data-app="columnInput"
+     class="column-input"
+     data-record-key="<?= $record->getKey() ?>"
+     data-value="<?= $value ?>"
+     data-attribute="<?= get_class($record) ?>::<?= $column->columnName ?>"
+>
+    <input type="<?= array_get($column->config, 'htmlInputType', 'text') ?>"
+           class="form-control input-sm"
+           style="width: <?= array_get($column->config, 'width', '100px') ?>"
+           v-model="newValue"
+           @keydown.enter="onSave"
+           @keydown.esc="onCancel"
+    />
+    <div style="visibility: hidden"
+         :style="{visibility: !loading && (value != newValue) ? 'visible' : 'hidden'}"
+         class="column-input-controls"
+    >
+        <btn type="outline-success"
+             v-tooltip="'[Enter]'"
+             @click="onSave"
+             tabindex="-1"
+        ><i class="icon-check"></i></btn>
+        <btn type="outline-danger"
+             v-tooltip="'[Esc]'"
+             @click="onCancel"
+             tabindex="-1"
+        ><i class="icon-close"></i></btn>
+    </div>
+    <div style="visibility: hidden"
+         :style="{visibility: loading ? 'visible' : 'hidden'}"
+         class="column-input-spinner"
+    >
+        <div class="spinner"></div>
+    </div>
+</div>
