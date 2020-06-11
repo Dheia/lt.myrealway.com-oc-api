@@ -22,7 +22,11 @@ class Plugin extends PluginBase
             ])));
 
             $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/vue.js');
+            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/Sortable.min.js');
+            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/vuedraggable.umd.min.js');
+            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/v-mask.min.js');
             $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/uiv.min.js');
+            $controller->addJs('/plugins/qcsoft/ocext/assets/vue-libs.js');
             $controller->addJs('/plugins/qcsoft/ocext/assets/vue-shell.js');
         });
     }

@@ -4,12 +4,14 @@
      data-value="<?= $value ?>"
      data-attribute="<?= get_class($record) ?>::<?= $column->columnName ?>"
 >
-    <input type="<?= array_get($column->config, 'htmlInputType', 'text') ?>"
-           class="form-control input-sm"
+    <input class="form-control input-sm"
            style="width: <?= array_get($column->config, 'width', '100px') ?>"
            v-model="newValue"
            @keydown.enter="onSave"
            @keydown.esc="onCancel"
+    <?php foreach(array_get($column->config, 'inputAttributes', []) as $key => $value) : ?>
+    <?= $key ?>="<?= $value ?>"
+    <?php endforeach ?>
     />
     <div style="visibility: hidden"
          :style="{visibility: !loading && (value != newValue) ? 'visible' : 'hidden'}"
