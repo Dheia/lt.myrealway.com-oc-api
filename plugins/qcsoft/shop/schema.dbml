@@ -41,7 +41,7 @@ ref: category_product.product_id > product.id
 
 table bundle{
   id integer [pk, increment]
-  name string
+  _webpage _webpage
   description text
   default_price integer
 }
