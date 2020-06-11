@@ -71,6 +71,16 @@ class Product extends ProductBase
         });
     }
 
+    public function getDefaultPriceAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setDefaultPriceAttribute($value)
+    {
+        return $this->attributes['default_price'] = $value * 100;
+    }
+
     public function saveCustomergroupPrices($requestedItems)
     {
         /** @var Collection $existingItems */
@@ -111,53 +121,6 @@ class Product extends ProductBase
                 return $price / 100;
             })
             ->toArray();
-    }
-
-    public function saveCustomergroupPricesold($requestedItems)
-    {
-        $existingItems = CustomergroupProduct::where('product_id', $this->id)->get();
-
-        $requestedItems = array_filter($requestedItems, function ($item) {
-            return $item > 0;
-        });
-
-        $requestedIds = array_keys($requestedItems);
-
-        foreach ($existingItems as $i => $item)
-        {
-            if (!in_array($item->customergroup_id, $requestedIds))
-            {
-                $item->delete();
-
-                unset($existingItems[$i]);
-            }
-        }
-
-        foreach ($requestedItems as $id => $requestedPrice)
-        {
-            $existingItem = $existingItems->firstWhere('customergroup_id', $id);
-
-            if ($existingItem)
-            {
-                if ($existingItem->price != $requestedPrice * 100)
-                {
-                    $existingItem->price = $requestedPrice * 100;
-
-                    $existingItem->save();
-                }
-            }
-            else
-            {
-                $createItem = new CustomergroupProduct();
-
-                $createItem->customergroup_id = $id;
-                $createItem->product_id = $this->id;
-                $createItem->price = $requestedPrice * 100;
-
-                $createItem->save();
-            }
-        }
-
     }
 
     public function saveFilterOptionsToRelation($requestedOptions)

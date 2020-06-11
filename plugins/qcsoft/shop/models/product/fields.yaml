@@ -9,11 +9,14 @@ fields:
         type: relation
 tabs:
     fields:
-        Default_price:
+        default_price:
             label: Default price
-            span: full
             type: number
             tab: Price
+            attributes:
+                style: 'position: absolute; left: 350px; top: 0; width: 150px'
+            containerAttributes:
+                style: 'clear: both; line-height: 32px'
         description:
             label: Description
             span: full

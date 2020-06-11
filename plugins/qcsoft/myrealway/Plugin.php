@@ -3,6 +3,7 @@
 use Cms\Classes\Controller;
 use Cms\Classes\Page;
 use Qcsoft\Myrealway\Classes\ImportOldSite;
+use Qcsoft\Myrealway\Formwidgets\BundleProductList;
 use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
@@ -13,6 +14,13 @@ class Plugin extends PluginBase
 
     public function registerSettings()
     {
+    }
+
+    public function registerFormWidgets()
+    {
+        return [
+            BundleProductList::class => 'bundleProductList',
+        ];
     }
 
     public function boot()

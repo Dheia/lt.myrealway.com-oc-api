@@ -10,6 +10,9 @@ use Qcsoft\Shop\Models\Product;
  * @property int $id
  * @property int $bundle_id
  * @property int $product_id
+ * @property int $quantity
+ * @property int $sort_order
+ * @property int $price_override
  * @property Bundle $bundle;
  * @property Product $product;
  */

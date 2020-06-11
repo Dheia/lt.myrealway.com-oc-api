@@ -50,6 +50,9 @@ table bundle_product{
   id integer [pk, increment]
   bundle_id integer
   product_id integer
+  quantity integer
+  sort_order integer
+  price_override integer
 }
 
 ref: bundle_product.bundle_id > bundle.id

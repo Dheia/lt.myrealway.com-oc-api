@@ -1,0 +1,25 @@
+columns:
+  id           :
+    label: id
+    type : text
+  main_image   :
+    label: Main image
+    type : partial
+    path : $/qcsoft/ocext/partials/column_image.htm
+  main_category:
+    label   : main category
+    relation: main_category
+    select  : name
+  name         :
+    label: name
+    type : text
+recordUrl       : ''
+noRecordsMessage: 'backend::lang.list.no_records'
+showPageNumbers : true
+recordsPerPage  : 100
+showSorting     : true
+defaultSort     : ''
+showCheckboxes  : false
+showSetup       : false
+showTree        : false
+showPagination  : false

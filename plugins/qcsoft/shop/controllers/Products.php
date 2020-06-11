@@ -4,6 +4,7 @@ use Backend\Classes\Controller;
 use Backend\Widgets\Form;
 use Backend\Widgets\Lists;
 use BackendMenu;
+use Qcsoft\Ocext\Behaviors\ColumnInputController;
 use Qcsoft\Shop\Models\Customergroup;
 use Qcsoft\Shop\Models\Filter;
 use Qcsoft\Ocext\Behaviors\MakeSlugController;
@@ -16,6 +17,7 @@ class Products extends Controller
         'Backend\Behaviors\ListController',
         'Backend\Behaviors\FormController',
         MakeSlugController::class,
+        ColumnInputController::class,
     ];
 
     public $listConfig = 'config_list.yaml';
@@ -91,10 +93,15 @@ EOT
         foreach ($customergroups as $customergroup)
         {
             $form->tabs['fields']['customergroup_price[' . $customergroup->id . ']'] = [
-                'label' => 'Price for customer group "' . $customergroup->name . '" (' . $customergroup->id . ')',
-                'span'  => 'full',
-                'type'  => 'number',
-                'tab'   => 'Price'
+                'label'               => 'Price for customer group "' . $customergroup->name . '" (' . $customergroup->id . ')',
+                'attributes'          => [
+                    'style' => 'position: absolute; left: 350px; top: 0; width: 150px'
+                ],
+                'containerAttributes' => [
+                    'style' => 'clear: both; line-height: 32px'
+                ],
+                'type'                => 'number',
+                'tab'                 => 'Price'
             ];
         }
     }

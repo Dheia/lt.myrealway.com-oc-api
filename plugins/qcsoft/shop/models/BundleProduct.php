@@ -8,4 +8,14 @@ class BundleProduct extends BundleProductBase
 
     public $rules = [];
 
+    public function getPriceOverrideAttribute($value)
+    {
+        return $value ? $value / 100 : '';
+    }
+
+    public function setPriceOverrideAttribute($value)
+    {
+        return $this->attributes['price_override'] = (float)$value * 100;
+    }
+
 }
