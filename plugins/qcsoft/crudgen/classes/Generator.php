@@ -63,7 +63,7 @@ class Generator
                     'type'           => $column->type,
                     'length'         => $columnLength[$column->type],
                     'unsigned'       => $column->auto_increment ? true : false,
-                    'allow_null'     => $column->nullable ? '1' : '',
+                    'allow_null'     => $column->nullable ? true : false,
                     'auto_increment' => $column->auto_increment ? '1' : '',
                     'primary_key'    => $column->pk ? '1' : '',
                     'default'        => '',

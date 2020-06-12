@@ -36,32 +36,17 @@ class OrmHasMany
 
     protected function pluralizeRelationKey()
     {
-        $parts = explode('_', $this->relatedModel->tableName);
-
-        if (count($parts) === 1)
+        if (strpos($this->relatedModel->tableName, '_') === false)
         {
-            return \Str::plural($parts[0]);
-        }
-        elseif (count($parts) === 2)
-        {
-            if ($parts[0] === $this->model->tableName)
-            {
-                $pluralizePart = $parts[1];
-            }
-            elseif ($parts[1] === $this->model->tableName)
-            {
-                $pluralizePart = $parts[0];
-            }
-            else
-            {
-                throw new \Exception('Relation key does not have owner model name in it');
-            }
-
-            return $this->model->tableName . '_' . \Str::plural($pluralizePart);
+            return \Str::plural($this->relatedModel->tableName);
         }
         else
         {
-            throw new \Exception('Relation key consists of more than two parts');
+            $pluralizedPart = trim(str_replace(
+                $this->model->tableName, '', $this->relatedModel->tableName
+            ), '_');
+
+            return $this->model->tableName . '_' . \Str::plural($pluralizedPart);
         }
     }
 
