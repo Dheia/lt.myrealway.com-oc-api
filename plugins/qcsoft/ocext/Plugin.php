@@ -21,13 +21,10 @@ class Plugin extends PluginBase
                 plugins_path('qcsoft/ocext/assets/bs3-extras.scss')
             ])));
 
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/vue.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/Sortable.min.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/vuedraggable.umd.min.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/v-mask.min.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vendor/uiv.min.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vue-libs.js');
-            $controller->addJs('/plugins/qcsoft/ocext/assets/vue-shell.js');
+            $controller->addJs('http://178.19.16.34:8080/main.js');
+//            $controller->addJs('/plugins/qcsoft/ocext/assets/js/dist/main.js');
+
         });
+
     }
 }

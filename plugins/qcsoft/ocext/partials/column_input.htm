@@ -9,8 +9,13 @@
            v-model="newValue"
            @keydown.enter="onSave"
            @keydown.esc="onCancel"
+           @keydown.up="onJumpTo('prev')"
+           @keydown.down="onJumpTo('next')"
+           @keydown.tab.shift="onJumpTo('prev')"
+           @keydown.tab.exact="onJumpTo('next')"
+           ref="input"
     <?php foreach(array_get($column->config, 'inputAttributes', []) as $key => $value) : ?>
-    <?= $key ?>="<?= $value ?>"
+    <?= \Str::snake($key, '-') ?>="<?= $value ?>"
     <?php endforeach ?>
     />
     <div style="visibility: hidden"

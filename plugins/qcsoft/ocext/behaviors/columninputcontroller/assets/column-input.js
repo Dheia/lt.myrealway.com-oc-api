@@ -45,6 +45,18 @@ vbus.appDefinition.columnInput = {
         {
             this.newValue = this.value
         },
+        onJumpTo(prevOrNext)
+        {
+            let jumpTo = $(this.$el).closest('tr')[prevOrNext]('tr').find('[data-app=columnInput]')[0]
+
+            if (jumpTo)
+            {
+                setTimeout(() =>
+                {
+                    jumpTo.__vue__.$refs.input.select()
+                })
+            }
+        },
     }
 
 }
