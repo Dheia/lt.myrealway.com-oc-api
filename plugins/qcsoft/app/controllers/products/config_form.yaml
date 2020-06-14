@@ -1,0 +1,10 @@
+name: Products
+form: $/qcsoft/app/models/product/fields.yaml
+modelClass: Qcsoft\App\Models\Product
+defaultRedirect: qcsoft/app/products
+create:
+    redirect: 'qcsoft/app/products/update/:id'
+    redirectClose: qcsoft/app/products
+update:
+    redirect: qcsoft/app/products
+    redirectClose: qcsoft/app/products

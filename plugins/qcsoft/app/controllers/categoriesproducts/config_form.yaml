@@ -1,0 +1,10 @@
+name: CategoriesProducts
+form: $/qcsoft/app/models/categoryproduct/fields.yaml
+modelClass: Qcsoft\App\Models\CategoryProduct
+defaultRedirect: qcsoft/app/categoriesproducts
+create:
+    redirect: 'qcsoft/app/categoriesproducts/update/:id'
+    redirectClose: qcsoft/app/categoriesproducts
+update:
+    redirect: qcsoft/app/categoriesproducts
+    redirectClose: qcsoft/app/categoriesproducts

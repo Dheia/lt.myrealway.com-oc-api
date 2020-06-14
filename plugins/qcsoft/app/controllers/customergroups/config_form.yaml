@@ -1,0 +1,10 @@
+name: Customergroups
+form: $/qcsoft/app/models/customergroup/fields.yaml
+modelClass: Qcsoft\App\Models\Customergroup
+defaultRedirect: qcsoft/app/customergroups
+create:
+    redirect: 'qcsoft/app/customergroups/update/:id'
+    redirectClose: qcsoft/app/customergroups
+update:
+    redirect: qcsoft/app/customergroups
+    redirectClose: qcsoft/app/customergroups

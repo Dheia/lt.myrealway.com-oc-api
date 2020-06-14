@@ -1,0 +1,10 @@
+name: BundlesProductsCustomergroups
+form: $/qcsoft/app/models/bundleproductcustomergroup/fields.yaml
+modelClass: Qcsoft\App\Models\BundleProductCustomergroup
+defaultRedirect: qcsoft/app/bundlesproductscustomergroups
+create:
+    redirect: 'qcsoft/app/bundlesproductscustomergroups/update/:id'
+    redirectClose: qcsoft/app/bundlesproductscustomergroups
+update:
+    redirect: qcsoft/app/bundlesproductscustomergroups
+    redirectClose: qcsoft/app/bundlesproductscustomergroups

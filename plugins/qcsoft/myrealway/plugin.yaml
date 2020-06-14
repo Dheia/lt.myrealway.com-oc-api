@@ -1,6 +1,0 @@
-plugin:
-    name: 'qcsoft.myrealway::lang.plugin.name'
-    description: 'qcsoft.myrealway::lang.plugin.description'
-    author: Qcsoft
-    icon: oc-icon-adjust
-    homepage: ''

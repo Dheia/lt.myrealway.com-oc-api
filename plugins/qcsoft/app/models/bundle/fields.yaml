@@ -1,0 +1,57 @@
+fields:
+    name:
+        label: name
+        span: auto
+        type: text
+    default_price:
+        label: default_price
+        span: auto
+        type: number
+tabs:
+    fields:
+        bundle_products_json:
+            label : Products
+            span  : full
+            type  : widget
+            widget: bundleProductList
+            tab: Products
+#        default_price:
+#            label: Default price
+#            type: number
+#            tab: Price
+#            attributes:
+#                style: 'position: absolute; left: 350px; top: 0; width: 150px'
+#            containerAttributes:
+#                style: 'clear: both; line-height: 32px'
+        description:
+            label: Description
+            span: full
+            type: richeditor
+            tab: Description
+        main_image:
+            label: Main image
+            span: left
+            type: fileupload
+            tab: Images
+        path:
+            label: path
+            span: auto
+            type: partial
+            path: $/qcsoft/ocext/partials/field_slug.htm
+            fromField: name
+            tab: Page
+        custom_h1_title:
+            label: h1_title
+            span: auto
+            type: text
+            tab: Page
+        custom_seo_title:
+            label: seo_title
+            span: auto
+            type: text
+            tab: Page
+        seo_desc:
+            label: seo_desc
+            span: auto
+            type: textarea
+            tab: Page

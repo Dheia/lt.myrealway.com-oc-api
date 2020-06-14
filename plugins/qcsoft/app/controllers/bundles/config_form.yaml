@@ -1,0 +1,10 @@
+name: Bundles
+form: $/qcsoft/app/models/bundle/fields.yaml
+modelClass: Qcsoft\App\Models\Bundle
+defaultRedirect: qcsoft/app/bundles
+create:
+    redirect: 'qcsoft/app/bundles/update/:id'
+    redirectClose: qcsoft/app/bundles
+update:
+    redirect: qcsoft/app/bundles
+    redirectClose: qcsoft/app/bundles

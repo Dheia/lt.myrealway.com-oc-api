@@ -1,0 +1,138 @@
+table _nested_tree{
+  parent_id integer
+  nest_left integer
+  nest_right integer
+  nest_depth integer
+}
+
+table _webpage{
+  name string
+  path string
+  custom_h1_title string
+  custom_seo_title string
+  seo_desc string
+}
+
+table category{
+  id integer [pk, increment]
+  _nested_tree _nested_tree
+  _webpage _webpage
+  description text
+}
+
+table product{
+  id integer [pk, increment]
+  main_category_id integer
+  _webpage _webpage
+  description text
+  default_price integer
+}
+
+ref: product.main_category_id > category.id
+
+table category_product{
+  id integer [pk, increment]
+  category_id integer
+  product_id integer
+}
+
+ref: category_product.category_id > category.id
+ref: category_product.product_id > product.id
+
+table bundle{
+  id integer [pk, increment]
+  _webpage _webpage
+  description text
+  default_price integer
+}
+
+table bundle_product{
+  id integer [pk, increment]
+  bundle_id integer
+  product_id integer
+  quantity integer
+  sort_order integer
+  price_override integer
+}
+
+ref: bundle_product.bundle_id > bundle.id
+ref: bundle_product.product_id > product.id
+
+table filter{
+  id integer [pk, increment]
+  type string
+  name string
+  description text
+}
+
+table filteroption{
+  id integer [pk, increment]
+  filter_id integer
+  name string
+  description text
+  sort_order integer
+}
+
+table filteroption_product{
+  id integer [pk, increment]
+  filteroption_id integer
+  product_id integer
+}
+
+ref: filteroption.filter_id > filter.id
+ref: filteroption_product.filteroption_id > filteroption.id
+ref: filteroption_product.product_id > product.id
+
+table customergroup{
+  id integer [pk, increment]
+  name string
+  is_default boolean
+  discount_percent integer [not null]
+}
+
+table customer{
+  id integer [pk, increment]
+  group_id integer
+  user_id integer
+}
+
+ref: customer.group_id > customergroup.id
+
+table cart{
+  id integer [pk, increment]
+  session_key string
+  customer_id integer
+}
+
+ref: cart.customer_id > customer.id
+
+table cartitem{
+  id integer [pk, increment]
+  cart_id integer
+  sellable_type string
+  sellable_id integer
+  quantity integer
+}
+
+ref: cartitem.cart_id > cart.id
+
+table customergroup_product{
+  id integer [pk, increment]
+  customergroup_id integer
+  product_id integer
+  price integer
+}
+
+ref: customergroup_product.customergroup_id > customergroup.id
+ref: customergroup_product.product_id > product.id
+
+table bundle_product_customergroup{
+  id integer [pk, increment]
+  bundle_product_id integer [not null]
+  customergroup_id integer [not null]
+  discount_value_type string [not null]
+  discount_value integer [not null]
+}
+
+ref: bundle_product_customergroup.bundle_product_id > bundle_product.id
+ref: bundle_product_customergroup.customergroup_id > customergroup.id

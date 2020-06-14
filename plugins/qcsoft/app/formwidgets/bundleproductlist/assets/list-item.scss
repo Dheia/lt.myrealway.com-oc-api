@@ -1,0 +1,83 @@
+.bundle-product-list-item {
+
+  @import "list-item-customergroup-prices";
+
+  width: 385px;
+  float: left;
+  background: white;
+  margin: 12px 10px 0 0;
+  padding: 10px 12px;
+  position: relative;
+
+  .image-attrs {
+    display: flex;
+
+  }
+
+  .product-image-col {
+    width: 120px;
+    height: 120px;
+  }
+
+  .product-attrs-col {
+    margin: 0 0 0 10px;
+
+    .attr-name {
+      font-size: 115%;
+    }
+
+    .attr-quantity {
+      margin-top: 10px;
+      display: flex;
+
+      .quantity-label {
+        margin-right: 15px;
+        margin-top: 5px;
+      }
+
+      .form-control {
+        width: 90px;
+      }
+
+      .btn {
+        padding: 6px 10px;
+      }
+    }
+
+    .attr-default_price {
+      margin-top: 8px;
+    }
+
+    .attr-price_override {
+      margin-top: 8px;
+      display: flex;
+
+      .po-label {
+        margin-right: 15px;
+        margin-top: 5px;
+      }
+
+      .form-control {
+        width: 120px;
+      }
+    }
+  }
+
+  .btn-remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: 0;
+    padding: 3px 7px;
+
+    &:hover {
+      color: #b00;
+    }
+
+    &:focus, &:active {
+      outline: 0;
+      box-shadow: none;
+    }
+  }
+}

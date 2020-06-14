@@ -1,0 +1,10 @@
+name: FilteroptionsProducts
+form: $/qcsoft/app/models/filteroptionproduct/fields.yaml
+modelClass: Qcsoft\App\Models\FilteroptionProduct
+defaultRedirect: qcsoft/app/filteroptionsproducts
+create:
+    redirect: 'qcsoft/app/filteroptionsproducts/update/:id'
+    redirectClose: qcsoft/app/filteroptionsproducts
+update:
+    redirect: qcsoft/app/filteroptionsproducts
+    redirectClose: qcsoft/app/filteroptionsproducts

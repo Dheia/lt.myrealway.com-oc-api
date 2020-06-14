@@ -1,0 +1,31 @@
+columns:
+  id:
+    label: id
+    type: text
+  main_image:
+    label: 'Main image'
+    type: partial
+    path: $/qcsoft/ocext/partials/column_image.htm
+    sortable: false
+  main_category:
+    label: 'Main category'
+    relation: main_category
+    select: name
+  name:
+    label: name
+    type: text
+  default_price:
+    label: 'Default price'
+    type: partial
+    path: $/qcsoft/ocext/partials/column_input.htm
+    clickable: false
+    width: '80px'
+    inputAttributes:
+      vValidate: '/^\d{0,7}(\.\d{0,2})?$/'
+
+#    path:
+#        label: path
+#        type: text
+#    description:
+#        label: description
+#        type: text

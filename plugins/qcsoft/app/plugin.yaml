@@ -1,0 +1,40 @@
+plugin:
+    name: 'qcsoft.app::lang.plugin.name'
+    description: 'qcsoft.app::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''
+navigation:
+    main-menu-app:
+        label: App
+        url: qcsoft/app/categories
+        icon: icon-life-ring
+        sideMenu:
+            side-menu-categories:
+                label: Categories
+                url: qcsoft/app/categories
+                icon: icon-sitemap
+            side-menu-products:
+                label: Products
+                url: qcsoft/app/products
+                icon: icon-sitemap
+            side-menu-bundles:
+                label: Bundles
+                url: qcsoft/app/bundles
+                icon: icon-sitemap
+            side-menu-filters:
+                label: Filters
+                url: qcsoft/app/filters
+                icon: icon-sitemap
+            side-menu-customergroups:
+                label: Customergroups
+                url: qcsoft/app/customergroups
+                icon: icon-sitemap
+            side-menu-customers:
+                label: Customers
+                url: qcsoft/app/customers
+                icon: icon-sitemap
+            side-menu-dev:
+                label: Dev
+                url: qcsoft/app/dev
+                icon: icon-sitemap

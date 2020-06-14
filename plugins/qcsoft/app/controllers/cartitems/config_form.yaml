@@ -1,0 +1,10 @@
+name: Cartitems
+form: $/qcsoft/app/models/cartitem/fields.yaml
+modelClass: Qcsoft\App\Models\Cartitem
+defaultRedirect: qcsoft/app/cartitems
+create:
+    redirect: 'qcsoft/app/cartitems/update/:id'
+    redirectClose: qcsoft/app/cartitems
+update:
+    redirect: qcsoft/app/cartitems
+    redirectClose: qcsoft/app/cartitems

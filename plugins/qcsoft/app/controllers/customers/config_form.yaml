@@ -1,0 +1,10 @@
+name: Customers
+form: $/qcsoft/app/models/customer/fields.yaml
+modelClass: Qcsoft\App\Models\Customer
+defaultRedirect: qcsoft/app/customers
+create:
+    redirect: 'qcsoft/app/customers/update/:id'
+    redirectClose: qcsoft/app/customers
+update:
+    redirect: qcsoft/app/customers
+    redirectClose: qcsoft/app/customers

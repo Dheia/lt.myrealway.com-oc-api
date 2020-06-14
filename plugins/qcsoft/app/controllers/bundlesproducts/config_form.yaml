@@ -1,0 +1,10 @@
+name: BundlesProducts
+form: $/qcsoft/app/models/bundleproduct/fields.yaml
+modelClass: Qcsoft\App\Models\BundleProduct
+defaultRedirect: qcsoft/app/bundlesproducts
+create:
+    redirect: 'qcsoft/app/bundlesproducts/update/:id'
+    redirectClose: qcsoft/app/bundlesproducts
+update:
+    redirect: qcsoft/app/bundlesproducts
+    redirectClose: qcsoft/app/bundlesproducts

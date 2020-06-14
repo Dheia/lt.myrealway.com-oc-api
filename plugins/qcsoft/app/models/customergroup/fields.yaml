@@ -1,0 +1,9 @@
+fields:
+    name:
+        label: Name
+        span: full
+        type: text
+    discount_percent:
+        label: 'Discount percent'
+        span: full
+        type: text

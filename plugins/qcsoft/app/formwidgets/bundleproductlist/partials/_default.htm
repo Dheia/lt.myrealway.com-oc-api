@@ -1,0 +1,19 @@
+<script type="application/json" id="<?= $this->getId() ?>-formValue"><?= $this->getLoadValue() ?></script>
+<script type="application/json" id="<?= $this->getId() ?>-customergroups"><?= $customergroups->toJson() ?></script>
+
+<div data-app="bundleProductList as <?= $this->getId() ?>" data-widget-id="<?= $this->getId() ?>">
+    <div style="display: none" :style="{display: 'block'}">
+        <div class="clearfix">
+            <button type="button" @click="addItem" class="btn btn-default oc-icon-plus">Add product</button>
+        </div>
+            <div v-for="item, i in items" :key="item.product.id" class="bundle-product-list-item">
+                <?= $this->makePartial('list-item') ?>
+            </div>
+        <modal v-model="addItemModalOpen">
+            <div id="<?= $this->controller->widget->list->getId() ?>"></div>
+            <div slot="footer">
+                <btn @click="addItemModalOpen = false">Cancel</btn>
+            </div>
+        </modal>
+    </div>
+</div>

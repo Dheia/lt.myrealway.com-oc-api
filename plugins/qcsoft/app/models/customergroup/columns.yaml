@@ -1,0 +1,15 @@
+columns:
+    id:
+        label: id
+        type: text
+    name:
+        label: Name
+        type: text
+    discount_percent:
+        label: 'Discount percent'
+        type: partial
+        path: $/qcsoft/ocext/partials/column_input.htm
+        clickable: false
+        width: '80px'
+        inputAttributes:
+            vValidate: '/^\d{0,2}(\.\d{0,2})?$/'
