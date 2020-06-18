@@ -4,8 +4,8 @@
             <input type="text"
                    class="form-control"
                    :disabled="local.valueType !== 'percent'"
-                   v-model="percentValue"
-                   v-validate="percentValidate"
+                   @input="setValue"
+                   :value="percentValue"
             >
             <span class="input-group-addon"
                   @click="setValueType('percent')"
@@ -15,8 +15,8 @@
             <input type="text"
                    class="form-control"
                    :disabled="local.valueType !== 'exactPrice'"
-                   v-model="exactPriceValue"
-                   v-validate="exactPriceValidate"
+                   @input="setValue"
+                   :value="exactPriceValue"
             >
             <span class="input-group-addon"
                   @click="setValueType('exactPrice')"
@@ -26,27 +26,58 @@
 </template>
 <script>
     export default {
-        props   : ['value', 'from-price'],
+        model   : {
+            prop: 'result',
+        },
+        props   : ['result', 'from-price'],
         computed: {
             local()
             {
-                return this.value ? this.value : {}
+                return this.result ? this.result : {}
+            },
+            percentValue()
+            {
+                if (this.local.value === '' || this.local.value === undefined)
+                {
+                    return ''
+                }
+
+                return this.local.valueType === 'percent' ? this.local.value :
+                    (10000 - Math.round(this.local.value / (this.fromPrice / 10000))) / 100
+            },
+            exactPriceValue()
+            {
+                if (this.local.value === '' || this.local.value === undefined)
+                {
+                    return ''
+                }
+
+                return this.local.valueType === 'exactPrice' ? this.local.value :
+                    Math.round(this.fromPrice * (100 - this.local.value)) / 100
             },
         },
-        data()
-        {
-            return {
-                percentValue   : '',
-                exactPriceValue: '',
-                converting     : false,
-            }
-        },
         methods : {
-            setValueType(type)
+            setValue(e)
             {
                 var s = {...this.local}
 
-                s.valueType = type
+                if (s.valueType === 'percent' && this.percentValidate(e.target.value))
+                {
+                    s.value = e.target.value
+                }
+                else if (s.valueType === 'exactPrice' && this.exactPriceValidate(e.target.value))
+                {
+                    s.value = e.target.value
+                }
+
+                this.$emit('input', s)
+            },
+            setValueType(valueType)
+            {
+                var s = {...this.local}
+
+                s.value = this[valueType + 'Value']
+                s.valueType = valueType
 
                 this.$emit('input', s)
             },
@@ -57,40 +88,6 @@
             exactPriceValidate(value)
             {
                 return value.match(/^\d{0,9}(\.\d{0,2})?$/) && (value >= 0) && (value <= this.fromPrice)
-            },
-        },
-        watch   : {
-            percentValue(value)
-            {
-                if (this.converting)
-                {
-                    return
-                }
-
-                this.converting = true
-
-                this.exactPriceValue = Math.round(this.fromPrice * (100 - value)) / 100
-
-                this.$nextTick(() =>
-                {
-                    this.converting = false
-                })
-            },
-            exactPriceValue(value)
-            {
-                if (this.converting)
-                {
-                    return
-                }
-
-                this.converting = true
-
-                this.percentValue = (10000 - Math.round(value / (this.fromPrice / 10000))) / 100
-
-                this.$nextTick(() =>
-                {
-                    this.converting = false
-                })
             },
         },
     }

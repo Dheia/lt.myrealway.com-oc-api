@@ -9,7 +9,7 @@ fields:
         type: number
 tabs:
     fields:
-        bundle_products_json:
+        bundle_product_list:
             label : Products
             span  : full
             type  : widget

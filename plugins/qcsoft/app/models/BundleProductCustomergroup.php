@@ -8,4 +8,14 @@ class BundleProductCustomergroup extends BundleProductCustomergroupBase
 
     public $rules = [];
 
+    public function getDiscountValueAttribute($value)
+    {
+        return $value ? $value / 100 : '';
+    }
+
+    public function setDiscountValueAttribute($value)
+    {
+        return $this->attributes['discount_value'] = (float)$value * 100;
+    }
+
 }

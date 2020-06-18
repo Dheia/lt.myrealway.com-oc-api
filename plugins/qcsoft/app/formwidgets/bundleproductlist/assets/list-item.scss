@@ -1,9 +1,6 @@
 .bundle-product-list-item {
 
-  @import "list-item-customergroup-prices";
-
   width: 385px;
-  float: left;
   background: white;
   margin: 12px 10px 0 0;
   padding: 10px 12px;
@@ -60,6 +57,25 @@
       .form-control {
         width: 120px;
       }
+    }
+  }
+
+  .drag-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+    border: 0;
+    padding: 4px 7px;
+    cursor: grab;
+
+    &:hover {
+      color: #00b;
+    }
+
+    &:focus, &:active {
+      outline: 0;
+      box-shadow: none;
     }
   }
 

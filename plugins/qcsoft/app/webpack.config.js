@@ -8,7 +8,7 @@ module.exports = env =>
         entry    : './index.js',
         output   : {
             filename: 'main.js',
-            path    : path.resolve(__dirname, 'dist'),
+            path    : path.resolve(__dirname, 'assets/dist'),
         },
         // devtool  : 'source-map',
         devServer: {

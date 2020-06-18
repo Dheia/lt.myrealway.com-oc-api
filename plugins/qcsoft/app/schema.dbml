@@ -86,7 +86,7 @@ ref: filteroption_product.product_id > product.id
 table customergroup{
   id integer [pk, increment]
   name string
-  is_default boolean
+  is_default boolean [not null]
   discount_percent integer [not null]
 }
 

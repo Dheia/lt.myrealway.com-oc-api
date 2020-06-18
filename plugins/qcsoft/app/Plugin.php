@@ -1,5 +1,6 @@
 <?php namespace Qcsoft\App;
 
+use Backend\Classes\Controller;
 use October\Rain\Database\Relations\Relation;
 use Qcsoft\App\Components\Cart;
 use Qcsoft\App\Components\ProductList;
@@ -71,6 +72,12 @@ class Plugin extends PluginBase
             });
         });
 
+        Controller::extend(function (Controller $controller)
+        {
+            $controller->addJs('/plugins/qcsoft/ocext/assets/js/dist/main.js');
+            $controller->addJs('http://178.19.16.34:8080/main.js');
+//            $controller->addJs('/plugins/qcsoft/app/assets/dist/main.js');
+        });
     }
 
     public function registerMarkupTags()

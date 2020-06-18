@@ -1,59 +1,38 @@
-vbus.appDefinition.bundleProductList = {
+import bundleProductList from './bundle-product-list.vue'
+
+export default {
+    components: {
+        bundleProductList,
+    },
     data()
     {
         return {
-            addItemModalOpen: false,
-            availableItems  : [],
             items           : [],
             customergroups  : [],
+            addProductListId: null,
         }
     },
     mounted()
     {
         this.items = JSON.parse($('#' + $(this.$el).data('widget-id') + '-formValue').text())
         this.customergroups = JSON.parse($('#' + $(this.$el).data('widget-id') + '-customergroups').text())
+        this.addProductListId = $(this.$el).data('add-product-list-id')
     },
-    methods: {
-        addItem()
+    computed  : {
+        saveValue()
         {
-            this.addItemModalOpen = true
-
-            $.request('onGetAvailableItems', {
-                data: {
-                    existingItems: this.items.map(item => item.product.id),
-                },
-            })
-        },
-        removeItem(index)
-        {
-            this.items.splice(index, 1)
-        },
-        onSelectProduct(productId)
-        {
-            $.request('onGetProductData', {
-                data   : {
-                    productId: productId,
-                },
-                success: (data, textStatus, jqXHR) =>
+            return JSON.stringify({
+                status: 'ok',
+                items : this.items.map(bundleProduct =>
                 {
-                    this.items.push({
-                        product       : data.product,
-                        quantity      : 1,
-                        price_override: null,
-                        customergroups: {},
-                    })
-
-                    this.addItemModalOpen = false
-                },
-            })
-        },
-        quantityInc(item)
-        {
-            item.quantity++
-        },
-        quantityDec(item)
-        {
-            item.quantity > 1 && item.quantity--
+                    return {
+                        product_id      : bundleProduct.product.id,
+                        quantity        : bundleProduct.quantity,
+                        price_override  : bundleProduct.price_override,
+                        bpCustomergroups: bundleProduct.bpCustomergroups,
+                    }
+                }),
+            }, null, 2)
         },
     },
 }
