@@ -1,0 +1,11 @@
+plugin:
+    name: 'qcsoft.modeler::lang.plugin.name'
+    description: 'qcsoft.modeler::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''
+navigation:
+    main-menu-modeler:
+        label: 'qcsoft.modeler::lang.plugin.name'
+        url: qcsoft/modeler/home
+        icon: icon-life-ring

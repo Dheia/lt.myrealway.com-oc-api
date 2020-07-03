@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    window.assetsBase = '/plugins/qcsoft/modeler/controllers/home/assets'
+    window.mxBasePath = '/plugins/qcsoft/modeler/controllers/home/assets/mxclient'
+</script>
+<link rel="stylesheet" href="/plugins/qcsoft/modeler/controllers/home/assets/bootstrap-alert.css">
+<link rel="stylesheet" href="/plugins/qcsoft/modeler/controllers/home/assets/bootstrap-alert-theme.css">
+<?php if(1) : ?>
+<script type="text/javascript"
+        src="/plugins/qcsoft/modeler/controllers/home/assets/mxClient.min.js"></script>
+<?php else : ?>
+<script type="text/javascript"
+        src="/plugins/qcsoft/modeler/controllers/home/assets/mxclient/js/mxClient.js"></script>
+<?php endif ?>
+
+<style>
+    #layout-body {
+        padding: 0;
+    }
+</style>
+
+<div class="app" data-schema="<?= $schema ?>">
+    <div id="app"></div>
+</div>

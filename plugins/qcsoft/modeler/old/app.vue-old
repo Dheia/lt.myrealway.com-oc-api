@@ -1,0 +1,258 @@
+<template>
+    <div>
+
+
+<!--        <graph-control v-if="showDebug"-->
+<!--                       class="graph-control"-->
+<!--                       :graph-data="graphData"-->
+<!--        ></graph-control>-->
+<!--        <mx-editor v-model="graphData"-->
+<!--                   ref="editor"-->
+<!--                   class="editor"-->
+<!--                   :style="{left: showDebug ? '600px' : '0'}"-->
+<!--                   :wheel-zoom="wheelZoom"-->
+<!--        >-->
+<!--            &lt;!&ndash;<template #entity>-->
+<!--                <cell-attribute></cell-attribute>-->
+<!--            </template>-->
+<!--            <template #edge>-->
+<!--            </template>&ndash;&gt;-->
+<!--        </mx-editor>-->
+<!--        -->
+<!--        -->
+<!--        -->
+<!--        -->
+<!--        -->
+        <!--<div v-for="(gd, i) in gds">
+            <mx-editor v-model="gds[i]">
+            </mx-editor>
+        </div>-->
+        <!--<div class="sidebar">
+            <div class="outline" ref="outline"></div>
+            <div class="controls">
+                <btn type="primary" @click="onAddEntity">onAddEntity</btn>
+                <hr/>
+                <div v-for="cell in graphData.cells">
+                    <input type="text" class="form-control" style="margin-bottom: 10px" v-model="cell.name"/>
+                    <simple-input label="x:" width="95px" v-model="cell.x" style="margin: 0 15px 0 5px"/>
+                    <simple-input label="y:" width="95px" v-model="cell.y" style="margin-right: 15px"/>
+                    <simple-input label="w:" width="95px" v-model="cell.width"/>
+                    <div style="transform: scale(.8); transform-origin: top left; margin-top: 10px">
+                        <div v-for="child in cell.children" style="margin-bottom: 10px">
+                            <input type="text" class="form-control" style="margin-bottom: 10px" v-model="child.name"/>
+                            <simple-input label="x:" width="95px" v-model="child.x" style="margin: 0 15px 0 5px"/>
+                            <simple-input label="y:" width="95px" v-model="child.y" style="margin-right: 15px"/>
+                            <simple-input label="w:" width="95px" v-model="child.width"/>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+        </div>-->
+    </div>
+</template>
+<script>
+    import mxvueHelper from './mxvue/mxvue-helper.js'
+    import simpleInput from './simple-input.vue'
+    import cellStyles from './cell-styles.js'
+    import devTestGraphdata from './dev-test-graph-data.js'
+    import graphControl from './graph-control.vue'
+
+    export default {
+        components: {
+            simpleInput,
+            graphControl
+        },
+        mixins    : [
+            mxvueHelper(self => self.$refs.editor.$options)
+        ],
+        data()
+        {
+            return {
+                gds      : [{}, {}, {}],
+                showDebug: true,
+                graphData: {},
+                wheelZoom: true,
+            }
+        },
+        mounted()
+        {
+            cellStyles(this.graph)
+
+            ////////////////////////////////////////////////////////////////////////////////
+            // Handle labels from cell value.name
+            ////////////////////////////////////////////////////////////////////////////////
+            this.graph.convertValueToString = function (cell)
+            {
+                if (cell.value != null && cell.value.name != null)
+                {
+                    return cell.value.name
+                }
+
+                // return mxGraph.prototype.convertValueToString.apply(this, arguments)
+            }
+
+            this.model.valueForCellChanged = function (cell, value)
+            {
+                if (value.name != null)
+                {
+                    return mxGraphModel.prototype.valueForCellChanged.apply(this, arguments);
+                }
+                else
+                {
+                    // var old = cell.value;
+                    //
+                    // cell.value.name = value;
+                    //
+                    // return old;
+                }
+            }
+
+            this.graph.swimlaneNesting = false
+
+            // this.graph.extendParents = false
+
+            ////////////////////////////////////////////////////////////////////////////////
+            // Auto resize entity to fit attributes
+            ////////////////////////////////////////////////////////////////////////////////
+            this.editor.layoutSwimlanes = true
+            this.editor.createSwimlaneLayout = () =>
+            {
+                var layout = new mxStackLayout(this.graph, false);
+
+                layout.fill = true;
+                layout.resizeParent = true;
+
+                layout.isVertexMovable = function (cell)
+                {
+                    return true;
+                };
+
+                return layout;
+            };
+
+            this.graph.htmlLabels = false
+
+            // this.graph.isCellResizable = function (cell)
+            // {
+            //     console.log('this.isSwimlane(cell)', this.isSwimlane(cell), cell)
+            //     return this.isSwimlane(cell);
+            // };
+            // ////////////////////////////////////////////////////////////////////////////////
+            // // Ctrl + S
+            // ////////////////////////////////////////////////////////////////////////////////
+            // document.addEventListener('keydown', e =>
+            // {
+            //     if (e.key === 's' && e.ctrlKey)
+            //     {
+            //         e.preventDefault()
+            //
+            //         $.request('onUpdateGraph', {
+            //             data   : {
+            //                 graphData: this.graphData,
+            //             },
+            //             success: (data, textStatus, jqXHR) =>
+            //             {
+            //                 this.$notify.success(data.result)
+            //             },
+            //         })
+            //     }
+            // })
+            // $.request('onGetGraph', {
+            //     data   : {},
+            //     success: (data, textStatus, jqXHR) =>
+            //     {
+            //         let d
+            //
+            //         try
+            //         {
+            //             d = JSON.parse(data.result)
+            //         }
+            //         catch (e)
+            //         {
+            //
+            //         }
+            //
+            //         this.graphData = d || {cells: []}
+            //     },
+            // })
+            this.$nextTick(() =>
+            {
+                new mxOutline(this.graph, this.$refs.outline);
+
+                this.onAddEntity()
+            })
+
+        },
+        methods   : {
+            onAddEntity()
+            {
+                this.model.beginUpdate()
+                // console.log('this.graphData', this.graphData)
+                this.graphData.cells.push(...devTestGraphdata())
+
+                this.$nextTick(() =>
+                {
+                    this.model.endUpdate()
+                })
+            },
+        }
+    }
+</script>
+<style>
+    .graph-control .btn i::before {
+        margin: 0;
+    }
+</style>
+<style lang="scss" scoped>
+    .editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        // right: 200px;
+        bottom: 0;
+        background: white;
+    }
+
+    .sidebar {
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 200px;
+        bottom: 0;
+        background: white;
+        border-left: 1px solid #ccc;
+
+        .outline {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            height: 150px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .controls {
+            position: absolute;
+            left: 0;
+            top: 150px;
+            right: 0;
+            bottom: 0;
+            padding: 7px 7px;
+        }
+    }
+
+    .graph-control {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 600px;
+        bottom: 0;
+        background: white;
+        overflow: scroll;
+
+        pre {
+            margin: 0;
+        }
+    }
+</style>

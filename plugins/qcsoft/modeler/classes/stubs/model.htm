@@ -1,0 +1,11 @@
+<?php namespace {{ model.getNamespace() }};
+
+use {{ model.getQualifiedBaseClassname() }};
+
+class {{ model.getClassName() }} extends {{ model.getClassName() }}Base
+{
+    use \October\Rain\Database\Traits\Validation;
+
+    public $rules = [];
+
+}
