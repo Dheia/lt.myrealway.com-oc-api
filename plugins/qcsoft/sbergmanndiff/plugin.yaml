@@ -1,0 +1,6 @@
+plugin:
+    name: 'qcsoft.sbergmanndiff::lang.plugin.name'
+    description: 'qcsoft.sbergmanndiff::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''
