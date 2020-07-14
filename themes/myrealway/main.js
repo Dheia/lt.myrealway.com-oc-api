@@ -44,6 +44,26 @@ $(document).on('click', '[data-ajax-link]', function (e)
 
     history.pushState(null, null, url)
 
+    loadPage(url)
+})
+
+window.addEventListener('popstate', function (e)
+{
+    loadPage(location.href)
+})
+
+$(document).on('ajaxComplete', function ()
+{
+    initApps()
+})
+
+$(function ()
+{
+    initApps()
+})
+
+function loadPage(url)
+{
     bus.app.mainLoadIndicator.loading = true
 
     $.ajax(url, {
@@ -59,21 +79,10 @@ $(document).on('click', '[data-ajax-link]', function (e)
                 $('#page').html(data)
 
                 initApps()
-
             }, 0)
         },
     })
-})
-
-$(document).on('ajaxComplete', function ()
-{
-    initApps()
-})
-
-$(function ()
-{
-    initApps()
-})
+}
 
 let unnamedCount = 0
 
