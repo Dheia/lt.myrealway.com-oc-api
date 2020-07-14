@@ -1,21 +1,21 @@
 <?php namespace Qcsoft\App\Modelsbase;
 
-use October\Rain\Database\Model;
-use Qcsoft\App\Models\Customer;
-use Qcsoft\App\Models\CustomergroupProduct;
-use Qcsoft\App\Models\BundleProductCustomergroup;
 use October\Rain\Database\Collection;
+use October\Rain\Database\Model;
+use Qcsoft\App\Models\BundleProductCustomergroup;
+use Qcsoft\App\Models\CatalogitemCustomergroup;
+use Qcsoft\App\Models\Customer;
 
 /**
  * Class CustomergroupBase
  * @package Qcsoft\App\Modelsbase
- * @property int $id
- * @property string $name
- * @property boolean $is_default
+ * @property Collection $customergroup_bundle_products
+ * @property Collection $customergroup_catalogitems
+ * @property Collection $customers
  * @property int $discount_percent
- * @property Collection $customers;
- * @property Collection $customergroup_products;
- * @property Collection $customergroup_bundle_products;
+ * @property int $id
+ * @property boolean $is_default
+ * @property string $name
  */
 class CustomergroupBase extends Model
 {
@@ -24,12 +24,9 @@ class CustomergroupBase extends Model
     public $table = 'qcsoft_app_customergroup';
 
     public $hasMany = [
-        'customers' => [Customer::class],
-        'customergroup_products' => [CustomergroupProduct::class],
-        'customergroup_bundle_products' => [BundleProductCustomergroup::class],
-    ];
-
-    public $belongsTo = [
+        'customergroup_bundle_products' => [BundleProductCustomergroup::class, 'delete' => false],
+        'customers' => [Customer::class, 'delete' => false],
+        'customergroup_catalogitems' => [CatalogitemCustomergroup::class, 'delete' => false],
     ];
 
 }

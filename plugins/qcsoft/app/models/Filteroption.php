@@ -12,15 +12,15 @@ class Filteroption extends FilteroptionBase
     {
         parent::boot();
 
-        static::extend(function ($model) {
-
-            /** @var static $model */
-
-            ////////////////////////////////////////////////////////////////////////////////
-            /// Auto delete related
-            ////////////////////////////////////////////////////////////////////////////////
-            $model->hasMany['filteroption_products']['delete'] = true;
-        });
+//        static::extend(function ($model) {
+//
+//            /** @var static $model */
+//
+//            ////////////////////////////////////////////////////////////////////////////////
+//            /// Auto delete related
+//            ////////////////////////////////////////////////////////////////////////////////
+//            $model->hasMany['filteroption_products']['delete'] = true;
+//        });
     }
 
     public function getSlugAttribute()

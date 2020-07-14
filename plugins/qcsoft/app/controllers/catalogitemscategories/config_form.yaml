@@ -1,0 +1,10 @@
+name: CatalogitemsCategories
+form: $/qcsoft/app/models/catalogitemcategory/fields.yaml
+modelClass: Qcsoft\App\Models\CatalogitemCategory
+defaultRedirect: qcsoft/app/catalogitemscategories
+create:
+    redirect: 'qcsoft/app/catalogitemscategories/update/:id'
+    redirectClose: qcsoft/app/catalogitemscategories
+update:
+    redirect: qcsoft/app/catalogitemscategories
+    redirectClose: qcsoft/app/catalogitemscategories

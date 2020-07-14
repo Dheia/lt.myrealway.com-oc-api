@@ -1,0 +1,13 @@
+fields:
+    item_id:
+        label: item_id
+        span: auto
+        type: text
+    item_type:
+        label: item_type
+        span: auto
+        type: text
+    name:
+        label: name
+        span: auto
+        type: text

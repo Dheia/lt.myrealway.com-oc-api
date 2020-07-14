@@ -6,7 +6,6 @@ table _nested_tree{
 }
 
 table _webpage{
-  name string
   path string
   custom_h1_title string
   custom_seo_title string
@@ -17,6 +16,7 @@ table category{
   id integer [pk, increment]
   _nested_tree _nested_tree
   _webpage _webpage
+  name string
   description text
 }
 
@@ -57,6 +57,13 @@ table bundle_product{
 
 ref: bundle_product.bundle_id > bundle.id
 ref: bundle_product.product_id > product.id
+
+table catalogitem{
+  id integer [pk, increment]
+  item_id integer
+  item_type string
+  name string
+}
 
 table filter{
   id integer [pk, increment]

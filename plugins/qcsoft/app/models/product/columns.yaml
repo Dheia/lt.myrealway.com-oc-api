@@ -2,17 +2,17 @@ columns:
   id:
     label: id
     type: text
-  main_image:
+  catalogitem_main_image:
     label: 'Main image'
     type: partial
     path: $/qcsoft/ocext/partials/column_image.htm
     sortable: false
-  main_category:
+  catalogitem_main_category[name]:
     label: 'Main category'
-    relation: main_category
-    select: name
-  name:
-    label: name
+#    relation: catalogitem
+#    select: main_category.name
+  catalogitem_name:
+    label: Name
     type: text
   default_price:
     label: 'Default price'
@@ -22,10 +22,17 @@ columns:
     width: '80px'
     inputAttributes:
       vValidate: '/^\d{0,7}(\.\d{0,2})?$/'
-
-#    path:
-#        label: path
-#        type: text
+  description:
+    label: Description
+    type: text
+#  page_path:
+#    label: path
+#    type: text
+#  page_path:
+#    label: path
+#    type: text
+#    relation: page
+#    select: name
 #    description:
 #        label: description
 #        type: text

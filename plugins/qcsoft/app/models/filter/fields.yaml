@@ -28,8 +28,3 @@ tabs:
                         containerAttributes:
                             style: 'display: none'
             tab: Options
-        description:
-            label: Description
-            span: full
-            type: richeditor
-            tab: Description

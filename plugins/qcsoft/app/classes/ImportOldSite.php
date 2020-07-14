@@ -1,51 +1,53 @@
 <?php namespace Qcsoft\App\Classes;
 
-use October\Rain\Database\Schema\Blueprint;
-use Qcsoft\App\Models\FilteroptionProduct;
+use Qcsoft\App\Models\Category;
 use Qcsoft\App\Models\Product;
+use Qcsoft\Ocext\Classes\Util;
 
 class ImportOldSite
 {
-    protected $htmlPath = 'qcsoft/app/classes/importoldsite';
+    protected $htmlPath = 'plugins/qcsoft/app/classes/importoldsite';
 
     protected $baseMrwPath = 'https://en.myrealway.com/';
 
-    protected $tempTableName = 'qcsoft_importoldsite_productpage';
+    protected $tempTableProducts = 'qcsoft_importoldsite_productpage';
+    protected $tempTableCategories = 'qcsoft_importoldsite_categorypage';
+    protected $tempTablePivot = 'qcsoft_importoldsite_productpage_categorypage';
 
     public function import()
     {
-//        $this->parseCatalogPages();
-//        $this->downloadProductPages();
-//        $this->fillProductDetails();
+//        Util::safedir($this->htmlPath);
+//        Util::safedir($this->htmlPath . '/products');
+//        Util::safedir($this->htmlPath . '/products/images');
+//        Util::safedir($this->htmlPath . '/categories');
+//
+//        Util::tempTable($this->tempTableProducts, ['id', 'wwwpath', 'product_name', 'image_url', 'price_regular']);
+//        Util::tempTable($this->tempTableCategories, ['id', 'wwwpath', 'name']);
+//        Util::tempTable($this->tempTablePivot, ['id', 'productpage_id' => 'int', 'categorypage_id' => 'int']);
+//
+//        $this->parseCatalogSubpage(1);
+//        $this->parseCatalogSubpage(2);
+//        $this->parseCatalogSubpage(3);
+//
+//        $this->parseProductPages();
+//
 //        $this->downloadProductImages();
+//
+//        $this->parseCategoriesDropdown();
+//
+//        $this->parseCategoryPages();
+
         $this->importProductsToShop();
-        $this->makeRandomGenderFilterBindings();
     }
 
-    protected function parseCatalogPages()
+    protected function parseCatalogSubpage($pageNum)
     {
-        if (!\Schema::hasTable($this->tempTableName))
-        {
-            \Schema::create($this->tempTableName, function (Blueprint $table)
-            {
-                $table->engine = 'InnoDB';
-                $table->increments('id');
-                $table->string('wwwpath');
-                $table->string('product_name');
-                $table->string('image_url');
-            });
-        }
+        $html = Util::cachedWebFile(
+            "{$this->baseMrwPath}product-catalog?path=&page=$pageNum",
+            "$this->htmlPath/page-$pageNum.html"
+        );
 
-        $this->parseCatalogPage(1);
-        $this->parseCatalogPage(2);
-        $this->parseCatalogPage(3);
-    }
-
-    protected function parseCatalogPage($pageNum)
-    {
-        $filepath = plugins_path("$this->htmlPath/page-$pageNum.html");
-
-        $doc = \phpQuery::newDocument(file_get_contents($filepath));
+        $doc = \phpQuery::newDocument($html);
 
         foreach ($doc['.products .product-layout'] as $_product)
         {
@@ -60,36 +62,20 @@ class ImportOldSite
 
             $parts = explode('/', $link);
 
-            \DB::table($this->tempTableName)
-                ->insert([
-                    'wwwpath'      => array_last($parts),
-                    'product_name' => '',
-                    'image_url'    => '',
-                ]);
+            \DB::table($this->tempTableProducts)->insert(['wwwpath' => array_last($parts)]);
         }
     }
 
-    protected function downloadProductPages()
+    protected function parseProductPages()
     {
-        foreach (\DB::table($this->tempTableName)->get() as $product)
+        foreach (\DB::table($this->tempTableProducts)->get() as $product)
         {
-            $ch = curl_init("{$this->baseMrwPath}{$product->wwwpath}");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
+            $html = Util::cachedWebFile(
+                "{$this->baseMrwPath}{$product->wwwpath}",
+                "$this->htmlPath/products/$product->wwwpath.html"
+            );
 
-            $filepath = plugins_path("$this->htmlPath/products/$product->wwwpath.html");
-            file_put_contents($filepath, $result);
-        }
-    }
-
-    protected function fillProductDetails()
-    {
-        foreach (\DB::table($this->tempTableName)->get() as $product)
-        {
-            $filepath = plugins_path("$this->htmlPath/products/$product->wwwpath.html");
-
-            $doc = \phpQuery::newDocument(file_get_contents($filepath));
+            $doc = \phpQuery::newDocument($html);
 
             if ($doc['.product-sumary h1']->length !== 1)
             {
@@ -103,19 +89,89 @@ class ImportOldSite
 
             $productName = pq($doc['.product-sumary h1'])->text();
             $imageSrc = pq($doc['.product-thumbnails li a img'])->attr('src');
+            $priceRegular = pq($doc['#product .price-regular'])->text();
+            $priceRegular = preg_replace('/[^0-9.]/', '$1', $priceRegular);
 
-            \DB::table($this->tempTableName)
+            \DB::table($this->tempTableProducts)
                 ->where('id', $product->id)
                 ->update([
-                    'product_name' => $productName,
-                    'image_url'    => $imageSrc,
+                    'product_name'  => $productName,
+                    'image_url'     => $imageSrc,
+                    'price_regular' => $priceRegular,
                 ]);
+        }
+    }
+
+    protected function parseCategoriesDropdown()
+    {
+        $html = Util::cachedWebFile(
+            "{$this->baseMrwPath}product-catalog?path=&page=1",
+            "$this->htmlPath/page-1.html"
+        );
+
+        $doc = \phpQuery::newDocument($html);
+
+        $options = $doc['select[name=category] option'];
+
+        foreach ($options as $_option)
+        {
+            $option = pq($_option);
+
+            if (strtolower($option->text()) === 'select category')
+            {
+                continue;
+            }
+
+            \DB::table($this->tempTableCategories)->insert([
+                'wwwpath' => $option->attr('value'),
+                'name'    => $option->text(),
+            ]);
+        }
+    }
+
+    protected function parseCategoryPages()
+    {
+        foreach (\DB::table($this->tempTableCategories)->get() as $categorypage)
+        {
+            $filepath = "$this->htmlPath/categories/" . \Str::slug($categorypage->name) . '.html';
+
+            $html = Util::cachedWebFile($categorypage->wwwpath, $filepath);
+
+            $doc = \phpQuery::newDocument($html);
+
+            foreach ($doc['.products .product-layout'] as $_product)
+            {
+                $product = pq($_product);
+                $linkElem = pq($product['.caption h4 a']);
+                $link = $linkElem->attr('href');
+
+                if (!starts_with($link, $this->baseMrwPath))
+                {
+                    throw new \Exception('Something is wrong with the product path. Have to check it manually');
+                }
+
+                $parts = explode('/', $link);
+
+                $productpagePath = array_last($parts);
+
+                if (!$productpage = \DB::table($this->tempTableProducts)
+                    ->where('wwwpath', $productpagePath)
+                    ->first())
+                {
+                    throw new \Exception("Product with path $productpagePath not found, this shouldn't've happened");
+                }
+
+                \DB::table($this->tempTablePivot)->insert([
+                    'productpage_id'  => $productpage->id,
+                    'categorypage_id' => $categorypage->id,
+                ]);
+            }
         }
     }
 
     protected function downloadProductImages()
     {
-        foreach (\DB::table($this->tempTableName)->get() as $product)
+        foreach (\DB::table($this->tempTableProducts)->get() as $product)
         {
             $fileExtension = preg_replace('/^.+(\.\w{3})$/', '$1', $product->image_url);
 
@@ -125,59 +181,36 @@ class ImportOldSite
             }
         }
 
-        foreach (\DB::table($this->tempTableName)->get() as $product)
+        foreach (\DB::table($this->tempTableProducts)->get() as $product)
         {
-            $ch = curl_init($product->image_url);
-            curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-            $result = curl_exec($ch);
-            curl_close($ch);
-
             $fileExtension = preg_replace('/^.+(\.\w{3})$/', '$1', $product->image_url);
 
-            $filepath = plugins_path("$this->htmlPath/products/images/{$product->wwwpath}{$fileExtension}");
+            $filepath = "$this->htmlPath/products/images/{$product->wwwpath}{$fileExtension}";
 
-            file_put_contents($filepath, $result);
+            Util::cachedWebFile($product->image_url, $filepath);
         }
     }
 
     protected function importProductsToShop()
     {
-        foreach (\DB::table($this->tempTableName)->get() as $productRaw)
+        foreach (\DB::table($this->tempTableProducts)->get() as $productRaw)
         {
             $productImageFileExtension = preg_replace('/^.+(\.\w{3})$/', '$1', $productRaw->image_url);
 
-            $productImageFilePath = plugins_path("$this->htmlPath/products/images/{$productRaw->wwwpath}{$productImageFileExtension}");
+            $productImageFilePath = base_path("$this->htmlPath/products/images/{$productRaw->wwwpath}{$productImageFileExtension}");
 
             $product = new Product();
-            $product->name = $productRaw->product_name;
-            $product->path = \Str::slug($product->name);
-            $product->main_image = $productImageFilePath;
+            $product->catalogitem_name = $productRaw->product_name;
+            $product->catalogitem_main_image = $productImageFilePath;
+            $product->default_price = $productRaw->price_regular;
             $product->save();
         }
-    }
 
-    /**
-     * This method here is just for convenience, it should be removed in the future
-     */
-    protected function makeRandomGenderFilterBindings()
-    {
-        foreach (Product::all() as $product)
+        foreach (\DB::table($this->tempTableCategories)->get() as $categoryRaw)
         {
-            $filterOptions = [
-                                 ['male'],
-                                 ['female'],
-                                 ['male', 'female'],
-                             ][rand(0, 2)];
-
-            foreach ($filterOptions as $i => $foption)
-            {
-                $fop = new FilteroptionProduct();
-                $fop->product_id = $product->id;
-                $fop->filteroption_id = $i + 1;
-                $fop->save();
-            }
+            $category = new Category();
+            $category->name = $categoryRaw->name;
+            $category->save();
         }
     }
 

@@ -1,0 +1,10 @@
+name: Genericblocks
+form: $/qcsoft/app/models/genericblock/fields.yaml
+modelClass: Qcsoft\App\Models\Genericblock
+defaultRedirect: qcsoft/app/genericblocks
+create:
+    redirect: 'qcsoft/app/genericblocks/update/:id'
+    redirectClose: qcsoft/app/genericblocks
+update:
+    redirect: qcsoft/app/genericblocks
+    redirectClose: qcsoft/app/genericblocks

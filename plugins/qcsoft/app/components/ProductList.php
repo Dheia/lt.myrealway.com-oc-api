@@ -1,6 +1,7 @@
 <?php namespace Qcsoft\App\Components;
 
 use Cms\Classes\ComponentBase;
+use Qcsoft\App\Models\CatalogEntityItem;
 use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Product;
 

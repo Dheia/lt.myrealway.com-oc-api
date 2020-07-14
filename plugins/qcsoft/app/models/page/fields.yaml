@@ -1,0 +1,25 @@
+fields:
+    owner_type:
+        label: owner_type
+        span: auto
+        type: text
+    owner_id:
+        label: owner_id
+        span: auto
+        type: text
+    path:
+        label: path
+        span: auto
+        type: text
+    custom_h1_title:
+        label: custom_h1_title
+        span: auto
+        type: text
+    custom_seo_title:
+        label: custom_seo_title
+        span: auto
+        type: text
+    seo_desc:
+        label: seo_desc
+        span: auto
+        type: text

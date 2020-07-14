@@ -1,0 +1,24 @@
+columns:
+    id:
+        label: id
+        type: text
+    owner_type:
+        label: owner_type
+        type: text
+    owner_id:
+        label: owner_id
+        type: text
+    path:
+        label: path
+        type: partial
+        path: $/qcsoft/ocext/partials/column_frontend_link.htm
+        clickable: false
+    custom_h1_title:
+        label: custom_h1_title
+        type: text
+    custom_seo_title:
+        label: custom_seo_title
+        type: text
+    seo_desc:
+        label: seo_desc
+        type: text

@@ -13,6 +13,6 @@ class Customers extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-customers');
+        BackendMenu::setContext('Qcsoft.App', 'main-menu-customers', 'side-menu-customers');
     }
 }

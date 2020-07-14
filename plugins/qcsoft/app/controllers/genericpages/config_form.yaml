@@ -1,0 +1,10 @@
+name: Genericpages
+form: $/qcsoft/app/models/genericpage/fields.yaml
+modelClass: Qcsoft\App\Models\Genericpage
+defaultRedirect: qcsoft/app/genericpages
+create:
+    redirect: 'qcsoft/app/genericpages/update/:id'
+    redirectClose: qcsoft/app/genericpages
+update:
+    redirect: qcsoft/app/genericpages
+    redirectClose: qcsoft/app/genericpages

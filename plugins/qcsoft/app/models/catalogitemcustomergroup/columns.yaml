@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: id
+        type: text
+    customergroup_id:
+        label: customergroup_id
+        type: text
+    catalogitem_id:
+        label: catalogitem_id
+        type: text
+    price:
+        label: price
+        type: text

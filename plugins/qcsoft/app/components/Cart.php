@@ -37,9 +37,10 @@ class Cart extends ComponentBase
         $cartitems = $cart->cartitems()
             ->with(['sellable', 'sellable.main_image'])
             ->get()
-            ->map(function ($item) {
-
-                $mainImageUrl = $item->sellable->main_image->getThumb(100, 100, ['mode' => 'crop']);
+            ->map(function ($item)
+            {
+                $mainImageUrl = $item->sellable->main_image ?
+                    $item->sellable->main_image->getThumb(100, 100, ['mode' => 'crop']) : null;
 
                 $result = $item->toArray();
 
@@ -62,7 +63,8 @@ class Cart extends ComponentBase
 
         $cart = $cart->toArray();
 
-        $cart['total_count'] = array_reduce($cartitems, function ($count, $item) {
+        $cart['total_count'] = array_reduce($cartitems, function ($count, $item)
+        {
             return $count + $item['quantity'];
         }, 0);
 

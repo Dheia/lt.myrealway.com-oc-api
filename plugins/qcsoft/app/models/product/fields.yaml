@@ -1,12 +1,13 @@
 fields:
-    name:
+    catalogitem_name:
         label: name
         span: auto
         type: text
-    main_category:
+    catalogitem[main_category]:
         label: Main category
         span: auto
         type: relation
+        emptyOption: '-- none --'
 tabs:
     fields:
         default_price:
@@ -17,35 +18,38 @@ tabs:
                 style: 'position: absolute; left: 350px; top: 0; width: 150px'
             containerAttributes:
                 style: 'clear: both; line-height: 32px'
+
         description:
             label: Description
             span: full
             type: richeditor
             tab: Description
-        main_image:
+
+        catalogitem[main_image]:
             label: Main image
             span: left
             type: fileupload
             tab: Images
-        path:
+
+        page_path:
             label: path
             span: auto
             type: partial
             path: $/qcsoft/ocext/partials/field_slug.htm
-            fromField: name
-            tab: Page
-        custom_h1_title:
+            slugField: page/owner.path
+            tab: SEO
+        page_custom_h1_title:
             label: h1_title
             span: auto
             type: text
-            tab: Page
-        custom_seo_title:
+            tab: SEO
+        page_custom_seo_title:
             label: seo_title
             span: auto
             type: text
-            tab: Page
-        seo_desc:
+            tab: SEO
+        page_seo_desc:
             label: seo_desc
             span: auto
             type: textarea
-            tab: Page
+            tab: SEO

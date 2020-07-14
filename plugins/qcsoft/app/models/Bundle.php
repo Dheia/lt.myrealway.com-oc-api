@@ -1,27 +1,20 @@
 <?php namespace Qcsoft\App\Models;
 
-use Qcsoft\Cms\Classes\PageModel;
 use Qcsoft\App\Modelsbase\BundleBase;
 use System\Models\File;
 
 class Bundle extends BundleBase
 {
-    use PageModel;
-
     use \October\Rain\Database\Traits\Validation;
 
     public $rules = [];
-
-    public $attachOne = [
-        'main_image' => [File::class],
-    ];
 
     protected static function boot()
     {
         parent::boot();
 
-        static::extend(function ($model) {
-
+        static::extend(function ($model)
+        {
             /** @var static $model */
 
             ////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +22,16 @@ class Bundle extends BundleBase
             ////////////////////////////////////////////////////////////////////////////////
             $model->hasMany['bundle_products']['delete'] = true;
         });
+    }
+
+    public function getNameAttribute()
+    {
+        return $this->catalogitem_name;
+    }
+
+    public function setNameAttribute($value)
+    {
+        return $this->catalogitem_name = $value;
     }
 
     public function getDefaultPriceAttribute($value)

@@ -1,0 +1,10 @@
+name: CustomergroupsCatalogitems
+form: $/qcsoft/app/models/customergroupcatalogitem/fields.yaml
+modelClass: Qcsoft\App\Models\CustomergroupCatalogitem
+defaultRedirect: qcsoft/app/customergroupscatalogitems
+create:
+    redirect: 'qcsoft/app/customergroupscatalogitems/update/:id'
+    redirectClose: qcsoft/app/customergroupscatalogitems
+update:
+    redirect: qcsoft/app/customergroupscatalogitems
+    redirectClose: qcsoft/app/customergroupscatalogitems

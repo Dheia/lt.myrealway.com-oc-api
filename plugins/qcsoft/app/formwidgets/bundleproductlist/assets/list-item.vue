@@ -4,7 +4,7 @@
         <div class="image-attrs">
             <img class="product-image-col" :src="local.product.main_image"/>
             <div class="product-attrs-col">
-                <div class="attr-name" v-text="local.product.name + ' (' + local.product.id + ')'"></div>
+                <div class="attr-name" v-text="local.product.catalogitem.name + ' (' + local.product.id + ')'"></div>
                 <div class="attr-quantity">
                     <div class="quantity-label">Quantity:</div>
                     <div class="input-group">

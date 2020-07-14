@@ -7,34 +7,55 @@ plugin:
 navigation:
     main-menu-app:
         label: App
-        url: qcsoft/app/categories
+        url: qcsoft/app/products
         icon: icon-life-ring
         sideMenu:
-            side-menu-categories:
-                label: Categories
-                url: qcsoft/app/categories
-                icon: icon-sitemap
             side-menu-products:
                 label: Products
                 url: qcsoft/app/products
+                icon: icon-sitemap
+            side-menu-categories:
+                label: Categories
+                url: qcsoft/app/categories
                 icon: icon-sitemap
             side-menu-bundles:
                 label: Bundles
                 url: qcsoft/app/bundles
                 icon: icon-sitemap
+#            side-menu-catalogitems:
+#                label: Catalogitems
+#                url: qcsoft/app/catalogitems
+#                icon: icon-sitemap
             side-menu-filters:
                 label: Filters
                 url: qcsoft/app/filters
                 icon: icon-sitemap
-            side-menu-customergroups:
-                label: Customergroups
-                url: qcsoft/app/customergroups
+            side-menu-genericpages:
+                label: Pages
+                url: qcsoft/app/genericpages
                 icon: icon-sitemap
+            side-menu-pages:
+                label: Sitemap
+                url: qcsoft/app/pages
+                icon: icon-sitemap
+            side-menu-settings:
+                label: Settings
+                url: qcsoft/app/genericblocks
+                icon: icon-gears
+            side-menu-dev:
+                label: Dev
+                url: qcsoft/app/dev
+                icon: icon-sitemap
+    main-menu-customers:
+        label: Customers
+        url: qcsoft/app/customers
+        icon: icon-life-ring
+        sideMenu:
             side-menu-customers:
                 label: Customers
                 url: qcsoft/app/customers
                 icon: icon-sitemap
-            side-menu-dev:
-                label: Dev
-                url: qcsoft/app/dev
+            side-menu-customergroups:
+                label: Customergroups
+                url: qcsoft/app/customergroups
                 icon: icon-sitemap

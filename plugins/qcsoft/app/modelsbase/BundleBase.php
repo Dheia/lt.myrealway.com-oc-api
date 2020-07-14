@@ -1,33 +1,42 @@
 <?php namespace Qcsoft\App\Modelsbase;
 
+use October\Rain\Database\Collection;
 use October\Rain\Database\Model;
 use Qcsoft\App\Models\BundleProduct;
-use October\Rain\Database\Collection;
+use Qcsoft\App\Models\Catalogitem;
+use Qcsoft\App\Models\Page;
+use Qcsoft\App\Traits\CompositeModel;
 
 /**
  * Class BundleBase
  * @package Qcsoft\App\Modelsbase
- * @property int $id
- * @property string $name
- * @property string $path
- * @property string $custom_h1_title
- * @property string $custom_seo_title
- * @property string $seo_desc
- * @property string $description
+ * @property Collection $bundle_products
+ * @property Catalogitem $catalogitem
  * @property int $default_price
- * @property Collection $bundle_products;
+ * @property string $description
+ * @property int $id
+ * @property Page $page
  */
 class BundleBase extends Model
 {
+    use CompositeModel;
+
+    public $compositeModel = [
+        'catalogitem' => [],
+        'page' => [],
+    ];
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_bundle';
 
     public $hasMany = [
-        'bundle_products' => [BundleProduct::class],
+        'bundle_products' => [BundleProduct::class, 'delete' => false],
     ];
 
-    public $belongsTo = [
+    public $morphOne = [
+        'page' => [Page::class, 'name' => 'owner', 'delete' => true],
+        'catalogitem' => [Catalogitem::class, 'name' => 'item', 'delete' => true],
     ];
 
 }

@@ -1,0 +1,35 @@
+fields:
+    name:
+        label: Name
+        span: full
+        type: text
+tabs:
+    fields:
+        content:
+            label: Content
+            span: full
+            type: richeditor
+            tab: Content
+
+        page_path:
+            label: path
+            span: auto
+            type: partial
+            path: $/qcsoft/ocext/partials/field_slug.htm
+            slugField: page/owner.path
+            tab: SEO
+        page_custom_h1_title:
+            label: h1_title
+            span: auto
+            type: text
+            tab: SEO
+        page_custom_seo_title:
+            label: seo_title
+            span: auto
+            type: text
+            tab: SEO
+        page_seo_desc:
+            label: seo_desc
+            span: auto
+            type: textarea
+            tab: SEO

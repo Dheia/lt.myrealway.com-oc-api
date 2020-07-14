@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: id
+        type: text
+    item_id:
+        label: item_id
+        type: text
+    item_type:
+        label: item_type
+        type: text
+    name:
+        label: name
+        type: text

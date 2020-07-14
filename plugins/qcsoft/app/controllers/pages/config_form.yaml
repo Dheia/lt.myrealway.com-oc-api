@@ -1,0 +1,10 @@
+name: Pages
+form: $/qcsoft/app/models/page/fields.yaml
+modelClass: Qcsoft\App\Models\Page
+defaultRedirect: qcsoft/app/pages
+create:
+    redirect: 'qcsoft/app/pages/update/:id'
+    redirectClose: qcsoft/app/pages
+update:
+    redirect: qcsoft/app/pages
+    redirectClose: qcsoft/app/pages

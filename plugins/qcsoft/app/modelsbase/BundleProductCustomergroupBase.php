@@ -7,22 +7,19 @@ use Qcsoft\App\Models\Customergroup;
 /**
  * Class BundleProductCustomergroupBase
  * @package Qcsoft\App\Modelsbase
- * @property int $id
+ * @property BundleProduct $bundle_product
  * @property int $bundle_product_id
+ * @property Customergroup $customergroup
  * @property int $customergroup_id
- * @property string $discount_value_type
  * @property int $discount_value
- * @property BundleProduct $bundle_product;
- * @property Customergroup $customergroup;
+ * @property string $discount_value_type
+ * @property int $id
  */
 class BundleProductCustomergroupBase extends Model
 {
     public $timestamps = false;
 
     public $table = 'qcsoft_app_bundle_product_customergroup';
-
-    public $hasMany = [
-    ];
 
     public $belongsTo = [
         'bundle_product' => [BundleProduct::class],

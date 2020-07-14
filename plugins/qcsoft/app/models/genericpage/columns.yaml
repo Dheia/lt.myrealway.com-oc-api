@@ -1,0 +1,13 @@
+columns:
+    id:
+        label: id
+        type: text
+    name:
+        label: name
+        type: text
+    page_path:
+        label: web path
+        type: text
+    content:
+        label: content
+        type: text

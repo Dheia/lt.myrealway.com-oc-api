@@ -1,12 +1,13 @@
 <?php namespace Qcsoft\App\Formwidgets;
 
 use Backend\Classes\FormWidgetBase;
-use Backend\Widgets\Lists;
 use October\Rain\Database\Builder;
+use October\Rain\Database\Collection;
 use Qcsoft\App\Models\BundleProduct;
 use Qcsoft\App\Models\BundleProductCustomergroup;
 use Qcsoft\App\Models\Customergroup;
 use Qcsoft\App\Models\Product;
+use Qcsoft\App\Widgets\VLists;
 
 class BundleProductList extends FormWidgetBase
 {
@@ -30,14 +31,25 @@ class BundleProductList extends FormWidgetBase
         $listConfig['recordOnClick'] = 'vbus.app["' . $this->getId() . '"].$refs.bundleProductList.onSelectProduct(:id)';
         $listConfig['model'] = new Product();
 
-        $listWidget = new Lists($this->controller, $listConfig);
+        $listWidget = new VLists($this->controller, $listConfig);
 
         $listWidget->bindToController();
 
         $listWidget->bindEvent('list.extendQueryBefore', function (Builder $query)
         {
-            $query->with('main_image');
-            $query->whereNotIn('id', \Request::input('existingItems', []));
+            $query->whereNotIn($query->getModel()->getTable() . '.id', \Request::input('existingItems', []));
+
+            $query->withComposites();
+
+            $query->with(['catalogitem.main_image']);
+
+//            $query->with(['catalogitem', 'catalogitem.main_image', 'catalogitem.main_category']);
+
+        });
+
+        $listWidget->bindEvent('list.extendRecords', function (Collection $records)
+        {
+            $records->withThumbs('catalogitem.main_image', 80, 80);
         });
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -74,9 +86,12 @@ class BundleProductList extends FormWidgetBase
 
     public function onGetProductData()
     {
-        $product = Product::where('id', \Request::input('productId'))->first();
+        $product = Product::where((new Product)->getTable() . '.id', \Request::input('productId'))->first();
 
-        $main_image = $product->main_image->getThumb(120, 120, ['mode' => 'crop']);
+        $product->load(['catalogitem', 'catalogitem.main_image', 'catalogitem.main_category', 'page']);
+
+        $main_image = $product->catalogitem->main_image ?
+            $product->catalogitem->main_image->getThumb(120, 120, ['mode' => 'crop']) : null;
 
         $result = $product->toArray();
 
@@ -87,7 +102,7 @@ class BundleProductList extends FormWidgetBase
         ];
     }
 
-    public function onGetAvailableItems()
+    public function onProductPickerGetList()
     {
         return $this->controller->widget->list->onRefresh();
     }
@@ -95,7 +110,7 @@ class BundleProductList extends FormWidgetBase
     public function getLoadValue()
     {
         $result = $this->model->bundle_products()
-            ->with(['product', 'product.main_image', 'bundle_product_customergroups'])
+            ->with(['product', 'product.catalogitem', 'product.catalogitem.main_image', 'bundle_product_customergroups'])
             ->get()
             ->sortBy('sort_order')
             ->values()
@@ -103,11 +118,16 @@ class BundleProductList extends FormWidgetBase
             {
                 /** @var BundleProduct $item */
 
-                $main_image = $item->product->main_image->getThumb(120, 120, ['mode' => 'crop']);
+                $main_image = $item->product->catalogitem->main_image ?
+                    $item->product->catalogitem->main_image->getThumb(120, 120, ['mode' => 'crop']) :
+                    null;
 
-                $product = $item->product->only(['id', 'name', 'default_price']);
+                $catalogitem = $item->product->catalogitem->only(['id', 'main_category_id', 'name']);
+
+                $product = $item->product->only(['id', 'catalogitem', 'default_price']);
 
                 $product['main_image'] = $main_image;
+                $product['catalogitem'] = $catalogitem;
 
                 $bpCustomergroups = $this->allCustomergroups
                     ->map(function ($customergroup) use ($item)

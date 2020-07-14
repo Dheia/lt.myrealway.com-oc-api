@@ -18,6 +18,6 @@ class Customergroups extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-customergroups');
+        BackendMenu::setContext('Qcsoft.App', 'main-menu-customers', 'side-menu-customergroups');
     }
 }

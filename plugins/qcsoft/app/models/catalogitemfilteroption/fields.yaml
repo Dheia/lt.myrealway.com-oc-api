@@ -1,0 +1,9 @@
+fields:
+    filteroption_id:
+        label: filteroption_id
+        span: auto
+        type: text
+    catalogitem_id:
+        label: catalogitem_id
+        span: auto
+        type: text

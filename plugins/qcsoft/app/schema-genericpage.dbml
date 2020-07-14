@@ -1,0 +1,33 @@
+table _webpage{
+  name string
+  path string
+  custom_h1_title string
+  custom_seo_title string
+  seo_desc string
+}
+
+table genericpage{
+  id integer [pk, increment]
+  _webpage _webpage
+  content text
+}
+
+table genericblock{
+  id integer [pk, increment]
+  parent_id integer
+  owner_type string
+  owner_id integer
+  sort_order integer
+  partial string
+  type string
+  subtype string
+  code string
+  tag string
+  link text
+  link_type string
+  link_obj_id string
+  name string
+  sdesc text
+  content text
+  extra_fields text
+}

@@ -11,8 +11,13 @@
                 ></list-item>
             </div>
         </draggable>
-        <modal v-model="addItemModalOpen">
-            <div :id="addProductListId"></div>
+        <modal v-model="addItemModalOpen" size="lg">
+            <oc-lists :list-id="addProductListId"
+                      :columns="addProductListData.columns"
+                      :records="recordsExceptProductIds"
+                      v-if="isListDataLoaded"
+                      @record-click="onSelectProduct"
+            ></oc-lists>
             <div slot="footer">
                 <btn @click="addItemModalOpen = false">Cancel</btn>
             </div>
@@ -28,13 +33,24 @@
         data()
         {
             return {
-                addItemModalOpen: false,
+                addItemModalOpen  : false,
+                isListDataLoaded  : false,
+                addProductListData: [],
             }
         },
         computed  : {
             local()
             {
+                console.log(this.value)
                 return this.value ? this.value : []
+            },
+            recordsExceptProductIds: vm =>
+            {
+                let exceptProductIds = vm.value.map(v => v.product.id)
+
+                return vm.isListDataLoaded ?
+                    vm.addProductListData.records.filter(v => !exceptProductIds.includes(v.id)) :
+                    []
             }
         },
         methods   : {
@@ -42,9 +58,14 @@
             {
                 this.addItemModalOpen = true
 
-                $.request('onGetAvailableItems', {
-                    data: {
-                        existingItems: this.value.map(item => item.product.id),
+                $.request('onProductPickerGetList', {
+                    success: (data, textStatus, jqXHR) =>
+                    {
+                        this.addProductListData = data[this.addProductListId]
+
+                        this.isListDataLoaded = true
+
+                        console.log(this.addProductListData)
                     },
                 })
             },
@@ -52,11 +73,11 @@
             {
                 this.value.splice(index, 1)
             },
-            onSelectProduct(productId)
+            onSelectProduct(record)
             {
                 $.request('onGetProductData', {
                     data   : {
-                        productId: productId,
+                        productId: record.id,
                     },
                     success: (data, textStatus, jqXHR) =>
                     {
@@ -64,7 +85,7 @@
                             product         : data.product,
                             quantity        : 1,
                             price_override  : null,
-                            bpCustomergroups: null,
+                            bpCustomergroups: Object.keys(this.customergroups).map(v => ({customergroup_id: v})),
                         })
 
                         this.addItemModalOpen = false
