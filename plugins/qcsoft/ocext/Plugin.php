@@ -1,6 +1,7 @@
 <?php namespace Qcsoft\Ocext;
 
 use Backend\Classes\Controller;
+use Qcsoft\Ocext\Macros\CollectionMacros;
 use System\Classes\CombineAssets;
 use System\Classes\PluginBase;
 
@@ -16,6 +17,8 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        (new CollectionMacros())->register();
+
         Controller::extend(function (Controller $controller)
         {
             $controller->addCss(\Url::to(CombineAssets::combine([

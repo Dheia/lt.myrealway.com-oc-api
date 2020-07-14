@@ -5,7 +5,7 @@
      data-attribute="<?= get_class($record) ?>::<?= $column->columnName ?>"
 >
     <input class="form-control input-sm"
-           style="width: <?= array_get($column->config, 'width', '100px') ?>"
+           style="background: transparent; width: <?= array_get($column->config, 'width', '100px') ?>"
            v-model="newValue"
            @keydown.enter="onSave"
            @keydown.esc="onCancel"

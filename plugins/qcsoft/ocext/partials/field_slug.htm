@@ -14,12 +14,12 @@
     <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
     <?= $field->getAttributes() ?>
     />
-<button type="button"
-        class="btn btn-secondary icon icon-refresh"
-        style="position: absolute; right: 0; top: 0; height: 100%;"
-        data-request="onMakeSlug"
-        data-request-data="fromField: '<?= $field->config['fromField'] ?>'"
-        data-request-success="$('#<?= $field->getId() ?>').val(data.result)"
-></button>
+    <button type="button"
+            class="btn btn-secondary icon icon-refresh"
+            style="position: absolute; right: 0; top: 0; height: 100%;"
+            data-request="onMakeSlug"
+            data-request-data="recordId: <?= $formModel->exists ? $formModel->getKey() : 0 ?>, slugField: '<?= $field->config['slugField'] ?>'"
+            data-request-success="$('#<?= $field->getId() ?>').val(data.result)"
+    ></button>
 </div>
 <?php endif ?>
