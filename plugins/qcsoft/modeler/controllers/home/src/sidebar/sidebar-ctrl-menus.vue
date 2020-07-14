@@ -1,31 +1,34 @@
 <template>
     <div>
-        <div class="sidebar-migrations">
-            <div class="migrations-toolbar">
-                <btn @click="$emit('action', {type: 'migrations-apply'})"
-                     class="btn-load-migrations oc-icon-forward"
+        <div class="sidebar-orm">
+            <div class="orm-toolbar">
+                <btn @click="$emit('action', {type: 'controllers-and-menus-load'})"
+                     class="btn-apply-orm oc-icon-refresh"
+                     :disabled="sidebar.isOrmLoading"
                 ></btn>
-                <btn @click="$emit('action', {type: 'migrations-load'})"
-                     class="btn-apply-migrations oc-icon-refresh"
-                     :disabled="sidebar.isMigrationsLoading"
-                ></btn>
-                <loading-spinner v-if="sidebar.isMigrationsLoading"
+                <loading-spinner v-if="sidebar.isOrmLoading"
                                  class="loading-spinner"
                 ></loading-spinner>
             </div>
-            <div class="migrations-json"
-                 v-text="result.migrations"
-            ></div>
+            <div class="orm-models">
+                <div class="orm-model"
+                     v-for="item in controllersAndMenus"
+                     @click="$emit('action', {type: 'orm-select-model', item})"
+                >
+                    <div :class="`oc-icon-${item.type === 'created' ? 'plus' : 'refresh'}`"></div>
+                    <div v-text="item.model.modelName"></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
     export default {
-        props: ['editor', 'result', 'storage', 'sidebar'],
+        props: ['editor', 'result', 'storage', 'sidebar', 'controllers-and-menus'],
     }
 </script>
 <style scoped lang="scss">
-    .btn-apply-migrations, .btn-load-migrations {
+    .btn-apply-orm, .btn-load-orm {
         margin: 0 0 0 1px;
         padding: 2px 12px 0 15px;
         /*border: 0;*/
@@ -45,15 +48,15 @@
         }
     }
 
-    .btn-load-migrations {
+    .btn-load-orm {
         margin-left: 5px;
     }
 
-    .btn-apply-migrations {
+    .btn-apply-orm {
         margin-left: 15px;
     }
 
-    .sidebar-migrations {
+    .sidebar-orm {
         position: absolute;
         left: 0;
         top: 40px;
@@ -61,7 +64,7 @@
         bottom: 0;
     }
 
-    .migrations-toolbar {
+    .orm-toolbar {
         height: 40px;
         display: flex;
         align-items: center;
@@ -73,14 +76,22 @@
         }
     }
 
-    .migrations-json {
+    .orm-models {
         position: absolute;
-        white-space: pre;
         left: 5px;
         top: 45px;
         right: 0;
         bottom: 0;
         overflow: scroll;
+    }
+
+    .orm-model {
+        display: flex;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
 </style>

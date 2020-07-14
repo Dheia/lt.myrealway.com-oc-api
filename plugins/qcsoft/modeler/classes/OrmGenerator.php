@@ -1,116 +1,95 @@
 <?php namespace Qcsoft\Modeler\Classes;
 
-use RainLab\Builder\Classes\PluginCode;
+use October\Rain\Database\Model;
+use SebastianBergmann\Diff\Differ;
+use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
 
 class OrmGenerator
 {
-    /** @var PluginCode */
-    public $pluginCodeObj;
+    protected static $modelStub;
+    protected static $modelBaseStub;
 
-    /** @var SchemaDefinition */
-    public $schemaDefinition;
-
-    /** @var array */
-    public $models;
-
-    /**
-     * OrmGenerator constructor.
-     * @param string $pluginCodeObj
-     * @param SchemaDefinition $schemaDefinition
-     */
-    public function __construct(string $pluginCode, SchemaDefinition $schemaDefinition)
+    protected static function loadStubs()
     {
-        $this->pluginCodeObj = new PluginCode($pluginCode);
-        $this->schemaDefinition = $schemaDefinition;
+        if (!static::$modelStub || !static::$modelBaseStub)
+        {
+            static::$modelStub = file_get_contents(__DIR__ . '/ormgenerator/model.htm');
+            static::$modelBaseStub = file_get_contents(__DIR__ . '/ormgenerator/modelbase.htm');
+        }
     }
 
-    public function generateOrmModels($callback, $only = [])
+    public function generate(OrmSchema $schema, $onlyEntities = null)
     {
         $result = [];
 
-        $pluginPath = plugins_path($this->pluginCodeObj->toFilesystemPath());
-
-        Util::safedir("$pluginPath/models");
-        Util::safedir("$pluginPath/modelsbase");
-
-        $modelStub = file_get_contents(__DIR__ . '/stubs/model.htm');
-        $modelBaseStub = file_get_contents(__DIR__ . '/stubs/modelbase.htm');
-
-        $this->prepareSchema();
-
         /** @var OrmModel $model */
-        foreach ($this->models as $model)
+        foreach ($schema->models as $model)
         {
-            if (!empty($only) && !in_array($model->entity->name, $only))
+            if (is_array($onlyEntities) && !in_array($model->entity->name, $onlyEntities))
             {
                 continue;
             }
 
-            $callback($model);
-
-            $modelBaseCode = \Twig::parse($modelBaseStub, ['model' => $model]);
-            $modelCode = \Twig::parse($modelStub, ['model' => $model]);
-
-            $result[] = [
-                'modelPath'     => "$pluginPath/models/" . $model->getClassname() . '.php',
-                'modelCode'     => $modelCode,
-                'modelBasePath' => "$pluginPath/modelsbase/" . $model->getClassname() . 'Base.php',
-                'modelBaseCode' => $modelBaseCode,
-            ];
+            $result[] = $this->generateForModel($schema, $model);
         }
 
         return $result;
     }
 
-    protected function prepareSchema()
+    public function generateForModel(OrmSchema $schema, OrmModel $model)
     {
-        $this->models = [];
+        static::loadStubs();
 
-        $fields = [];
+        $pluginPath = plugins_path($schema->plugin->toFilesystemPath());
 
-        foreach ($this->schemaDefinition->entities as $entity)
+        $model->addClassUse(Model::class);
+
+        \Event::fire('qcsoft.modeler.generateOrm', [$model]);
+
+        asort($model->classUse);
+        $model->classUse = array_values($model->classUse);
+
+        ksort($model->properties);
+
+        $result = (object)[];
+
+        $result->entity_id = $model->entity->id;
+        $result->modelPhpPath = "$pluginPath/models/" . $model->getClassname() . '.php';
+        $result->modelPhpCode = \Twig::parse(static::$modelStub, ['model' => $model]);
+        $result->modelBasePhpPath = "$pluginPath/modelsbase/" . $model->getClassname() . 'Base.php';
+        $result->modelBasePhpCode = \Twig::parse(static::$modelBaseStub, ['model' => $model]);
+
+        if (file_exists($result->modelBasePhpPath))
         {
-            $model = new OrmModel($this, $entity);
+            $oldBaseCode = file_get_contents($result->modelBasePhpPath);
 
-            foreach ($this->schemaDefinition->attributes as $attribute)
+            if ($oldBaseCode !== $result->modelBasePhpCode)
             {
-                if ($attribute->entity_id === $entity->id)
-                {
-                    $field = new OrmField($model, $attribute);
-
-                    $model->fields[] = $field;
-
-                    $fields[$attribute->id] = $field;
-                }
+                $result->type = 'updated';
+                $result->modelBaseOldCode = $oldBaseCode;
+                $result->modelBaseCodeDiff = $this->getDiff($oldBaseCode, $result->modelBasePhpCode);
             }
-
-            $this->models[$entity->id] = $model;
+            else
+            {
+                $result->type = 'unchanged';
+            }
         }
-
-        $relations = [];
-
-        foreach ($this->schemaDefinition->relations as $relation)
+        else
         {
-            /** @var OrmField $fieldFrom */
-            $fieldFrom = $fields[$relation->attribute_from_id];
-
-            /** @var OrmField $fieldTo */
-            $fieldTo = $fields[$relation->attribute_to_id];
-
-            /** @var OrmModel $modelFrom */
-            $modelFrom = $this->models[$fieldFrom->model->entity->id];
-
-            /** @var OrmModel $modelTo */
-            $modelTo = $this->models[$fieldTo->model->entity->id];
-
-            $relation = new OrmRelation($fieldFrom, $fieldTo, $relation);
-
-            $modelFrom->relationsFrom[] = $relation;
-
-            $modelTo->relationsTo[] = $relation;
-
-            $relations[] = $relation;
+            $result->type = 'created';
         }
+
+        return $result;
     }
 
+    protected function getDiff($code, $newCode)
+    {
+        $builder = new DiffOnlyOutputBuilder(
+            "--- Original\n+++ New\n"
+        );
+
+        $differ = new Differ(/*$builder*/);
+
+        return $differ->diff($code, $newCode);
+    }
 }

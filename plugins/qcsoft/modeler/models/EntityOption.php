@@ -8,4 +8,6 @@ class EntityOption extends Model
 
     public $table = 's_e_opt';
 
+    protected $jsonable = ['value'];
+
 }

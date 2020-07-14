@@ -12,16 +12,25 @@
                 <loading-spinner v-if="sidebar.isOrmLoading"
                                  class="loading-spinner"
                 ></loading-spinner>
+                <btn @click="$emit('action', {type: 'orm-hide'})"
+                     class="btn-apply-orm oc-icon-close"
+                ></btn>
             </div>
-            <div class="orm-json"
-                 v-text="result.orm"
-            ></div>
+            <div class="orm-models">
+                <div class="orm-model"
+                     v-for="item in ormAllChanges"
+                     @click="$emit('action', {type: 'orm-select-model', item})"
+                >
+                    <div :class="`oc-icon-${item.type === 'created' ? 'plus' : 'refresh'}`"></div>
+                    <div v-text="item.model.modelName"></div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 <script>
     export default {
-        props: ['editor', 'result', 'storage', 'sidebar'],
+        props: ['editor', 'result', 'storage', 'sidebar', 'orm-all-changes'],
     }
 </script>
 <style scoped lang="scss">
@@ -73,14 +82,22 @@
         }
     }
 
-    .orm-json {
+    .orm-models {
         position: absolute;
-        white-space: pre;
         left: 5px;
         top: 45px;
         right: 0;
         bottom: 0;
         overflow: scroll;
+    }
+
+    .orm-model {
+        display: flex;
+        cursor: pointer;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
 </style>

@@ -10,7 +10,7 @@
                          @changed="onChanged('entity', ...arguments)"
                          @removed="onRemoved('entity', ...arguments)"
             >
-                <cell-attribute v-for="attribute in editor.attributes.filter(v => v.entity_id === entity.id)"
+                <cell-attribute v-for="(attribute, i) in editor.attributes.filter(v => v.entity_id === entity.id)"
                                 :attribute="attribute"
                                 :key="'attribute' + attribute.id"
                                 :is-mx-listener-running="isMxListenerRunning"
@@ -86,6 +86,12 @@
         mounted()
         {
             this.mxEditor.setGraphContainer(this.$refs.container)
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            this.mxEditor.graph.zoomOut()
+            let view = this.mxEditor.graph.view
+            view.setTranslate(view.translate.x + -160, view.translate.y + -10)
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             this.mxEditor.graph.refresh()
         },

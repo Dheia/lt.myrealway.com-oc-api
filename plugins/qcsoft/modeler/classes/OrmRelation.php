@@ -29,6 +29,26 @@ class OrmRelation
         return preg_replace('/(.+)_id$/', '$1', $this->fromField->attribute->name);
     }
 
+    public function keyHasOne()
+    {
+        $fromName = $this->fromField->model->entity->name;
+
+        if (strpos($fromName, '_') === false)
+        {
+            return $fromName;
+        }
+        else
+        {
+            $toName = $this->toField->model->entity->name;
+
+            $endingPart = trim(str_replace(
+                $toName, '', $fromName
+            ), '_');
+
+            return $toName . '_' . $endingPart;
+        }
+    }
+
     public function keyHasMany()
     {
         $fromName = $this->fromField->model->entity->name;

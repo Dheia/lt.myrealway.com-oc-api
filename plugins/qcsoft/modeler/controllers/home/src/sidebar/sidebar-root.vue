@@ -6,7 +6,6 @@
                     <btn @click="onAddEntity" class="btn-add-entity oc-icon-plus">Entity</btn>
                 </div>
                 <div class="right-side">
-                    qwerasdf
                 </div>
             </div>
             <div class="root-entities">
@@ -56,11 +55,12 @@
             onAddEntity()
             {
                 this.editor.entities.push({
-                    name  : '',
-                    x     : 100,
-                    y     : 100,
-                    width : 200,
-                    height: 100,
+                    name   : '',
+                    x      : 100,
+                    y      : 100,
+                    width  : 200,
+                    height : 100,
+                    options: [],
                 })
             },
             onAddAttribute(entity_id)

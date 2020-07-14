@@ -1,0 +1,44 @@
+{{ ('<?php namespace ' ~ model.getNamespace() ~ 'base;') | raw }}
+{{ ('') }}
+{% for use in model.classUse %}
+{{ ('use ' ~ use ~ ';') }}
+{% endfor %}
+{{ ('') }}
+{{ ('/**') }}
+{{ (' * Class ' ~ model.getClassName() ~ 'Base') }}
+{{ (' * @package ' ~ model.getNamespace() ~ 'base') }}
+{% for name, type in model.properties %}
+{{ (' * @property ' ~ type ~ ' $' ~ name) }}
+{% endfor %}
+{{ (' */') }}
+{{ ('class ' ~ model.getClassName() ~ 'Base extends Model') }}
+{{ ('{') }}
+{% for name in model.traits %}
+{{ ('    use ' ~ name ~ ';') }}
+{{ ('') }}
+{% endfor %}
+{% for propName, propValue in model.extraProps %}
+{{ ('    public $' ~ propName ~ ' = ' ~ propValue) | raw }}
+{{ ('') }}
+{% endfor %}
+{% for propName, propValues in model.extraPropsMulti %}
+{{ ('    public $' ~ propName ~ ' = [') | raw }}
+{% for propName, propValue in propValues %}
+{{ ('        \'' ~ propName ~ '\' => ' ~ propValue ~ ',') | raw }}
+{% endfor %}
+{{ ('    ];') }}
+{{ ('') }}
+{% endfor %}
+{{ ('    public $timestamps = false;') }}
+{{ ('') }}
+{{ ('    public $table = \'' ~ model.getQualifiedTableName() ~ '\';') | raw }}
+{{ ('') }}
+{% for type, items in model.relationDecls %}
+{{ ('    public $' ~ type ~ ' = [') }}
+{% for name, definition in items %}
+{{ ('        \'' ~ name ~ '\' => ' ~ definition ~ ',') | raw }}
+{% endfor %}
+{{ ('    ];') }}
+{{ ('') }}
+{% endfor %}
+{{ ('}') }}

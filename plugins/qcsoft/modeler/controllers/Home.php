@@ -2,20 +2,20 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
-use Qcsoft\Modeler\Classes\MigrationsGenerator;
-use Qcsoft\Modeler\Classes\OrmGenerator;
-use Qcsoft\Modeler\Classes\OrmModel;
-use Qcsoft\Modeler\Classes\OrmRelation;
+use October\Rain\Database\Collection;
+use Qcsoft\Modeler\Behaviors\CtrlController;
+use Qcsoft\Modeler\Behaviors\MigrationsController;
+use Qcsoft\Modeler\Behaviors\OrmController;
+use Qcsoft\Modeler\Classes\OrmSchema;
 use Qcsoft\Modeler\Classes\SchemaDefinition;
 use Qcsoft\Modeler\Models\Attribute;
 use Qcsoft\Modeler\Models\Entity;
 use Qcsoft\Modeler\Models\Relation;
-use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\DiffOnlyOutputBuilder;
+use RainLab\Builder\Classes\PluginCode;
 
 class Home extends Controller
 {
-    public $implement = [];
+    public $implement = [MigrationsController::class, OrmController::class, CtrlController::class];
 
     protected static $pl = [
         'entity'    => 'entities',
@@ -23,16 +23,23 @@ class Home extends Controller
         'relation'  => 'relations',
     ];
 
+    /** @var OrmSchema */
+    public $ormSchema;
+
     public function __construct()
     {
         parent::__construct();
         BackendMenu::setContext('Qcsoft.Modeler', 'main-menu-modeler');
 
-//        $this->addJs('/plugins/qcsoft/modeler/assets/dist/main.js');
         $this->addCss('/plugins/qcsoft/modeler/assets/diff2html.min.css');
 //        $this->addCss('/plugins/qcsoft/modeler/assets/diff2html.min.js');
-//        $this->addCss('/plugins/qcsoft/modeler/assets/diff2html-ui.min.js');
-        $this->addJs('http://178.19.16.34:8080/main.js');
+//        $this->addJs('http://178.19.16.34:8080/main.js');
+        $this->addJs('/plugins/qcsoft/modeler/assets/dist/main.js');
+
+        $this->ormSchema = new OrmSchema(
+            new PluginCode('Qcsoft.App'),
+            $this->getSchemaDefinition('database')
+        );
     }
 
     public function index()
@@ -44,160 +51,119 @@ class Home extends Controller
         ]));
     }
 
-    public function onGetMigrations()
+    public function onSave()
     {
-        $currentDef = new SchemaDefinition(
+        $requestedData = \Request::input('data');
 
-            Entity::with('options')->get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
+        $requestedEntities = $requestedData['entities'];
 
-            Attribute::orderBy('sort_order')->get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
+        /** @var Collection $existingEntities */
+        $existingEntities = Entity::orderBy('id')->get();
 
-            Relation::get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
-        );
-
-        return MigrationsGenerator::generateMigrations('Qcsoft.App', $currentDef);
+        foreach ($requestedEntities as $requestedEntity)
+        {
+            $existingEntity = $existingEntities->firstWhere('id', $requestedEntity['id']);
+            $existingEntity->x = $requestedEntity['x'];
+            $existingEntity->y = $requestedEntity['y'];
+            $existingEntity->width = $requestedEntity['width'];
+            $existingEntity->save();
+        }
     }
 
-    public function onGetOrm()
+    public function getSchemaDefinition($from)
     {
-        $currentDef = new SchemaDefinition(
-
-            Entity::with('options')->get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
-
-            Attribute::orderBy('sort_order')->get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
-
-            Relation::get()
-                ->map(function ($item)
-                {
-                    return (object)$item->toArray();
-                }),
-        );
-
-        $generator = new OrmGenerator('Qcsoft.App', $currentDef);
-
-        $models = $generator->generateOrmModels(function ($model)
+        if ($from === 'request')
         {
-            /** @var OrmModel $model */
+            $requestData = \Request::input('data');
 
-            /** @var object $attribute */
-            foreach ($model->fields as $field)
-            {
-                switch ($field->attribute->type)
+            $entitiesDef = collect($requestData['entities'])
+                ->map(function ($item)
                 {
-                    case 'bool':
-                    case 'boolean':
-                        $model->addProperty('boolean', $field->attribute->name);
-                        break;
-                    case 'int':
-                    case 'integer':
-                        $model->addProperty('int', $field->attribute->name);
-                        break;
-                    case 'string':
-                        $model->addProperty('string', $field->attribute->name);
-                        break;
-                    case 'text':
-                        $model->addProperty('string', $field->attribute->name);
-                        break;
-                    case 'imageUpload':
-                        $model
-                            ->addProperty('File', $field->attribute->name)
-                            ->addClassUse('System\\Models\\File')
-                            ->addRelationDecl('attachOne', $field->attribute->name, '[File::class]');
-
-                        break;
-                    default:
-                        throw new \Exception('not attr type ' . $attribute->type);
-                }
-
-                /** @var OrmRelation $relation */
-                foreach ($model->relationsFrom as $relation)
-                {
-                    if ($relation->relation->type === 'oneToMany')
+                    if (!isset($item['options']))
                     {
-                        $relatedClassname = $relation->toField->model->getClassname();
-
-                        $model->addRelationDecl('belongsTo',
-                            $relation->keyBelongsTo(),
-                            "[$relatedClassname::class]"
-                        )
-                            ->addClassUse($relation->toField->model->getQualifiedClassname())
-                            ->addProperty($relatedClassname, $relation->keyBelongsTo());
+                        $item['options'] = [];
                     }
-                }
 
-                /** @var OrmRelation $relation */
-                foreach ($model->relationsTo as $relation)
+                    return (object)$item;
+                });
+
+            $attributesDef = collect($requestData['attributes'])
+                ->map(function ($item)
                 {
-                    if ($relation->relation->type === 'oneToMany')
-                    {
-                        $relatedClassname = $relation->fromField->model->getClassname();
+                    return (object)$item;
+                });
 
-                        $model->addRelationDecl('hasMany',
-                            $relation->keyHasMany(),
-                            "[$relatedClassname::class]"
-                        )
-                            ->addClassUse('October\\Rain\\Database\\Collection')
-                            ->addClassUse($relation->fromField->model->getQualifiedClassname())
-                            ->addProperty('Collection', $relation->keyHasMany());
-                    }
-                }
-            }
-        });
-
-        $result = [];
-
-        foreach ($models as $model)
+            $relationsDef = collect($requestData['relations'])
+                ->map(function ($item)
+                {
+                    return (object)$item;
+                });
+        }
+        elseif ($from === 'database')
         {
-            if (!file_exists($model['modelPath']))
-            {
-                file_put_contents($model['modelPath'], $model['modelCode']);
-            }
+            $entitiesDef = Entity::with('options')->get()
+                ->map(function ($item)
+                {
+                    return (object)$item->toArray();
+                });
 
-            if (file_exists($model['modelBasePath']))
-            {
-                $oldBaseCode = file_get_contents($model['modelBasePath']);
+            $attributesDef = Attribute::orderBy('sort_order')->get()
+                ->map(function ($item)
+                {
+                    return (object)$item->toArray();
+                });
 
-                $builder = new DiffOnlyOutputBuilder(
-                    "--- Original\n+++ New\n"
-                );
-
-                $differ = new Differ(/*$builder*/);
-
-                $diff = $differ->diff($oldBaseCode, $model['modelBaseCode']);
-
-                $result[] = [
-                    'oldBaseCode' => $oldBaseCode,
-                    'diff'        => $diff,
-                    'model'       => $model,
-                ];
-            }
-            else
-            {
-//                $result[] = "created {$model['modelBasePath']}\n{$model['modelBaseCode']}";
-            }
+            $relationsDef = Relation::get()
+                ->map(function ($item)
+                {
+                    return (object)$item->toArray();
+                });
+        }
+        else
+        {
+            throw new \Exception("getSchemaDefinition($from) source should be database or request");
         }
 
-        return json_encode($result);
+        return new SchemaDefinition($entitiesDef, $attributesDef, $relationsDef);
     }
+
+//    public function onGetControllersAndMenus()
+//    {
+//        $schemaDefinition = $this->getSchemaDefinition('database');
+//        \Debugbar::info($schemaDefinition);
+//        return;
+//
+//        foreach ($schemaDefinition->entities as $entity)
+//        {
+//            $parts = array_map(['\Str', 'plural'], explode('_', $entity->name));
+//
+//            $controllerClassname = implode('', array_map(['\Str', 'ucfirst'], $parts));
+//
+//            $controllerQualifiedClassname = $this->pluginCodeObj->toPluginNamespace() . '\\Controllers\\' . $controllerClassname;
+//
+//            if (class_exists($controllerQualifiedClassname))
+//            {
+//                continue;
+//            }
+//
+//            $model = new ControllerModel();
+//
+//            $model->setPluginCode($this->pluginCodeObj->toCode());
+//
+//            $ormModel = new \Qcsoft\Crudgen\Classes\OrmModel($this->pluginCodeObj, $table->name);
+//
+//            $model->fill([
+//                'controller'         => $controllerClassname,
+//                'behaviors'          => [
+//                    ListController::class,
+//                    FormController::class,
+//                ],
+//                'baseModelClassName' => $ormModel->getClassname(),
+//                'menuItem'           => $this->getMainMenuKey() . '||' . $this->getSideMenuKey($table->name),
+//            ]);
+//
+//            $model->save();
+//        }
+//    }
 
 }

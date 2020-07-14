@@ -11,13 +11,11 @@ export default function (graph)
                         [c.STYLE_PERIMETER]     : mxPerimeter.RectanglePerimeter,
                         [c.STYLE_ALIGN]         : mxConstants.ALIGN_LEFT,
                         [c.STYLE_VERTICAL_ALIGN]: mxConstants.ALIGN_TOP,
-                        [c.STYLE_GRADIENTCOLOR] : '#eee',
-                        [c.STYLE_FILLCOLOR]     : '#eee',
-                        // [c.STYLE_SWIMLANE_FILLCOLOR]: '#ddd',
-                        [c.STYLE_STROKECOLOR]   : 'black',
+                        [c.STYLE_FILLCOLOR]     : 'transparent',
+                        [c.STYLE_STROKECOLOR]   : 'transparent',
+                        [c.STYLE_STROKEWIDTH]   : '0',
                         [c.STYLE_FONTCOLOR]     : '#000000',
-                        [c.STYLE_STROKEWIDTH]   : '1',
-                        [c.STYLE_STARTSIZE]     : '28',
+                        [c.STYLE_STARTSIZE]     : '32',
                         [c.STYLE_VERTICAL_ALIGN]: 'middle',
                         [c.STYLE_FONTSIZE]      : '12',
                         [c.STYLE_FONTSTYLE]     : 1,
@@ -42,9 +40,9 @@ export default function (graph)
                         [c.STYLE_FILLCOLOR]     : nattrs % 2 ? '#fff' : '#ffe5e5',
                         [c.STYLE_FONTSIZE]      : '12',
                         [c.STYLE_FONTSTYLE]     : 0,
-                        [c.STYLE_SPACING_LEFT]  : '4',
-                        [c.STYLE_IMAGE_WIDTH]   : '48',
-                        [c.STYLE_IMAGE_HEIGHT]  : '48',
+                        [c.STYLE_STROKECOLOR]   : 'transparent',
+                        // [c.STYLE_IMAGE_WIDTH]   : '48',
+                        // [c.STYLE_IMAGE_HEIGHT]  : '48',
                     }
 
                     return result
@@ -79,13 +77,28 @@ export default function (graph)
                     return result
                 },
             },
+            relation_morphMany : {
+                style(cell)
+                {
+                    let result = {
+                        ...graph.stylesheet.getDefaultEdgeStyle(),
+                        [c.STYLE_LABEL_BACKGROUNDCOLOR]: '#FFFFFF',
+                        [c.STYLE_STROKECOLOR]          : '#fa0',
+                        [c.STYLE_STROKEWIDTH]          : '2',
+                        [c.STYLE_ROUNDED]              : true,
+                        [c.STYLE_EDGE]                 : mxEdgeStyle.EntityRelation,
+                    }
+
+                    return result
+                },
+            },
         }
 
-    graph.getStylesheet().getCellStyle = function (type, style)
-    {
-        // console.log(arguments)
-        return this.styles[type]
-    }
+    // graph.getStylesheet().getCellStyle = function (type, style)
+    // {
+    //     // console.log(arguments)
+    //     return this.styles[type]
+    // }
 
     for (let cellClass in definitions)
     {

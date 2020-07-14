@@ -5,10 +5,12 @@
 <script>
     import CellMixin from './mixin-cell.js'
     import CellAttributeWatch from './cell-attribute-watch.js'
+    import MxCellValue from './cell-attribute-mx-cell-value'
+    import './cell-attribute-mx-cell-style.scss'
 
     export default {
-        props   : ['attribute'],
-        mixins  : [CellMixin, CellAttributeWatch],
+        props   : ['attribute', 'index'],
+        mixins  : [CellMixin, CellAttributeWatch, MxCellValue],
         created()
         {
             this.cellMixinCreated()
@@ -37,10 +39,6 @@
             mxCellSetValue(value)
             {
                 // this.attribute.name = value
-            },
-            mxCellGetValue()
-            {
-                return `${this.attribute.name} <strong>${this.attribute.type}</strong> (${this.attribute.id})`
             },
         },
     }

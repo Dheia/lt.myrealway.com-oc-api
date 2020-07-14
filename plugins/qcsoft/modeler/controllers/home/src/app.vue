@@ -14,43 +14,53 @@
                     >
                         <template #entity="{ entity }">
                             <div class="graph-entity-title">
-                                <div v-text="`${entity.name} (${entity.id})`"
-                                     class="title-text"
-                                ></div>
-                                <div class="oc-icon-sitemap"
-                                     v-if="entity.options.some(v => v.type === 'nested_tree')"
-                                ></div>
+                                <div class="entity-title-inner">
+                                    <div v-text="`${entity.name} (${entity.id})`"
+                                         class="title-text"
+                                    ></div>
+                                    <div class="oc-icon-sitemap"
+                                         v-if="entity.options.some(v => v.type === 'nested_tree')"
+                                    ></div>
+                                </div>
                             </div>
                         </template>
                     </schema-editor>
                 </div>
-                <div class="diff" v-show="showingDiff">
-                    <div v-html="showingDiff"></div>
-                </div>
+                <portal-target name="main-area"></portal-target>
             </split-area>
             <split-area :size="storage.splitpanes[1]" style="overflow: hidden; position: relative">
                 <div class="sidebar">
-                    <app-sidebar :editor="editor"
-                                 :result="result"
-                                 :storage="storage"
-                                 :debug="debug"
-                                 :sidebar="sidebar"
-                                 @action="onSidebarAction"
-                    ></app-sidebar>
+                    <app-sidebar v-bind="$data"></app-sidebar>
                 </div>
             </split-area>
         </split>
+
+        <root-module v-bind="$data"></root-module>
+        <selection-module v-bind="$data"></selection-module>
+        <migrations-module v-bind="$data"></migrations-module>
+        <orm-module v-bind="$data"></orm-module>
+        <ctrl-module v-bind="$data"></ctrl-module>
+
     </div>
 </template>
 <script>
     import SchemaEditor from './schema-editor/schema-editor.vue'
     import AppSidebar from './sidebar/sidebar.vue'
-    import * as Diff2Html from 'diff2html'
+    import RootModule from './modules/root.vue'
+    import SelectionModule from './modules/selection.vue'
+    import MigrationsModule from './modules/migrations.vue'
+    import OrmModule from './modules/orm.vue'
+    import CtrlModule from './modules/ctrl.vue'
 
     export default {
         components: {
             SchemaEditor,
             AppSidebar,
+            RootModule,
+            SelectionModule,
+            MigrationsModule,
+            OrmModule,
+            CtrlModule,
         },
         data()
         {
@@ -59,18 +69,9 @@
             storage.splitpanes = storage.splitpanes || [70, 30]
 
             return {
-                loadValue  : {...this.$root.schema},
-                editor     : {},
-                storage    : storage,
-                result     : {
-                    migrations: '',
-                },
-                sidebar    : {
-                    isMigrationsLoading: false,
-                    isOrmLoading       : false,
-                },
-                debug      : [],
-                showingDiff: null,
+                loadValue: {...this.$root.schema},
+                editor   : {},
+                storage  : storage,
             }
         },
         mounted()
@@ -82,84 +83,38 @@
             {
                 if (e.key === 's' && e.ctrlKey)
                 {
-                    this.debug.push('ctrl+s pressed')
-
                     e.preventDefault()
 
-                    this.loadOrm()
+                    let sendData = {...this.editor}
+
+                    delete sendData.changes
+
+                    this.isLoading = true
+
+                    $.request('onSave', {
+                        data    : {
+                            data: sendData,
+                        },
+                        success : (data, textStatus, jqXHR) =>
+                        {
+                            this.$notify('Saved')
+                        },
+                        complete: () =>
+                        {
+                            this.isLoading = false
+                        }
+                    })
+
+                    // let saveData = this.loadValue.entities.map(item => ({
+                    //     id: item.id,
+                    //     x : item.x,
+                    //     y : item.y,
+                    //     w : item.w,
+                    // }))
                 }
             })
-
-            // this.loadMigrations()
-            this.loadOrm()
         },
         methods   : {
-            onSidebarAction(action)
-            {
-                this[`on-${action.type}`](action)
-            },
-            'on-migrations-apply'(action)
-            {
-                this.$notify.error('Under construction')
-            },
-            'on-migrations-load'(action)
-            {
-                this.loadMigrations()
-            },
-            'on-orm-load'(action)
-            {
-                this.loadOrm()
-            },
-            loadMigrations()
-            {
-                let sendData = {...this.editor}
-
-                delete sendData.changes
-
-                this.sidebar.isMigrationsLoading = true
-
-                $.request('onGetMigrations', {
-                    data    : {
-                        data: sendData,
-                    },
-                    success : (data, textStatus, jqXHR) =>
-                    {
-                        this.result.migrations = data.result
-                    },
-                    complete: () =>
-                    {
-                        this.sidebar.isMigrationsLoading = false
-                    }
-                })
-            },
-            loadOrm()
-            {
-                let sendData = {...this.editor}
-
-                delete sendData.changes
-
-                this.sidebar.isOrmLoading = true
-
-                $.request('onGetOrm', {
-                    data    : {
-                        data: sendData,
-                    },
-                    success : (data, textStatus, jqXHR) =>
-                    {
-                        // this.$notify.success('Saved')
-                        // // this.showingDiff = 'qwer'
-                        this.showingDiff = Diff2Html.html(JSON.parse(data.result)[0].diff, {
-                            matching    : 'lines',
-                            outputFormat: 'side-by-side',
-                        })
-                        this.result.orm = JSON.parse(data.result)
-                    },
-                    complete: () =>
-                    {
-                        this.sidebar.isOrmLoading = false
-                    }
-                })
-            },
             onSplitpaneResized(sizes)
             {
                 this.storage.splitpanes = sizes
@@ -188,6 +143,7 @@
             {
                 return JSON.stringify(vm.storage)
             },
+
         },
         watch     : {
             storageJson(value, oldValue)
@@ -219,16 +175,6 @@
         max-height: 100%;
     }
 
-    .diff {
-        background: white;
-        position: absolute;
-        left: 0;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        overflow: scroll;
-    }
-
     .sidebar {
         position: absolute;
         left: 0;
@@ -239,11 +185,23 @@
 
     .graph-entity-title {
         display: flex;
-        background: rgba(0, 255, 0, .3);
+        height: 30px;
+        border-left: 1px solid white;
+        border-right: 1px solid #7af;
+
+        .entity-title-inner {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            background: #def;
+            border-left: 1px solid #7af;
+            border-top: 1px solid #7af;
+        }
 
         .title-text {
             flex-grow: 1;
-            padding-left: 5px;
+            padding-left: 7px;
+            border-bottom: 1px solid #cdf;
         }
     }
 </style>
