@@ -1,0 +1,28 @@
+==
+<div data-app="catalogitemList"
+     data-filtered-count="{{ catalogitemList.getFilteredCount() }}"
+     data-per-page="{{ catalogitemList.perPage }}"
+>
+    <div v-text="'numLoadedPages: '+numLoadedPages">numLoadedPages:</div>
+    <div v-text="'filteredCount: '+filteredCount">filteredCount:</div>
+</div>
+<div id="catalogitem_list_items" class="row row-cols-4 flex-wrap">
+    {% partial 'catalogitem-list/catalogitem-list-items' %}
+</div>
+<div data-app>
+    <b-overlay :show="app.catalogitemList.isLoading" no-wrap no-center>
+        <template v-slot:overlay>
+            <div class="overlay-spinner">
+                <b-spinner></b-spinner>
+            </div>
+        </template>
+    </b-overlay>
+</div>
+<div data-app>
+    <button type="button"
+            class="btn btn-primary"
+            @click="app.catalogitemList.loadNextPage()"
+            v-show="app.catalogitemList.filteredCount > app.catalogitemList.numLoadedPages * app.catalogitemList.perPage"
+    >Show more
+    </button>
+</div>

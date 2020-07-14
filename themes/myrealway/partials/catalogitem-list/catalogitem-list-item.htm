@@ -1,15 +1,15 @@
 ==
-<div class="card" data-app="productListItem" data-id="{{ product.id }}">
-    <a href="{{ url(product.path) }}" data-ajax-link style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
-        <img src="{{ product.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
-             alt="{{ product.name }}"
+<div class="card" data-app="catalogitemListItem" data-id="{{ catalogitem.id }}">
+    <a href="{{ url(catalogitem.item.page.path) }}" data-ajax-link style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
+        <img src="{{ catalogitem.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
+             alt="{{ catalogitem.name }}"
              style="position: absolute; top: 50%; left: 0; transform: translateY(-50%)"
         >
     </a>
     <div class="card-body">
-        <h5 class="card-title">{{ product.name }}</h5>
-        <p class="card-text">{{ product.desc }}</p>
-        {% for filteroption in product.product_filteroptions().with('filteroption').get().pluck('filteroption') %}
+        <h5 class="card-title">{{ catalogitem.name }}</h5>
+        <p class="card-text">{{ catalogitem.item.desc }}</p>
+        {% for filteroption in catalogitem.catalogitem_filteroptions().with('filteroption').get().pluck('filteroption') %}
             <div>{{ filteroption.name }}</div>
         {% endfor %}
 

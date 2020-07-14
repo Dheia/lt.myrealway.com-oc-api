@@ -2,18 +2,18 @@ export default {
     data()
     {
         return {
-            productId: null,
+            catalogitemId: null,
             quantity : 1,
         }
     },
     mounted()
     {
-        this.productId = $(this.$el).data('id')
+        this.catalogitemId = $(this.$el).data('id')
     },
     methods: {
         addToCart()
         {
-            this.app.cart.addItem('product', this.productId, this.quantity)
+            this.app.cart.addItem('catalogitem', this.catalogitemId, this.quantity)
         },
         quantityDec()
         {

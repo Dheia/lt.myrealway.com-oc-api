@@ -7,18 +7,18 @@ import Vue from 'vue'
 import {IconsPlugin, OverlayPlugin, SpinnerPlugin} from 'bootstrap-vue/'
 
 import mainLoadIndicator from './layouts/main-load-indicator'
-import productList from './partials/product-list/product-list'
-import productListItem from './partials/product-list/product-list-item'
-import productListFilters from './partials/product-list/product-list-filters'
+import catalogitemList from './partials/catalogitem-list/catalogitem-list'
+import catalogitemListItem from './partials/catalogitem-list/catalogitem-list-item'
+import catalogitemListFilters from './partials/catalogitem-list/catalogitem-list-filters'
 import cart from './cart'
 import floatingCart from './partials/floating-cart/floating-cart'
 
 window.bus = {
     appDefinition: {
         mainLoadIndicator,
-        productList,
-        productListItem,
-        productListFilters,
+        catalogitemList,
+        catalogitemListItem,
+        catalogitemListFilters,
         cart,
         floatingCart,
     },

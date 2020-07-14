@@ -41,9 +41,9 @@
                 {% endfor %}
                 <li class="nav-item flex-grow-1 text-right">
                     {% if user %}
-                        <a class="nav-link" href="{{ url('login') }}">Welcome, {{ user.name }}!</a>
+                        <a class="nav-link" href="{{ url('login') }}" data-ajax-link>Welcome, {{ user.name }}!</a>
                     {% else %}
-                        <a class="nav-link" href="{{ url('login') }}">Login / Register</a>
+                        <a class="nav-link" href="{{ url('login') }}" data-ajax-link>Login / Register</a>
                     {% endif %}
                 </li>
             </ul>

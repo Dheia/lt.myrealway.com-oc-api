@@ -1,5 +1,5 @@
 export default {
-    data      : {
+    data   : {
         isLoading     : false,
         numLoadedPages: 1,
         filteredCount : null,
@@ -10,12 +10,12 @@ export default {
         this.filteredCount = $(this.$el).data('filtered-count')
         this.perPage = $(this.$el).data('per-page')
     },
-    methods   : {
+    methods: {
         reload()
         {
             this.numLoadedPages = 0
 
-            $('#product_list_items').html('')
+            $('#catalogitem_list_items').html('')
 
             this.loadNextPage()
         },
@@ -23,13 +23,13 @@ export default {
         {
             this.isLoading = true
 
-            $.request('productList::onLoadProductListPage', {
+            $.request('catalogitemList::onLoadCatalogitemListPage', {
                 data   : {
                     page: this.numLoadedPages + 1,
                 },
                 success: (data, textStatus, jqXHR) =>
                 {
-                    $('#product_list_items').append(data['itemsHtml'])
+                    $('#catalogitem_list_items').append(data['itemsHtml'])
 
                     this.filteredCount = data['filteredCount']
 

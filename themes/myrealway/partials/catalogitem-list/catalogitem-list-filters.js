@@ -16,7 +16,7 @@ export default {
 
             this.queryFromFilterValues()
 
-            this.updateProductList()
+            this.updateCatalogitemList()
         },
         onFilterChange(filterSlug, optionSlug)
         {
@@ -31,7 +31,7 @@ export default {
 
             this.queryFromFilterValues()
 
-            this.updateProductList()
+            this.updateCatalogitemList()
         },
         filterValuesFromQuery()
         {
@@ -62,9 +62,9 @@ export default {
 
             history.pushState(null, null, `${location.origin}${location.pathname}${query}`)
         },
-        updateProductList()
+        updateCatalogitemList()
         {
-            $('[data-app="productList"]')[0].__vue__.reload()
+            $('[data-app="catalogitemList"]')[0].__vue__.reload()
         },
     }
 }

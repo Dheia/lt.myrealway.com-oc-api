@@ -1,17 +1,17 @@
 ==
-<div data-app="productListFilters" data-filters="{{ productList.getAllowedFiltersSlugMap() }}">
-    {% for filter in productList.getAllFilters() %}
+<div data-app="catalogitemListFilters" data-filters="{{ catalogitemList.getAllowedFiltersSlugMap() }}">
+    {% for filter in catalogitemList.getAllFilters() %}
         <div class="form-group">
-            <label for="product_filter_{{ filter.slug }}">{{ filter.name }}</label>
+            <label for="catalogitem_filter_{{ filter.slug }}">{{ filter.name }}</label>
             <select class="form-control"
-                    id="product_filter_{{ filter.slug }}"
+                    id="catalogitem_filter_{{ filter.slug }}"
                     @change="onFilterChange('{{ filter.slug }}', $event.target.value)"
                     :value="filterValues['{{ filter.slug }}']"
             >
                 <option value="">Select {{ filter.name | lower }}</option>
                 {% for option in filter.filteroptions.sortBy('sort_order') %}
                     <option value="{{ option.slug }}"
-                            {{ productList.isFilterOptionSelected(option.id) ? 'selected' : '' }}
+                            {{ catalogitemList.isFilterOptionSelected(option.id) ? 'selected' : '' }}
                     >{{ option.name }}</option>
                 {% endfor %}
             </select>

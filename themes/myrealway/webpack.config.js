@@ -13,7 +13,7 @@ module.exports = env =>
                 '*'
             ],
             disableHostCheck: true,
-            port            : 8080,
+            port            : 8081,
         },
         resolve  : {
             alias: {
