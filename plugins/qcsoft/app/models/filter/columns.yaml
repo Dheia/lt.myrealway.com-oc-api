@@ -2,12 +2,12 @@ columns:
     id:
         label: id
         type: text
-    type:
-        label: type
-        type: text
     name:
         label: name
         type: text
-    description:
-        label: description
+    is_in_bundles:
+        label: is_in_bundles
+        type: text
+    is_in_products:
+        label: is_in_products
         type: text

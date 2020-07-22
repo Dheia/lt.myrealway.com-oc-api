@@ -9,6 +9,8 @@ use Qcsoft\App\Models\Filteroption;
  * @package Qcsoft\App\Modelsbase
  * @property Collection $filteroptions
  * @property int $id
+ * @property boolean $is_in_bundles
+ * @property boolean $is_in_products
  * @property string $name
  */
 class FilterBase extends Model

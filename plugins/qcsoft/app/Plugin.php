@@ -89,6 +89,15 @@ class Plugin extends PluginBase
 
         \Event::listen('cms.router.beforeRoute', function ($url, Router $router) use (&$pageObj)
         {
+            if (starts_with($url, '/graphql'))
+            {
+                $appGraphQL = new \Qcsoft\App\GraphQL\AppGraphQL();
+
+                echo $appGraphQL->handle();
+
+                die;
+            }
+
             if ($url !== '/')
             {
                 $url = trim($url, '/');
@@ -166,147 +175,193 @@ class Plugin extends PluginBase
     {
         return [
             'functions' => [
-                'headerMenu' => function ()
+                'headerMenu1'              => function ()
                 {
                     return [
                         [
-                            'title'    => 'About us',
-                            'url'      => '',
-                            'children' => [
-                                [
-                                    'title' => 'Alliance',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Scientific potential',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Quality control',
-                                    'url'   => '',
-                                ],
-                            ],
-                        ],
-                        /*[
-                            'title'    => 'Bioregulators',
-                            'url'      => '',
-                            'children' => [
-                                [
-                                    'title' => 'About peptides',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'MRW bioregulators',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'MRW peptides',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Our advantages',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Select bioregulator',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Product catalog PDF',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Clinical trials PDF',
-                                    'url'   => '',
-                                ],
-                            ],
-                        ],
-                        [
-                            'title'    => 'Antiparasitic',
-                            'url'      => '',
-                            'children' => [],
-                        ],
-                        [
-                            'title' => 'PROTECTION',
+                            'title' => 'Delivery',
                             'url'   => '',
                         ],
                         [
-                            'title'    => 'Practical use',
-                            'url'      => '',
-                            'children' => [
-                                [
-                                    'title' => 'Hair and Skin',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Preventive medicine',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Muscles and Ligaments',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Men\'s health',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Weight loss',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Women\'s health',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Practical protocols PDF',
-                                    'url'   => '',
-                                ],
-                            ],
-                        ],*/
-                        [
-                            'title'    => 'Blog',
-                            'url'      => '',
-                            'children' => [
-                                [
-                                    'title' => 'FAQ',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'News',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Events',
-                                    'url'   => '',
-                                ],
-                                [
-                                    'title' => 'Video',
-                                    'url'   => '',
-                                ],
-                            ],
-                        ],
-                        [
-                            'title' => 'Partnership',
+                            'title' => 'Pay methods',
                             'url'   => '',
                         ],
                         [
-                            'title' => 'E-SHOP',
-                            'url'   => 'product-catalog',
-                            'class' => 'e-shop'
+                            'title' => 'Warranty and cashback',
+                            'url'   => '',
                         ],
-                        //                        [
-                        //                            'title'    => '',
-                        //                            'url'      => '',
-                        //                            'children' => [
-                        //                                [
-                        //                                    'title' => '',
-                        //                                    'url'   => '',
-                        //                                ],
-                        //                            ],
-                        //                        ],
                     ];
                 },
+                'headerMenu2'              => function ()
+                {
+                    return [
+                        [
+                            'title' => 'Product catalog',
+                            'url'   => '',
+                        ],
+                        [
+                            'title' => 'About us',
+                            'url'   => '',
+                        ],
+                        [
+                            'title' => 'Information',
+                            'url'   => '',
+                        ],
+                        [
+                            'title' => 'Contacts',
+                            'url'   => '',
+                        ],
+                    ];
+                },
+                'homeBestsellerProductIds' => function ()
+                {
+                    return [1035, 1040, 1045, 1050];
+                },
+                'homeBestsellerProgramIds' => function ()
+                {
+                    return [6, 7, 8, 10];
+                },
+                //                'headerMenu' => function ()
+                //                {
+                //                    return [
+                //                        [
+                //                            'title'    => 'About us',
+                //                            'url'      => '',
+                //                            'children' => [
+                //                                [
+                //                                    'title' => 'Alliance',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Scientific potential',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Quality control',
+                //                                    'url'   => '',
+                //                                ],
+                //                            ],
+                //                        ],
+                //                        /*[
+                //                            'title'    => 'Bioregulators',
+                //                            'url'      => '',
+                //                            'children' => [
+                //                                [
+                //                                    'title' => 'About peptides',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'MRW bioregulators',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'MRW peptides',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Our advantages',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Select bioregulator',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Product catalog PDF',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Clinical trials PDF',
+                //                                    'url'   => '',
+                //                                ],
+                //                            ],
+                //                        ],
+                //                        [
+                //                            'title'    => 'Antiparasitic',
+                //                            'url'      => '',
+                //                            'children' => [],
+                //                        ],
+                //                        [
+                //                            'title' => 'PROTECTION',
+                //                            'url'   => '',
+                //                        ],
+                //                        [
+                //                            'title'    => 'Practical use',
+                //                            'url'      => '',
+                //                            'children' => [
+                //                                [
+                //                                    'title' => 'Hair and Skin',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Preventive medicine',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Muscles and Ligaments',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Men\'s health',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Weight loss',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Women\'s health',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Practical protocols PDF',
+                //                                    'url'   => '',
+                //                                ],
+                //                            ],
+                //                        ],*/
+                //                        [
+                //                            'title'    => 'Blog',
+                //                            'url'      => '',
+                //                            'children' => [
+                //                                [
+                //                                    'title' => 'FAQ',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'News',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Events',
+                //                                    'url'   => '',
+                //                                ],
+                //                                [
+                //                                    'title' => 'Video',
+                //                                    'url'   => '',
+                //                                ],
+                //                            ],
+                //                        ],
+                //                        [
+                //                            'title' => 'Partnership',
+                //                            'url'   => '',
+                //                        ],
+                //                        [
+                //                            'title' => 'E-SHOP',
+                //                            'url'   => 'product-catalog',
+                //                            'class' => 'e-shop'
+                //                        ],
+                //                        //                        [
+                //                        //                            'title'    => '',
+                //                        //                            'url'      => '',
+                //                        //                            'children' => [
+                //                        //                                [
+                //                        //                                    'title' => '',
+                //                        //                                    'url'   => '',
+                //                        //                                ],
+                //                        //                            ],
+                //                        //                        ],
+                //                    ];
+                //                },
             ]
         ];
     }

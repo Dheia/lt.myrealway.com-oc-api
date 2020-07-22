@@ -12,6 +12,8 @@ use Qcsoft\App\Models\Filter;
  * @property int $filter_id
  * @property Collection $filteroption_catalogitems
  * @property int $id
+ * @property boolean $is_in_bundles
+ * @property boolean $is_in_products
  * @property string $name
  * @property int $sort_order
  */

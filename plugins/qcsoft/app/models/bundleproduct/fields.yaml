@@ -1,9 +1,0 @@
-fields:
-    bundle_id:
-        label: bundle_id
-        span: auto
-        type: text
-    product_id:
-        label: product_id
-        span: auto
-        type: text

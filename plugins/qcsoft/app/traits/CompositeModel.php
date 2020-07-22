@@ -3,12 +3,12 @@
 use October\Rain\Database\Builder;
 use October\Rain\Database\Model;
 use October\Rain\Database\Relations\MorphOne;
-use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\Ocext\Classes\AppSchema;
 
 /**
  * Trait CompositeModel
  * @package Qcsoft\App\Traits
+ * @mixin Model
  */
 trait CompositeModel
 {

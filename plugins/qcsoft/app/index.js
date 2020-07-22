@@ -4,6 +4,7 @@ import vValidate from './vuebackend/directives/v-validate'
 import percentOrExactPrice from './vuebackend/components/percent-or-exact-price.vue'
 
 import bundleProductList from './formwidgets/bundleproductlist/assets/script'
+// import FilterOptions from './formwidgets/filteroptions/partials/script.js'
 
 Vue.component(OcLists.name, OcLists)
 Vue.component(ListwidgetImage.name, ListwidgetImage)
