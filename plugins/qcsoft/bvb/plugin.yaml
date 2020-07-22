@@ -1,0 +1,6 @@
+plugin:
+    name: 'qcsoft.bvb::lang.plugin.name'
+    description: 'qcsoft.bvb::lang.plugin.description'
+    author: Qcsoft
+    icon: oc-icon-adjust
+    homepage: ''
