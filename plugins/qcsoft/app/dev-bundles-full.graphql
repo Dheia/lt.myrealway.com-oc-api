@@ -1,0 +1,52 @@
+{
+    bundle(where: ["id", "6"]) {
+        id
+        default_price(currency: "EUR")
+        bundle_products(orderBy: ["id", "desc"], take: 2) {
+            id
+            quantity
+            sort_order
+            #price_override
+            product {
+                id
+                default_price
+                page {
+                    id
+                    #owner_type
+                    #owner_id
+                    path
+                    #custom_h1_title
+                    #custom_seo_title
+                    #seo_desc
+                }
+                catalogitem {
+                    id
+                    #item_type
+                    #item_id
+                    name
+                    main_image {
+                        id
+                        #disk_name
+                        file_name
+                        file_size
+                        content_type
+                        #title
+                        #description
+                        #field
+                        #attachment_id
+                        #attachment_type
+                        #is_public
+                        #sort_order
+                        #created_at
+                        #updated_at
+                        thumb(w: 120, h: 120, mode: "crop")
+                    }
+                }
+            }
+        }
+    }
+    product(orderBy: ["default_price", "asc"], take: 3) {
+        id
+        default_price
+    }
+}

@@ -1,0 +1,135 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+    query: Query
+}
+
+union CatalogitemItem = Bundle | Product
+
+union PageOwner = Bundle | Genericpage | Product
+
+"Catalog product bundles"
+type Bundle {
+    bundle_products(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [BundleProduct]
+    catalogitem: Catalogitem
+    "Default price"
+    default_price(currency: String, format: String): Float
+    description: String
+    id: ID
+    page: Page
+}
+
+"Catalog BundleProduct"
+type BundleProduct {
+    bundle: Bundle
+    id: ID
+    price_override: Int
+    product: Product
+    quantity: Int
+    sort_order: Int
+}
+
+type BundleProductCustomergroup {
+    bundle_product_id: ID
+    customergroup_id: ID
+    discount_value: Int
+    discount_value_type: String
+    id: ID
+}
+
+type Catalogitem {
+    id: ID
+    item: CatalogitemItem
+    item_id: Int
+    item_type: String
+    main_category_id: Int
+    main_image: File
+    name: String
+}
+
+"Category"
+type Category {
+    description: String
+    id: ID
+    name: String
+    nest_depth: Int
+    nest_left: Int
+    nest_right: Int
+    parent_id: Int
+}
+
+"File"
+type File {
+    attachment_id: String
+    attachment_type: String
+    content_type: String
+    created_at: String
+    description: String
+    disk_name: String
+    field: String
+    file_name: String
+    file_size: Int
+    id: ID
+    is_public: Boolean
+    path: String
+    sort_order: Int
+    thumb(h: Int, mode: String, w: Int): String
+    title: String
+    updated_at: String
+}
+
+"Genericpage"
+type Genericpage {
+    content: String
+    id: ID
+    name: String
+}
+
+type Page {
+    custom_h1_title: String
+    custom_seo_title: String
+    id: ID
+    owner: PageOwner
+    owner_id: Int
+    owner_type: String
+    path: String
+    seo_desc: String
+}
+
+"Catalog product"
+type Product {
+    catalogitem: Catalogitem
+    "Default price"
+    default_price(currency: String, format: String): Float
+    description: String
+    fieldWithError: String
+    id: ID
+    page: Page
+}
+
+type Query {
+    "Bundle eloquent model"
+    bundle(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [Bundle]
+    bundle_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "BundleProduct eloquent model"
+    bundle_product(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [BundleProduct]
+    bundle_product_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "BundleProductCustomergroup eloquent model"
+    bundle_product_customergroup(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [BundleProductCustomergroup]
+    bundle_product_customergroup_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "Catalogitem eloquent model"
+    catalogitem(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [Catalogitem]
+    catalogitem_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "Category eloquent model"
+    category(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [Category]
+    category_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "File eloquent model"
+    file(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [File]
+    file_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "Page eloquent model"
+    page(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [Page]
+    page_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+    "Product eloquent model"
+    product(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): [Product]
+    product_count(selectOrderBy: [String], selectScopes: [[String]], selectTake: Int, selectWhere: [String], selectWhereIn: [String], selectWith: [String]): Int
+}

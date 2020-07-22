@@ -1,0 +1,35 @@
+columns:
+  id:
+    label: id
+    type: text
+  catalogitem_main_image:
+    label: Main image
+#    type: partial
+#    path: $/qcsoft/ocext/partials/column_image.htm
+    widget: listwidget-image
+    imgStyle:
+    imgContainerStyle:
+      margin: -12px 0 -12px 0
+    sortable: false
+  catalogitem_main_category[name]:
+    label: main category
+#  main_category:
+#    label: main category
+#    relation: main_category
+#    select: name
+  catalogitem_name:
+    label: name
+    type: text
+  default_price:
+    label: 'default price'
+    type: text
+recordUrl: ''
+noRecordsMessage: 'backend::lang.list.no_records'
+showPageNumbers: true
+recordsPerPage: 100
+showSorting: true
+defaultSort: ''
+showCheckboxes: false
+showSetup: false
+showTree: false
+showPagination: false

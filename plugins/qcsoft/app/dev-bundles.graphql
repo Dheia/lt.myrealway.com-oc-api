@@ -1,0 +1,48 @@
+{
+    bundle (
+        selectOrderBy: ["id", "asc"],
+        selectTake: 5,
+        selectWhere: ["id", ">=", "10"],
+        selectWith: [
+            "page", "catalogitem", "catalogitem.main_image",
+            "bundle_products", "bundle_products.product", "bundle_products.product.page",
+            "bundle_products.product.catalogitem", "bundle_products.product.catalogitem.main_image",
+        ]
+    ) {
+        id
+        page {
+            id
+            path
+        }
+        catalogitem {
+            id
+            #item_type
+            #item_id
+            name
+            main_image {
+                id
+                thumb(w: 120, h: 120, mode: "crop")
+            }
+        }
+        bundle_products {
+            id
+            #default_price
+            product {
+                page {
+                    id
+                    path
+                }
+                catalogitem {
+                    id
+                    #    #item_type
+                    #    #item_id
+                    name
+                    main_image {
+                        id
+                        thumb(w: 120, h: 120, mode: "crop")
+                    }
+                }
+            }
+        }
+    }
+}

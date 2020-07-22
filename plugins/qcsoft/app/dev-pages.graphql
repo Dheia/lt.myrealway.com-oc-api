@@ -1,0 +1,52 @@
+{
+    page(selectWhereIn: ["owner_type", "bundle", "product", "genericpage"]) {
+        id
+        path
+        custom_h1_title
+        owner {
+            __typename
+            ... on Bundle {
+                id
+                bundle_products {
+                    quantity
+                    product {
+                        catalogitem {
+                            name
+                            main_image {
+                                thumb (w: 35, h: 35, mode: "crop")
+                            }
+                        }
+                    }
+                }
+                catalogitem {
+                    id
+                    name
+                    main_image {
+                        id
+                        file_name
+                        path
+                        thumb(w: 100, h: 100, mode: "crop")
+                    }
+                }
+            }
+            ... on Product {
+                id
+                catalogitem {
+                    id
+                    name
+                    main_image {
+                        id
+                        file_name
+                        path
+                        thumb(w: 100, h: 100, mode: "crop")
+                    }
+                }
+            }
+            ... on Genericpage {
+                id
+                name
+                content
+            }
+        }
+    }
+}
