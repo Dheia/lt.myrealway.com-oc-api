@@ -1,0 +1,16 @@
+==
+function onStart(){
+//$this['items'] =
+$model = [
+        'product' => \Qcsoft\App\Models\Product::class,
+        'bundle' => \Qcsoft\App\Models\Bundle::class,
+    ][$this['type']];
+
+$this['items'] = $model::whereIn('id', $this['ids'])->get();
+}
+==
+<div class="home-bestsellers">
+    {% for item in items %}
+        {% partial 'home/bestsellers-item' item=item %}
+    {% endfor %}
+</div>

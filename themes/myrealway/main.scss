@@ -1,6 +1,8 @@
 @import 'theme-vars';
 @import "/node_modules/bootstrap/scss/bootstrap";
 
+@import 'partials/home/slider';
+
 @import 'partials/header/header';
 @import 'partials/floating-cart/floating-cart';
 @import 'partials/catalogitem-list/catalogitem-list';

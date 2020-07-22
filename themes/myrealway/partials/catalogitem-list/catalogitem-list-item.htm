@@ -1,6 +1,8 @@
 ==
+{{ catalogitem.item_type }}
 <div class="card" data-app="catalogitemListItem" data-id="{{ catalogitem.id }}">
-    <a href="{{ url(catalogitem.item.page.path) }}" data-ajax-link style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
+    <a href="{{ url(catalogitem.item.page.path) }}" data-ajax-link
+       style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
         <img src="{{ catalogitem.main_image.getThumb(280, 200, {mode: 'crop'}) }}" class="card-img-top"
              alt="{{ catalogitem.name }}"
              style="position: absolute; top: 50%; left: 0; transform: translateY(-50%)"
@@ -12,6 +14,14 @@
         {% for filteroption in catalogitem.catalogitem_filteroptions().with('filteroption').get().pluck('filteroption') %}
             <div>{{ filteroption.name }}</div>
         {% endfor %}
+
+        {% if catalogitem.item_type == 'product' %}
+            p
+        {% else %}
+            {% for bundle_product in catalogitem.item.bundle_products %}
+                {{ bundle_product | json_encode }}
+            {% endfor %}
+        {% endif %}
 
         <div class="input-group mt-3">
             <div class="input-group-prepend">

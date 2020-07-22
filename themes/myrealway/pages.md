@@ -1,0 +1,13 @@
+- Product
+- Bundle
+- Static page
+  - Home
+  - Product catalog
+  - About us
+  - Information
+  - Contacts
+  - Cart
+  - Order
+  - Login / Register
+- 404
+- 500
