@@ -3,11 +3,19 @@
 use Backend\Classes\Controller;
 use BackendMenu;
 use Qcsoft\App\Classes\ImportOldSite;
+use Qcsoft\App\GraphQL\AppContext;
+use Qcsoft\App\GraphQL\AppGraphQL;
 use Qcsoft\App\Models\Auser;
 use Qcsoft\App\Models\Category;
 use Qcsoft\App\Models\FilteroptionProduct;
 use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Behaviors\MaintenanceController;
+
+use GraphQL\Type\Definition\ObjectType;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Schema;
+use GraphQL\GraphQL;
+
 
 class Dev extends Controller
 {
@@ -19,19 +27,31 @@ class Dev extends Controller
         BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-dev');
     }
 
-//    public function index()
-//    {
-//        dump(Auser::first()->aphone->num);
-//        dump(Auser::first()->aphone());
-//        die;
-//    }
-
     public function index()
     {
-        \Debugbar::disable();
+        $appContext = new AppContext();
 
-        $this->importOldSite();
+        $result = AppGraphQL::execute(<<<EOT
+{
+    bundle (selectWith: ["bundle_products"]) {
+        bundle_products {
+            id
+        }
     }
+}
+EOT
+            , [], $appContext);
+
+        dump($result->toArray());
+        die;
+    }
+
+//    public function index()
+//    {
+//        \Debugbar::disable();
+//
+//        $this->importOldSite();
+//    }
 
     public function importOldSite()
     {
@@ -76,5 +96,12 @@ class Dev extends Controller
             }
         }
     }
+
+//    public function index()
+//    {
+//        dump(Auser::first()->aphone->num);
+//        dump(Auser::first()->aphone());
+//        die;
+//    }
 
 }

@@ -7,9 +7,6 @@ use BackendMenu;
 use October\Rain\Database\Builder;
 use Qcsoft\App\Classes\CatalogitemFilteroptionsBackend;
 use Qcsoft\App\Models\Catalogitem;
-use Qcsoft\App\Models\CatalogitemFilteroption;
-use Qcsoft\App\Models\Filter;
-use Qcsoft\App\Models\Filteroption;
 use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Behaviors\ColumnInputController;
 use Qcsoft\Ocext\Behaviors\MakeSlugController;
@@ -30,6 +27,23 @@ class Products extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-products');
+    }
+
+    public function listGetQuery($definition, $selectConstraints)
+    {
+        return <<<EOT
+{
+    product_count
+    product {
+        id
+        path
+        catalogitem {
+            id
+            name
+        }
+    }
+}
+EOT;
     }
 
     public function formBeforeSave($model)

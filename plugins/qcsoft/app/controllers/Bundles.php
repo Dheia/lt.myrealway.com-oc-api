@@ -6,6 +6,8 @@ use Backend\Widgets\Lists;
 use BackendMenu;
 use October\Rain\Database\Builder;
 use Qcsoft\App\Classes\CatalogitemFilteroptionsBackend;
+use Qcsoft\App\Models\Bundle;
+use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\Ocext\Behaviors\ColumnInputController;
 use Qcsoft\Ocext\Behaviors\MakeSlugController;
 
@@ -25,6 +27,53 @@ class Bundles extends Controller
     {
         parent::__construct();
         BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-bundles');
+    }
+
+    public function listGetQuery($definition, $selectConstraints)
+    {
+//        dump($selectConstraints);
+//        return <<<EOT
+//{
+//    bundle {
+//        id
+//        catalogitem {
+//            id
+//            name
+//        }
+//    }
+//}
+//EOT;
+        return <<<EOT
+{
+    page_count (selectWhereIn: ["owner_type", "genericpage", "bundle"])
+    page (selectWhereIn: ["owner_type", "genericpage", "bundle"]) {
+        id
+        path
+        owner {
+            __typename
+            ... on Bundle {
+                id
+                catalogitem {
+                    id
+                    name
+                }
+            }
+            ... on Product {
+                id
+                catalogitem {
+                    id
+                    name
+                }
+            }
+            ... on Genericpage {
+                id
+                name
+                content
+            }
+        }
+    }
+}
+EOT;
     }
 
     public function formBeforeSave($model)
@@ -49,6 +98,15 @@ class Bundles extends Controller
         $query->with(['catalogitem', 'catalogitem.main_image'/*, 'catalogitem.main_category'*/]);
 
         (new CatalogitemFilteroptionsBackend())->extendListQuery($query);
+    }
+
+    public function formCreateModelObject()
+    {
+        $result = new Bundle();
+
+        $result->catalogitem = new Catalogitem();
+
+        return $result;
     }
 
 }

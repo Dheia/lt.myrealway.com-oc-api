@@ -5,8 +5,11 @@ use BackendMenu;
 
 class Catalogitems extends Controller
 {
-    public $implement = [        'Backend\Behaviors\ListController',        'Backend\Behaviors\FormController'    ];
-    
+    public $implement = [
+        'Backend\Behaviors\ListController',
+        'Backend\Behaviors\FormController',
+    ];
+
     public $listConfig = 'config_list.yaml';
     public $formConfig = 'config_form.yaml';
 
@@ -15,4 +18,5 @@ class Catalogitems extends Controller
         parent::__construct();
         BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-catalogitems');
     }
+
 }

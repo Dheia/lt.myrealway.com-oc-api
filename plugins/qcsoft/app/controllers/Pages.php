@@ -18,4 +18,5 @@ class Pages extends Controller
         parent::__construct();
         BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-pages');
     }
+
 }
