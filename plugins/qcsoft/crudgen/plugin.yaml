@@ -4,25 +4,25 @@ plugin:
   author: Qcsoft
   icon: oc-icon-adjust
   homepage: ''
-navigation:
-  main-menu-crudgen:
-    label: Crudgen
-    url: qcsoft/crudgen/migrations
-    icon: icon-life-ring
-    sideMenu:
-      side-menu-migrations:
-        label: Migrations
-        url: qcsoft/crudgen/migrations
-        icon: icon-sitemap
-      side-menu-models:
-        label: Models
-        url: qcsoft/crudgen/models
-        icon: icon-sitemap
-      side-menu-controllers:
-        label: Controllers
-        url: qcsoft/crudgen/controllers
-        icon: icon-sitemap
-      side-menu-plugin-selector:
-        label: 'Select plugin'
-        url: qcsoft/crudgen/pluginselector
-        icon: icon-sitemap
+#navigation:
+#  main-menu-crudgen:
+#    label: Crudgen
+#    url: qcsoft/crudgen/migrations
+#    icon: icon-life-ring
+#    sideMenu:
+#      side-menu-migrations:
+#        label: Migrations
+#        url: qcsoft/crudgen/migrations
+#        icon: icon-sitemap
+#      side-menu-models:
+#        label: Models
+#        url: qcsoft/crudgen/models
+#        icon: icon-sitemap
+#      side-menu-controllers:
+#        label: Controllers
+#        url: qcsoft/crudgen/controllers
+#        icon: icon-sitemap
+#      side-menu-plugin-selector:
+#        label: 'Select plugin'
+#        url: qcsoft/crudgen/pluginselector
+#        icon: icon-sitemap

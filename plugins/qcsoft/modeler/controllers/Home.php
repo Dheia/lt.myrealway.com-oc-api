@@ -33,7 +33,7 @@ class Home extends Controller
 
         $this->addCss('/plugins/qcsoft/modeler/assets/diff2html.min.css');
 //        $this->addCss('/plugins/qcsoft/modeler/assets/diff2html.min.js');
-//        $this->addJs('http://178.19.16.34:8080/main.js');
+//        $this->addJs('http://178.19.16.34:8082/main.js');
         $this->addJs('/plugins/qcsoft/modeler/assets/dist/main.js');
 
         $this->ormSchema = new OrmSchema(
@@ -54,7 +54,7 @@ class Home extends Controller
     public function onSave()
     {
         $requestedData = \Request::input('data');
-
+\Debugbar::info(\Request::post());return;
         $requestedEntities = $requestedData['entities'];
 
         /** @var Collection $existingEntities */

@@ -16,7 +16,10 @@ class ProductType extends ObjectType
             {
                 return [
                     'id'            => Types::id(),
+                    'product_code'  => Types::string(),
+                    'mini_desc'     => Types::string(),
                     'description'   => Types::string(),
+                    'ingredients'   => Types::string(),
                     'default_price' => [
                         'type'        => Types::float(),
                         'description' => 'Default price',

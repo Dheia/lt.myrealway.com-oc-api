@@ -14,7 +14,7 @@ columns:
   catalogitem_name:
     label: Name
     type: text
-  default_price:
+  catalogitem_price:
     label: 'Default price'
     type: partial
     path: $/qcsoft/ocext/partials/column_input.htm
@@ -24,7 +24,9 @@ columns:
       vValidate: '/^\d{0,7}(\.\d{0,2})?$/'
   description:
     label: Description
-    type: text
+    type: partial
+    path: $/qcsoft/ocext/partials/column_words.htm
+    numWords: 20
 #  page_path:
 #    label: path
 #    type: text

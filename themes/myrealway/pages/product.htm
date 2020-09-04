@@ -3,16 +3,8 @@ url = "/:product"
 layout = "default"
 is_hidden = 0
 ==
-<div class="container">
-    <h1>{{ product.h1_title }}</h1>
-    <div class="row">
-        <div class="col-6">
-            <img src="{{ product.main_image.getPath() }}"
-                 alt="{{ product.name }}"
-            />
-        </div>
-        <div class="col-6">
-
-        </div>
-    </div>
-</div>
+{% if pageObj.catalogitem.item_type == 'product' %}
+    {% partial 'page-product/page-product' product=pageObj %}
+{% else %}
+    {% partial 'page-product/page-bundle' bundle=pageObj %}
+{% endif %}

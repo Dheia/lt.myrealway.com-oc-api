@@ -10,7 +10,7 @@ columns:
   catalogitem_name:
     label: name
     type: text
-  default_price:
+  catalogitem_price:
     label: 'Default price'
     type: partial
     path: $/qcsoft/ocext/partials/column_input.htm

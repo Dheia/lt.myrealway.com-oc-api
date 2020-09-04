@@ -5,4 +5,41 @@
     left: 50%;
     transform: translateX(-50%);
   }
+
+}
+
+.catalogitem-list-items {
+  display: flex;
+
+  .card {
+    padding: 10px;
+    border: 0;
+  }
+
+  .bundle-product {
+    color: black;
+    display: block;
+  }
+
+  .item-price {
+    font-size: 200%;
+  }
+
+  .qty-and-cart {
+    display: flex;
+
+    .input-group {
+      margin-right: 10px;
+
+      input {
+        height: 40px;
+      }
+
+      .btn {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+  }
 }

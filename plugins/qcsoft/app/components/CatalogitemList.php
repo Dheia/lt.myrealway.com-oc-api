@@ -57,7 +57,7 @@ class CatalogitemList extends ComponentBase
     {
         if (!static::$catalogitemList)
         {
-            $query = Catalogitem::with('main_image');
+            $query = Catalogitem::with('main_image','item','item.page');
 
             $pageNum = \Request::input('page');
 
@@ -73,6 +73,8 @@ class CatalogitemList extends ComponentBase
                 }
             }
 
+//            dump($query->toSql());die;
+
             static::$filteredCount = $query->count();
 
             static::$catalogitemList = $query
@@ -80,6 +82,7 @@ class CatalogitemList extends ComponentBase
                 ->skip(($pageNum - 1) * $this->perPage)
                 ->limit($this->perPage)
                 ->get();
+//            dump(static::$catalogitemList ->toArray());die;
         }
     }
 

@@ -16,10 +16,12 @@ Vue.component(ToolbarBtn.name, ToolbarBtn)
 
 $(function ()
 {
+    let appEl = $('.app')
+
     new Vue({
-        data      : {schema: $('.app').data('schema')},
+        data      : {schema: appEl.data('schema')},
         el        : '#app',
-        template  : '<app/>',
+        template  : `<app :start-zoom="${appEl.data('zoom')}" :start-x="${appEl.data('x')}" :start-y="${appEl.data('y')}"/>`,
         components: {app}
     })
 })

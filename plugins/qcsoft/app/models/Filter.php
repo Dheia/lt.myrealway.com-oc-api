@@ -12,7 +12,8 @@ class Filter extends FilterBase
     {
         parent::boot();
 
-        static::extend(function ($model) {
+        static::extend(function ($model)
+        {
 
             /** @var static $model */
 
@@ -21,15 +22,16 @@ class Filter extends FilterBase
             ////////////////////////////////////////////////////////////////////////////////
             $optionsRepeaterValue = null;
 
-            $model->bindEvent('model.saveInternal', function () use ($model, &$optionsRepeaterValue) {
+            $model->bindEvent('model.saveInternal', function () use ($model, &$optionsRepeaterValue)
+            {
 
-                $optionsRepeaterValue = $model->attributes['options_repeater'];
+                $optionsRepeaterValue = array_get($model->attributes, 'options_repeater');
 
                 unset($model->attributes['options_repeater']);
             });
 
-            $model->bindEvent('model.afterSave', function () use ($model, &$optionsRepeaterValue) {
-
+            $model->bindEvent('model.afterSave', function () use ($model, &$optionsRepeaterValue)
+            {
                 $model->saveOptionsRepeaterToRelation($optionsRepeaterValue);
             });
         });

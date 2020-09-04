@@ -17,6 +17,11 @@ class Product extends ProductBase
 //        return $result;
     }
 
+    public function getPageApiData()
+    {
+        return [];
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -57,25 +62,30 @@ class Product extends ProductBase
         });
     }
 
-    public function getNameAttribute()
+    public function getH1TitleAttribute()
     {
-        return $this->catalogitem_name;
+        return $this->page->custom_h1_title ?: $this->catalogitem->name;
     }
 
-    public function setNameAttribute($value)
-    {
-        return $this->catalogitem_name = $value;
-    }
-
-    public function getDefaultPriceAttribute($value)
+    public function getCatalogitemPriceAttribute($value)
     {
         return $value / 100;
     }
 
-    public function setDefaultPriceAttribute($value)
+    public function setCatalogitemPriceAttribute($value)
     {
-        return $this->attributes['default_price'] = $value * 100;
+        return $this->attributes['catalogitem_price'] = $value * 100;
     }
+
+//    public function getNameAttribute()
+//    {
+//        return $this->catalogitem_name;
+//    }
+//
+//    public function setNameAttribute($value)
+//    {
+//        return $this->catalogitem_name = $value;
+//    }
 
 //    public function saveCustomergroupPrices($requestedItems)
 //    {

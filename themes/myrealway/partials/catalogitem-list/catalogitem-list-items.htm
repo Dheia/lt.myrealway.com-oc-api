@@ -1,6 +1,4 @@
 ==
 {% for catalogitem in catalogitemList.getCatalogitemList() %}
-    <div class="col">
-        {% partial 'catalogitem-list/catalogitem-list-item' catalogitem=catalogitem %}
-    </div>
+    {% partial 'catalogitem-list/catalogitem-list-item' catalogitem=catalogitem %}
 {% endfor %}

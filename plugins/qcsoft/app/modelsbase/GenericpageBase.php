@@ -7,6 +7,7 @@ use Qcsoft\App\Traits\CompositeModel;
 /**
  * Class GenericpageBase
  * @package Qcsoft\App\Modelsbase
+ * @property string $code
  * @property string $content
  * @property int $id
  * @property string $name

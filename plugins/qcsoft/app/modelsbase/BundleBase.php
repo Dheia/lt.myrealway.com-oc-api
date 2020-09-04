@@ -15,6 +15,7 @@ use Qcsoft\App\Traits\CompositeModel;
  * @property int $default_price
  * @property string $description
  * @property int $id
+ * @property string $mini_desc
  * @property Page $page
  */
 class BundleBase extends Model
@@ -31,7 +32,7 @@ class BundleBase extends Model
     public $table = 'qcsoft_app_bundle';
 
     public $hasMany = [
-        'bundle_products' => [BundleProduct::class, 'delete' => false],
+        'bundle_products' => [BundleProduct::class, 'delete' => true],
     ];
 
     public $morphOne = [

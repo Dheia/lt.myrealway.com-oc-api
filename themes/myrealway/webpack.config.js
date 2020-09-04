@@ -1,11 +1,15 @@
 const path = require('path')
 
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
 module.exports = env =>
 {
     return {
-        entry    : './main.js',
+        entry    : {
+            main : './main.js',
+        },
         output   : {
-            filename: 'main.js',
+            filename: '[name].js',
             path    : path.resolve(__dirname, 'assets/dist'),
         },
         devServer: {
@@ -19,6 +23,25 @@ module.exports = env =>
             alias: {
                 vue: env.type === 'prod' ? 'vue/dist/vue.min.js' : 'vue/dist/vue.js',
             }
-        }
+        },
+        module   : {
+            rules: [
+                {
+                    test  : /\.vue$/,
+                    loader: 'vue-loader'
+                },
+                {
+                    test: /\.s?css$/,
+                    use : [
+                        'vue-style-loader',
+                        'css-loader',
+                        'sass-loader'
+                    ]
+                }
+            ]
+        },
+        plugins  : [
+            new VueLoaderPlugin()
+        ],
     }
 }

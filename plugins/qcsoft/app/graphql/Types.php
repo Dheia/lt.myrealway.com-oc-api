@@ -6,9 +6,9 @@ use Qcsoft\App\GraphQL\Type\BundleProductCustomergroupType;
 use Qcsoft\App\GraphQL\Type\BundleProductType;
 use Qcsoft\App\GraphQL\Type\BundleType;
 use Qcsoft\App\GraphQL\Type\CatalogitemItemType;
+use Qcsoft\App\GraphQL\Type\CatalogitemRelevantitemType;
 use Qcsoft\App\GraphQL\Type\CatalogitemType;
 use Qcsoft\App\GraphQL\Type\CategoryType;
-use Qcsoft\App\GraphQL\Type\Field\HtmlField;
 use Qcsoft\App\GraphQL\Type\FileType;
 use Qcsoft\App\GraphQL\Type\FilteroptionType;
 use Qcsoft\App\GraphQL\Type\FilterType;
@@ -36,6 +36,7 @@ class Types
     public static function bundle() { return static::get(BundleType::class); }
     public static function catalogitemItem() { return static::get(CatalogitemItemType::class); }
     public static function catalogitem() { return static::get(CatalogitemType::class); }
+    public static function catalogitemRelevantitem() { return static::get(CatalogitemRelevantitemType::class); }
     public static function category() { return static::get(CategoryType::class); }
     public static function file() { return static::get(FileType::class); }
     public static function filter() { return static::get(FilterType::class); }

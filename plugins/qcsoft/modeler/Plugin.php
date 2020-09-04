@@ -9,10 +9,16 @@ use System\Classes\PluginBase;
 class Plugin extends PluginBase
 {
     protected static $dbTypes = [
-        'bool'   => ['boolean', ''],
-        'int'    => ['integer', '10'],
-        'string' => ['string', '191'],
-        'text'   => ['text', ''],
+        'bool'      => ['boolean', ''],
+        'int'       => ['integer', '10'],
+        'integer'   => ['integer', '10'],
+        'timestamp' => ['timestamp', ''],
+        'float'     => ['double', ''],
+        'double'    => ['double', ''],
+        'number'    => ['decimal', ''],
+        'decimal'   => ['decimal', ''],
+        'string'    => ['string', '191'],
+        'text'      => ['text', ''],
     ];
 
     public function registerComponents()
@@ -80,6 +86,9 @@ class Plugin extends PluginBase
             /** @var OrmField $field */
             foreach ($model->fields as $field)
             {
+//                \Debugbar::info();
+
+
                 switch ($field->attribute->type)
                 {
                     case 'bool':
@@ -89,6 +98,19 @@ class Plugin extends PluginBase
                     case 'int':
                     case 'integer':
                         $model->addProperty('int', $field->attribute->name);
+                        break;
+                    case 'timestamp':
+                        $model->addProperty('timestamp', $field->attribute->name);
+                        break;
+                    case 'float':
+                        $model->addProperty('float', $field->attribute->name);
+                        break;
+                    case 'double':
+                        $model->addProperty('double', $field->attribute->name);
+                        break;
+                    case 'number':
+                    case 'decimal':
+                        $model->addProperty('decimal', $field->attribute->name);
                         break;
                     case 'string':
                         $model->addProperty('string', $field->attribute->name);

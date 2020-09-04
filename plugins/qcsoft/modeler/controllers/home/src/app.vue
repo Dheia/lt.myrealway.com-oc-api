@@ -8,6 +8,9 @@
                 <div class="editor">
                     <schema-editor :load-value="loadValue"
                                    :editor="editor"
+                                   :start-zoom="startZoom"
+                                   :start-x="startX"
+                                   :start-y="startY"
                                    @added="onSchemaObjectAdded"
                                    @changed="onSchemaObjectChanged"
                                    @removed="onSchemaObjectRemoved"
@@ -53,6 +56,7 @@
     import CtrlModule from './modules/ctrl.vue'
 
     export default {
+        props     : ['startZoom', 'startX', 'startY'],
         components: {
             SchemaEditor,
             AppSidebar,

@@ -8,13 +8,12 @@ export default {
         this.load()
     },
     methods: {
-        addItem(sellableType, sellableId, quantity)
+        addItem(catalogitemId, quantity)
         {
             $.request('cart::onAddItem', {
                 data   : {
-                    sellable_type: sellableType,
-                    sellable_id  : sellableId,
-                    quantity     : quantity,
+                    catalogitemId,
+                    quantity,
                 },
                 success: (data, textStatus, jqXHR) =>
                 {

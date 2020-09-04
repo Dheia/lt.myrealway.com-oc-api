@@ -19,6 +19,12 @@ tabs:
             containerAttributes:
                 style: 'clear: both; line-height: 32px'
 
+        mini_desc:
+            label: Short description
+            span: full
+            type: textarea
+            size: small
+            tab: Description
         description:
             label: Description
             span: full

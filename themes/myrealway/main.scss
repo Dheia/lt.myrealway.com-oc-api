@@ -1,8 +1,23 @@
+body * {
+  font-family: Roboto;
+}
+
 @import 'theme-vars';
 @import "/node_modules/bootstrap/scss/bootstrap";
 
-@import 'partials/home/slider';
+@import "vendor/slick/slick.scss";
+@import "vendor/slick/slick-theme.scss";
+//@import "vendor/swiper/swiper";
+//@import "vendor/swiper/navigation";
+
+@import 'partials/page-home/page-home';
+@import 'partials/page-home/bestsellers-slider';
+@import 'partials/page-home/main-slider';
+
+@import 'partials/page-product/page-product';
 
 @import 'partials/header/header';
+@import 'partials/footer/footer';
+
 @import 'partials/floating-cart/floating-cart';
 @import 'partials/catalogitem-list/catalogitem-list';

@@ -88,7 +88,7 @@ EOT;
 
     public function listExtendColumns(Lists $lists)
     {
-        (new CatalogitemFilteroptionsBackend())->extendListColumns($lists);
+//        (new CatalogitemFilteroptionsBackend())->extendListColumns($lists);
     }
 
     public function listExtendQuery(Builder $query, $definition)
@@ -97,7 +97,7 @@ EOT;
 
         $query->with(['catalogitem', 'catalogitem.main_image'/*, 'catalogitem.main_category'*/]);
 
-        (new CatalogitemFilteroptionsBackend())->extendListQuery($query);
+//        (new CatalogitemFilteroptionsBackend())->extendListQuery($query);
     }
 
     public function formCreateModelObject()

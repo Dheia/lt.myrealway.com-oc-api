@@ -66,6 +66,20 @@ return [
             'varcharmax' => 191,
         ],
 
+        'mrw_old' => [
+            'driver'     => 'mysql',
+            'engine'     => 'InnoDB',
+            'host'       => 'localhost',
+            'port'       => 3306,
+            'database'   => 'myrealway_old',
+            'username'   => 'root',
+            'password'   => 'E-b6WbcG',
+            'charset'    => 'utf8mb4',
+            'collation'  => 'utf8mb4_unicode_ci',
+            'prefix'     => '',
+            'varcharmax' => 191,
+        ],
+
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => 'localhost',

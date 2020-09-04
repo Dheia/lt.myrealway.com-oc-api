@@ -14,8 +14,11 @@ use Qcsoft\App\Traits\CompositeModel;
  * @property int $default_price
  * @property string $description
  * @property int $id
+ * @property string $ingredients
+ * @property string $mini_desc
  * @property Page $page
  * @property Collection $product_bundles
+ * @property string $product_code
  */
 class ProductBase extends Model
 {

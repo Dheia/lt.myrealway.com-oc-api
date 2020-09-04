@@ -6,6 +6,7 @@ use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\CatalogitemCategory;
 use Qcsoft\App\Models\CatalogitemCustomergroup;
 use Qcsoft\App\Models\CatalogitemFilteroption;
+use Qcsoft\App\Models\CatalogitemRelevantitem;
 use Qcsoft\App\Models\Category;
 use Qcsoft\App\Models\Product;
 use System\Models\File;
@@ -16,6 +17,7 @@ use System\Models\File;
  * @property Collection $catalogitem_categories
  * @property Collection $catalogitem_customergroups
  * @property Collection $catalogitem_filteroptions
+ * @property Collection $catalogitem_relevantitems
  * @property int $id
  * @property mixed $item
  * @property int $item_id
@@ -24,6 +26,7 @@ use System\Models\File;
  * @property int $main_category_id
  * @property File $main_image
  * @property string $name
+ * @property int $price
  */
 class CatalogitemBase extends Model
 {
@@ -43,6 +46,7 @@ class CatalogitemBase extends Model
         'catalogitem_filteroptions' => [CatalogitemFilteroption::class, 'delete' => false],
         'catalogitem_customergroups' => [CatalogitemCustomergroup::class, 'delete' => false],
         'catalogitem_categories' => [CatalogitemCategory::class, 'delete' => false],
+//        'catalogitem_relevantitems' => [CatalogitemRelevantitem::class, 'delete' => true],
     ];
 
     public $attachOne = [

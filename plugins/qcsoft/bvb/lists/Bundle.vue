@@ -1,5 +1,11 @@
 <template>
     <div>
+        <div class="pl-2 pb-2 pt-1">
+            <b-button href="/backend/qcsoft/app/bundles/create">
+                <b-icon icon="plus"/>
+                Create
+            </b-button>
+        </div>
         <admin-b-table
                 :items="records"
                 :fields="fields"
@@ -11,7 +17,12 @@
                 <div class="column-id" v-text="value"></div>
             </template>
             <template v-slot:cell(catalogitem.main_image.thumb)="{ value }">
-                <img :src="value"/>
+                <img :src="value" style="min-height: 50px"/>
+            </template>
+            <template v-slot:cell(catalogitem.name)="{ item, value }">
+                <a :href="'/backend/qcsoft/app/bundles/update/' + item.id"
+                   v-text="value"
+                   target="_self"></a>
             </template>
             <template v-slot:cell(page.path)="{ value }">
                 <a :href="'/' + value" v-text="value" target="_blank"></a>

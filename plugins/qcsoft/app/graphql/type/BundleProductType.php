@@ -18,6 +18,8 @@ class BundleProductType extends ObjectType
             {
                 return [
                     'id'             => Types::id(),
+                    'bundle_id'      => Types::int(),
+                    'product_id'     => Types::int(),
                     'bundle'         => Types::bundle(),
                     'product'        => Types::product(),
                     'quantity'       => Types::int(),

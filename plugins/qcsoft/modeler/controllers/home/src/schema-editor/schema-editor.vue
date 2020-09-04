@@ -53,7 +53,7 @@
             CellAttribute,
             CellRelation,
         },
-        props     : ['loadValue', 'editor'],
+        props     : ['loadValue', 'editor', 'startZoom', 'startX', 'startY'],
         mixins    : [CreateMxEditor],
         data      : vm => ({
             isPortalReady      : [],
@@ -88,9 +88,16 @@
             this.mxEditor.setGraphContainer(this.$refs.container)
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////
-            this.mxEditor.graph.zoomOut()
+            let zoomFn = this.startZoom < 0 ? 'zoomOut' : 'zoomIn'
+
+            for (let i = 0; i < Math.abs(this.startZoom); i++)
+            {
+                this.mxEditor.graph[zoomFn]()
+            }
+
             let view = this.mxEditor.graph.view
-            view.setTranslate(view.translate.x + -160, view.translate.y + -10)
+
+            view.setTranslate(view.translate.x + this.startX, view.translate.y + this.startY)
             ////////////////////////////////////////////////////////////////////////////////////////////////////
 
             this.mxEditor.graph.refresh()

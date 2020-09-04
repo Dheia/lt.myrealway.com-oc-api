@@ -11,16 +11,27 @@
     <meta charset="UTF-8">
     <meta name="robots" content="noindex,nofollow" />
     <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ ['main.scss'] | theme }}">
+{#    <link rel="stylesheet" href="{{ 'assets/vendor/jquery.fancybox.min.css' | theme }}">#}
 </head>
 <body>
 <div data-app="cart"></div>
 <div data-app="mainLoadIndicator"></div>
 {% partial 'header/header' %}
-{% partial 'floating-cart/floating-cart' %}
+{#{% partial 'floating-cart/floating-cart' %}#}
 <div id="page">
     {% page %}
 </div>
+{% partial 'footer/footer' %}
+{#
+{% if admin() %}
+<div style="position: fixed; right: 0; top: 0; padding: 5px 10px;
+background: white; box-shadow: 0 0 5px 0 rgba(0,0,0,0.5)">
+<a target="_blank" href="/backend">backend</a>
+</div>
+{% endif %}
+#}
 {#<script src="{{ 'assets/dist/main.js' | theme }}"></script>#}
 <script src="http://178.19.16.34:8081/main.js"></script>
 </body>

@@ -1,5 +1,4 @@
 ==
-{{ catalogitem.item_type }}
 <div class="card" data-app="catalogitemListItem" data-id="{{ catalogitem.id }}">
     <a href="{{ url(catalogitem.item.page.path) }}" data-ajax-link
        style="padding-top: 70%; position: relative; display: block; margin-top: 1px">
@@ -8,33 +7,46 @@
              style="position: absolute; top: 50%; left: 0; transform: translateY(-50%)"
         >
     </a>
-    <div class="card-body">
+    <div class="card-body d-flex flex-column">
         <h5 class="card-title">{{ catalogitem.name }}</h5>
-        <p class="card-text">{{ catalogitem.item.desc }}</p>
-        {% for filteroption in catalogitem.catalogitem_filteroptions().with('filteroption').get().pluck('filteroption') %}
-            <div>{{ filteroption.name }}</div>
-        {% endfor %}
 
-        {% if catalogitem.item_type == 'product' %}
-            p
-        {% else %}
-            {% for bundle_product in catalogitem.item.bundle_products %}
-                {{ bundle_product | json_encode }}
-            {% endfor %}
-        {% endif %}
+        <div class="flex-grow-1">
+            {% if catalogitem.item_type == 'product' %}
+            {% else %}
+                {% for bundle_product in catalogitem.item.bundle_products %}
+                    <a target="_blank"
+                       href="{{ url(bundle_product.product.page.path) }}"
+                       class="bundle-product"
+                    >
+                        <img src="{{ bundle_product.product.catalogitem.main_image.getThumb(35, 35, {mode: 'crop'}) }}"/>
+                        {{ bundle_product.product.catalogitem.name }}
+                    </a>
+                {% endfor %}
+            {% endif %}
 
-        <div class="input-group mt-3">
-            <div class="input-group-prepend">
-                <button type="button" class="btn btn-primary" @click="quantityDec">-</button>
-            </div>
-            <input type="text" v-model="quantity" class="form-control" value="1"/>
-            <div class="input-group-append">
-                <button type="button" class="btn btn-primary" @click="quantityInc">+</button>
+            <div class="item-sdesc">
+                {{ catalogitem.item.mini_desc }}
             </div>
         </div>
 
-        <button type="button" class="btn btn-primary mt-3" @click="addToCart">
-            Add to cart
-        </button>
+        <div class="item-price">
+            {{ catalogitem.item.default_price }}&euro;
+        </div>
+
+        <div class="qty-and-cart">
+            <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                    <button type="button" class="btn btn-primary" @click="quantityDec">-</button>
+                </div>
+                <input type="text" v-model="quantity" class="form-control" value="1"/>
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" @click="quantityInc">+</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mt-3" @click="addToCart">
+                Pirkti
+            </button>
+        </div>
     </div>
 </div>

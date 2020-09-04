@@ -19,6 +19,7 @@ class BundleType extends ObjectType
             {
                 return [
                     'id'              => Types::id(),
+                    'mini_desc'       => Types::string(),
                     'description'     => Types::string(),
                     'default_price'   => [
                         'type'        => Types::float(),

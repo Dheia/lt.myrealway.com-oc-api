@@ -9,19 +9,9 @@ class Bundle extends BundleBase
 
     public $rules = [];
 
-    protected static function boot()
+    public function getH1TitleAttribute()
     {
-        parent::boot();
-
-        static::extend(function ($model)
-        {
-            /** @var static $model */
-
-            ////////////////////////////////////////////////////////////////////////////////
-            /// Auto delete related
-            ////////////////////////////////////////////////////////////////////////////////
-            $model->hasMany['bundle_products']['delete'] = true;
-        });
+        return $this->page->custom_h1_title ?: $this->catalogitem->name;
     }
 
     public function getNameAttribute()
@@ -34,14 +24,22 @@ class Bundle extends BundleBase
         return $this->catalogitem_name = $value;
     }
 
-    public function getDefaultPriceAttribute($value)
+    public function getCatalogitemPriceAttribute($value)
     {
         return $value / 100;
     }
 
-    public function setDefaultPriceAttribute($value)
+    public function setCatalogitemPriceAttribute($value)
     {
-        return $this->attributes['default_price'] = $value * 100;
+        return $this->attributes['catalogitem_price'] = $value * 100;
+    }
+
+    public function getSumPriceAttribute()
+    {
+        return $this->bundle_products->reduce(function ($prev, BundleProduct $bundleProduct)
+        {
+            return $prev + ($bundleProduct->product->default_price * $bundleProduct->quantity);
+        }, 0);
     }
 
 }

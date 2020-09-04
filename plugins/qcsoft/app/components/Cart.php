@@ -3,6 +3,7 @@
 use Cms\Classes\ComponentBase;
 use Qcsoft\App\Models\Cart as CartModel;
 use Qcsoft\App\Models\Cartitem;
+use Qcsoft\App\Models\Catalogitem;
 
 class Cart extends ComponentBase
 {
@@ -16,11 +17,13 @@ class Cart extends ComponentBase
     public function onAddItem()
     {
         $cart = CartModel::fromSessionGetOrCreate();
+\Debugbar::info(\Request::input('catalogitemId'));
+        $catalogitem = Catalogitem::findOrFail(\Request::input('catalogitemId'));
 
         $cartItem = Cartitem::firstOrNew([
             'cart_id'       => $cart->id,
-            'sellable_type' => \Request::input('sellable_type'),
-            'sellable_id'   => \Request::input('sellable_id'),
+            'sellable_type' => 'catalogitem',
+            'sellable_id'   => \Request::input('catalogitemId'),
         ]);
 
         $cartItem->quantity += \Request::input('quantity');

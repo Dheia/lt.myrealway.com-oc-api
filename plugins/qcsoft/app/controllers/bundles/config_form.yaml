@@ -6,5 +6,5 @@ create:
     redirect: 'qcsoft/app/bundles/update/:id'
     redirectClose: qcsoft/app/bundles
 update:
-    redirect: qcsoft/app/bundles
-    redirectClose: qcsoft/app/bundles
+    redirect: qcsoft/bvb#/bundles
+    redirectClose: qcsoft/bvb#/bundles

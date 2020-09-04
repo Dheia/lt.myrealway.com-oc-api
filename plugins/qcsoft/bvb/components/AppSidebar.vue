@@ -17,20 +17,20 @@
             return {
                 menuItems: [
                     {
-                        title: 'Bundles',
-                        url  : '/bundles',
-                    },
-                    {
                         title: 'Products',
                         url  : '/products',
                     },
                     {
-                        title: 'Filters',
-                        url  : '/filters',
+                        title: 'Bundles',
+                        url  : '/bundles',
                     },
                     {
                         title: 'Categories',
                         url  : '/categories',
+                    },
+                    {
+                        title: 'Filters',
+                        url  : '/filters',
                     },
                     {
                         title: 'Pages',
