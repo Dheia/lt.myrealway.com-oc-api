@@ -1,0 +1,22 @@
+<div id="header_mini_cart" class="d-flex align-items-end header-col-3" data-app>
+
+    <a href="#" target="_self">
+        <img src="{{ 'assets/img/user-icon.svg' | theme }}"/>
+        <span class="col-3-label">Mano profilis</span>
+    </a>
+    <a href="{{ url('cart') }}" data-ajax-link target="_self">
+        <img src="{{ 'assets/img/cart-icon.svg' | theme }}"/>
+        <span class="col-3-label">Krepšelis</span>
+        <span class="col-3-quantity"
+              v-text="app.cart.total_count"
+              v-if="app.cart.total_count > 0"
+        ></span>
+    </a>
+
+    {#<b-icon-cart-fill variant="light"
+                      font-scale="2"
+                      :class="'rounded-circle bg-primary p-2'"
+    ></b-icon-cart-fill>
+    <div style="color: white" v-text="app.cart.total_count"></div>#}
+
+</div>

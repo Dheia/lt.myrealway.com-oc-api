@@ -1,0 +1,41 @@
+<footer class="site-footer mt-5">
+    <div class="container">
+        <div class="d-flex">
+            {% for column in footer() %}
+                <div class="ft-column">
+                    <h4>{{ column.label }}</h4>
+                    {% if column.type == 'menu' %}
+                        <ul>
+                            {% for item in column.children %}
+                                <li>
+                                    <a href="" target="_self">{{ item.label }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% elseif column.type == 'list' %}
+                        <ul>
+                            {% for item in column.children %}
+                                <li>
+                                    {{ item.label }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% elseif column.type == 'partial' %}
+                        {% partial column.partial %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                © 2020 MYREALWAY © 2020
+            </div>
+            <div class="footer-poweredby">
+                Powered by
+                <a href="https://qc.lt" target="_blank">
+                    <span class="qc-q">Q</span><span class="qc-c">C</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>

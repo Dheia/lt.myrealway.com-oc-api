@@ -1,0 +1,30 @@
+==
+function onStart(){
+list($model, $configKey) = [
+'product' => [\Qcsoft\App\Models\Product::class, 'homeBestsellerProductsSlider'],
+'bundle' => [\Qcsoft\App\Models\Bundle::class, 'homeBestsellerBundlesSlider'],
+][$this['type']];
+
+$settings = \Qcsoft\App\Models\Genericsetting::all()->firstWhere('name', $configKey)->value;
+
+$this['items'] = $model::whereIn('id', $settings['itemIds'])->get();
+
+unset($settings['itemIds']);
+
+$this['settings'] = $settings;
+}
+==
+<div class="container home-bestsellers-slider">
+    <div data-slider='{{ settings | json_encode | raw }}'>
+        {% for item in items %}
+            <div class="hb-item">
+                <a target="_self" href="{{ url(item.page.path) }}" data-ajax-link>
+                    <img src="{{ item.catalogitem.main_image.getThumb(200, 200, {mode: 'crop'}) }}"/>
+                    <span class="text-center hb-item-name">{{ item.catalogitem.name }}</span>
+                </a>
+                <div class="text-center hb-item-sdesc">{{ item.mini_desc }}</div>
+                <div class="text-center hb-item-price">{{ item.default_price }}&euro;</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

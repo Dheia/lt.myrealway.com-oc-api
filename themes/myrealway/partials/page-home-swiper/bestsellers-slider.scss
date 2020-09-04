@@ -1,0 +1,48 @@
+.home-bestsellers-slider {
+  position: relative;
+  display: flex;
+
+  .hb-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  img {
+  }
+
+  .hb-item-name {
+    display: block;
+    font-size: 125%;
+    color: black;
+  }
+
+  .hb-item-sdesc {
+    flex-grow: 1;
+    padding: 10px 0;
+  }
+
+  .hb-item-price {
+    font-size: 200%;
+  }
+
+  .slider-buttons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    //outline:1px solid red;
+  }
+
+  .swiper-button-prev {
+    left: 0px;
+  }
+
+  .swiper-button-next {
+    right: 0px;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    //position:absolute;
+  }
+}

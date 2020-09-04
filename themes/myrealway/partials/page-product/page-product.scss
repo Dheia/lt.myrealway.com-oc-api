@@ -1,0 +1,62 @@
+.page-product {
+  margin-top: 35px;
+
+  .product-code {
+    color: #777;
+    font-size: 90%;
+  }
+
+  .product-mini-desc {
+    margin: 25px 0 35px 0;
+  }
+
+  .product-cart-controls {
+    display: flex;
+    align-items: center;
+    margin: 0 0 35px 0;
+
+    .product-price {
+      font-size: 200%;
+      margin: 0 50px 0 0;
+      flex-grow: 1;
+    }
+
+    .product-quantity {
+      width: 150px;
+
+      .input-group-prepend .btn,
+      .input-group-append .btn {
+        width: 40px;
+      }
+
+      .form-control {
+        height: 40px;
+      }
+    }
+
+    .product-add {
+      margin: 0 0 0 50px;
+
+      .btn {
+        padding: 0 50px;
+        height: 40px;
+      }
+    }
+  }
+
+  .product-tab-desc, .product-tab-ingredients {
+    padding: 25px 0 0 0;
+  }
+
+  .bundle-products {
+    margin-bottom: 35px;
+
+    .bundle-includes-label {
+      font-size: 150%;
+    }
+
+    .bundle-product {
+      display: block;
+    }
+  }
+}

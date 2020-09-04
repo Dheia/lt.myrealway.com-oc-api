@@ -1,0 +1,7 @@
+<div class="column-follow">
+    {% for network in ['facebook','instagram','linkedin','youtube'] %}
+        <a href="#" target="_blank">
+            <img src="{{ ('assets/img/footer/' ~ network ~ '.svg') | theme }}"/>
+        </a>
+    {% endfor %}
+</div>

@@ -1,0 +1,14 @@
+<div class="header-col-2 flex-grow-1">
+    <input class="form-control"
+           type="text"
+           placeholder="Įrašykite, ko ieškote"
+           aria-label="Įrašykite, ko ieškote"
+    >
+    <ul class="header-menu-1">
+        {% for item in headerMenu1() %}
+            <li>
+                <a href="{{ item.url }}" data-ajax-link>{{ item.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

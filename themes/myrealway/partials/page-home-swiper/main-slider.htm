@@ -1,0 +1,27 @@
+==
+function onStart(){
+$this['settings'] = \Qcsoft\App\Models\Genericsetting::all()->firstWhere('name', 'homeMainSlider')->value;
+}
+==
+<div class="home-main-slider" data-slider="{{ settings | json_encode }}">
+    <div class="swiper-container position-relative">
+        <div class="swiper-wrapper">
+            {% for item in ['assets/c2e7fed57db7aae72b638b962f9e297c.png', 'assets/c2e7fed57db7aae72b638b962f9e297c.png'] %}
+                <div class="swiper-slide main-slider-item" style="background-image: url({{ item | theme }})">
+                    <div class="slider-labels">
+                        <div class="slider-label-1">
+                            NATŪRALUS PLATAUS VARTOJIMO<br/>
+                            SPEKTRO <strong>ANTIPARAZITINIS</strong> KOMPLEKSAS
+                        </div>
+                        <ul class="slider-label-2">
+                            <div>- Profilaktika ir organizmo valymas</div>
+                            <div>- <strong>100%</strong> augalų ekstraktai</div>
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>

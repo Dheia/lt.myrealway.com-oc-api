@@ -1,0 +1,64 @@
+.site-footer {
+  background: black;
+  padding: 40px 0 10px 0;
+
+  .ft-column {
+    flex-grow: 1;
+  }
+
+  h4 {
+    font-size: 17px;
+    color: white;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    list-style: none;
+    margin: 0 0 3px 0;
+    font-size: 14px;
+  }
+
+  li, a {
+    color: #ccc;
+  }
+
+  .column-follow {
+    padding-top: 24px;
+
+    a + a {
+      margin-left: 7px;
+    }
+  }
+
+  .column-payment {
+    padding-top: 20px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    color: #ccc;
+    margin: 15px 0 0 0;
+  }
+
+  .footer-copyright {
+    flex-grow: 1;
+  }
+
+  .footer-poweredby {
+    .qc-q, .qc-c {
+      font-weight: 600;
+    }
+
+    .qc-q {
+      color: #E54AC7;
+    }
+
+    .qc-c {
+      color: #61F2FF;
+    }
+  }
+}
