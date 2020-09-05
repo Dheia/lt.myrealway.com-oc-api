@@ -2,6 +2,8 @@
 
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\Catalogitem;
+use Qcsoft\App\Models\Filter;
+use Qcsoft\App\Models\Filteroption;
 use Qcsoft\App\Models\Genericpage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
@@ -34,6 +36,16 @@ class WriteApiCache
         }
 
         return false;
+    }
+
+    public function writeBase()
+    {
+        $result = [
+            'filter'       => Filter::select(['id', 'name'])->get()->toArray(),
+            'filteroption' => Filteroption::select(['id', 'filter_id', 'name', 'sort_order'])->get()->toArray(),
+        ];
+
+        file_put_contents(storage_path("apicache/base.json"), json_encode($result));
     }
 
     protected function writeBundleItems($offset, $limit)

@@ -66,13 +66,22 @@ class Dev extends Controller
         }
     }
 
-    public function step_6_write_api_cache($type = null, $offset = null)
+    public function step_6_write_api_base()
     {
         $api = new WriteApiCache();
 
-        if ($nextChunk = $api->write($type, $offset,1000))
+        $api->writeBase();
+
+        return $this->asExtension(MaintenanceController::class)->index();
+    }
+
+    public function step_7_write_api_cache($type = null, $offset = null)
+    {
+        $api = new WriteApiCache();
+
+        if ($nextChunk = $api->write($type, $offset, 1000))
         {
-            return '<script>location.href="' . $this->actionUrl("step_6_write_api_cache/$nextChunk") . '"</script>';
+            return '<script>location.href="' . $this->actionUrl("step_7_write_api_cache/$nextChunk") . '"</script>';
         }
 
         return $this->asExtension(MaintenanceController::class)->index();
