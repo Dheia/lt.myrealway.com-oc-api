@@ -2,7 +2,13 @@
 $time = microtime(true);
 spl_autoload_register(function ($classname)
 {
-    if (file_exists($filename = "api/classes/$classname.php"))
+    $parts = explode('\\', $classname);
+
+    $classFilename = array_pop($parts);
+
+    $namespaceDirname = strtolower(implode('/', $parts));
+
+    if (file_exists($filename = "api/classes/$namespaceDirname/$classFilename.php"))
     {
         require $filename;
     }
