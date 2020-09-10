@@ -48,6 +48,7 @@ class SeedDb
         {
             $filter = new Filter();
             $filter->name = $name;
+            $filter->slug = \Str::slug($name);
 
             $filter->save();
 
@@ -56,6 +57,7 @@ class SeedDb
                 $filteroption = new Filteroption();
                 $filteroption->filter_id = $filter->id;
                 $filteroption->name = $option;
+                $filteroption->slug = \Str::slug($option);
 
                 $filteroption->save();
             }
@@ -96,6 +98,38 @@ class SeedDb
         $offset += $limit;
 
         return $offset;
+    }
+
+    public function makeRandomCatalogitemRelevantItems($offset)
+    {
+        if (!$offset)
+        {
+            CatalogitemRelevantitem::truncate();
+        }
+
+        $limit = 200;
+
+        $mainItems = Catalogitem::orderBy('id')->skip($offset)->limit($limit)->select(['id'])->pluck('id');
+
+        if (!count($mainItems))
+        {
+            return null;
+        }
+
+        foreach ($mainItems as $mainItemId)
+        {
+            $relevantItems = Catalogitem::orderByRaw('rand()')->limit(rand(3, 10))->select(['id'])->pluck('id');
+
+            foreach ($relevantItems as $relevantItemId)
+            {
+                CatalogitemRelevantitem::insert([
+                    'main_catalogitem_id'     => $mainItemId,
+                    'relevant_catalogitem_id' => $relevantItemId,
+                ]);
+            }
+        }
+
+        return $offset + count($mainItems);
     }
 
 }
