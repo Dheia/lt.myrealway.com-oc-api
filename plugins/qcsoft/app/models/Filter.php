@@ -1,5 +1,8 @@
 <?php namespace Qcsoft\App\Models;
 
+use Illuminate\Support\Collection;
+use Qcsoft\App\Classes\CatalogQuery;
+use Qcsoft\App\Classes\OptionsFilter;
 use Qcsoft\App\Modelsbase\FilterBase;
 
 class Filter extends FilterBase
@@ -105,9 +108,24 @@ class Filter extends FilterBase
         return $this->filteroptions->sortBy('sort_order')->toArray();
     }
 
-    public function getSlugAttribute()
+    public function applyToQuery($query, $options)
     {
-        return \Str::slug($this->name);
+        $optionIds = $options->pluck('handler.id')->implode(',');
+
+        $query->whereRaw(<<<EOT
+exists(
+        select *
+        from qcsoft_app_catalogitem_filteroption t
+        where t.filteroption_id in ($optionIds)
+          and t.catalogitem_id = qcsoft_app_catalogitem.id
+    )
+EOT
+        );
     }
+
+//    public function getSlugAttribute()
+//    {
+//        return \Str::slug($this->name);
+//    }
 
 }

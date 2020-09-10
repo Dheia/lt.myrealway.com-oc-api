@@ -15,6 +15,7 @@ use Qcsoft\App\Models\Filter;
  * @property boolean $is_in_bundles
  * @property boolean $is_in_products
  * @property string $name
+ * @property string $slug
  * @property int $sort_order
  */
 class FilteroptionBase extends Model

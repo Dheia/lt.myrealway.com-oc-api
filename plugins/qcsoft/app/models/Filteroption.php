@@ -23,9 +23,9 @@ class Filteroption extends FilteroptionBase
 //        });
     }
 
-    public function getSlugAttribute()
-    {
-        return \Str::slug($this->name);
-    }
+//    public function getSlugAttribute()
+//    {
+//        return \Str::slug($this->name);
+//    }
 
 }
