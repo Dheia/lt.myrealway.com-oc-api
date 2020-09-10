@@ -34,12 +34,4 @@ class ApiHandler
         return true;
     }
 
-    public static function addImage($response, $storage, $size, $id)
-    {
-        $response->add('img', $id, [
-            'id'  => $id,
-            $size => $storage->get("image/$size/$id") ?: null
-        ]);
-    }
-
 }

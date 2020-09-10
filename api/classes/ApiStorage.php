@@ -4,6 +4,11 @@ class ApiStorage
 {
     protected $basedir;
 
+    public static function getDefault()
+    {
+        return new static(realpath(__DIR__ . '/../../storage/apicache'));
+    }
+
     public function __construct($basedir)
     {
         $this->basedir = $basedir;

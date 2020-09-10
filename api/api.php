@@ -14,9 +14,9 @@ spl_autoload_register(function ($classname)
     }
 });
 
-$storage = new ApiStorage(realpath(__DIR__ . '/../storage/apicache'));
+$storage = ApiStorage::getDefault();
 
-$response = new ApiResponse();
+$response = new ApiResponse($storage);
 
 $handler = new ApiHandler();
 

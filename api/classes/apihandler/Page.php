@@ -7,16 +7,12 @@ class Page
 {
     public function handle($params, ApiStorage $storage, ApiResponse $response)
     {
-        if (!$page = $storage->getJson("page/$params"))
+        if (!$page = $response->addObject('page', $params))
         {
             return false;
         }
 
-        $owner = $storage->getJson("{$page->owner_type}/{$page->owner_id}");
-
-        $response->add('page', $params, $page);
-
-        $response->add($page->owner_type, $page->owner_id, $owner);
+        $owner = $response->addObject($page->owner_type, $page->owner_id);
 
         $classname = 'ApiHandler\\Page\\' . ucfirst($page->owner_type);
 

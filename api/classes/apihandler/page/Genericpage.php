@@ -44,7 +44,7 @@ EOT,
             ],
         ];
 
-        $response->add('genericblock', 1, [
+        $response->addValue('genericblock', 1, [
             'genericpage_id' => $owner->id,
             'component'      => 'SlideshowCarousel',
             'props'          => [
@@ -55,7 +55,7 @@ EOT,
 
         $featuredProducts = [10, 11, 25, 26, 27, 28, 29, 30, 31];
 
-        $response->add('genericblock', 2, [
+        $response->addValue('genericblock', 2, [
             'genericpage_id' => $owner->id,
             'component'      => 'CatalogitemsCarousel',
             'props'          => [
@@ -69,23 +69,19 @@ EOT,
 
         foreach ($featuredProducts as $id)
         {
-            $product = $storage->getJson("product/$id");
-            $catalogitem = $storage->getJson("catalogitem/{$product->catalogitem_id}");
-            $page = $storage->getJson("page/{$product->page_path}");
-
-            $response->add('product', $id, $product);
-            $response->add('catalogitem', $id, $catalogitem);
-            $response->add('page', $product->page_path, $page);
+            $product = $response->addObject('product', $id);
+            $catalogitem = $response->addObject('catalogitem', $product->catalogitem_id);
+            $page = $response->addObject('page', $product->page_path);
 
             if ($catalogitem->main_image_id)
             {
-                \ApiHandler::addImage($response, $storage, 'md', $catalogitem->main_image_id);
+                $response->addImage('md', $catalogitem->main_image_id);
             }
         }
 
         $featuredBundles = [1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010];
 
-        $response->add('genericblock', 3, [
+        $response->addValue('genericblock', 3, [
             'genericpage_id' => $owner->id,
             'component'      => 'CatalogitemsCarousel',
             'props'          => [
@@ -99,17 +95,13 @@ EOT,
 
         foreach ($featuredBundles as $id)
         {
-            $bundle = $storage->getJson("bundle/$id");
-            $catalogitem = $storage->getJson("catalogitem/{$bundle->catalogitem_id}");
-            $page = $storage->getJson("page/{$bundle->page_path}");
-
-            $response->add('bundle', $id, $bundle);
-            $response->add('catalogitem', $id, $catalogitem);
-            $response->add('page', $bundle->page_path, $page);
+            $bundle = $response->addObject('bundle', $id);
+            $catalogitem = $response->addObject('catalogitem', $bundle->catalogitem_id);
+            $page = $response->addObject('page', $bundle->page_path);
 
             if ($catalogitem->main_image_id)
             {
-                \ApiHandler::addImage($response, $storage, 'md', $catalogitem->main_image_id);
+                $response->addImage('md', $catalogitem->main_image_id);
             }
         }
     }
@@ -118,7 +110,7 @@ EOT,
     {
         $itemIds = [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46];
 
-        $response->add('genericblock', 4, [
+        $response->addValue('genericblock', 4, [
             'genericpage_id' => $owner->id,
             'component'      => 'CatalogMain',
             'props'          => [
@@ -129,24 +121,19 @@ EOT,
 
         foreach ($itemIds as $id)
         {
-            $catalogitem = $storage->getJson("catalogitem/$id");
-            $owner = $storage->getJson("{$catalogitem->item_type}/{$catalogitem->item_id}");
-            $page = $storage->getJson("page/{$owner->page_path}");
-
-            $response->add($catalogitem->item_type, $catalogitem->item_id, $owner);
-            $response->add('catalogitem', $id, $catalogitem);
-            $response->add('page', $owner->page_path, $page);
+            $catalogitem = $response->addObject('catalogitem', $id);
+            $owner = $response->addObject($catalogitem->item_type, $catalogitem->item_id);
+            $page = $response->addObject('page', $owner->page_path);
 
             if ($catalogitem->main_image_id)
             {
-                \ApiHandler::addImage($response, $storage, 'md', $catalogitem->main_image_id);
+                $response->addImage('md', $catalogitem->main_image_id);
             }
         }
     }
 
     protected function aboutUs($page, $owner, ApiStorage $storage, ApiResponse $response)
     {
-        $response->add('aaaaa', 'asdf', ['zxcv' => 123234]);
 
     }
 
