@@ -3,15 +3,13 @@
 use Backend\Classes\Controller;
 use Cms\Classes\Router;
 use October\Rain\Database\Relations\Relation;
+use Qcsoft\App\Classes\Catalog\CatalogHandler;
 use Qcsoft\App\Components\Cart;
 use Qcsoft\App\Components\CatalogitemList;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\Catalogitem;
-use Qcsoft\App\Models\CatalogitemFilteroption;
-use Qcsoft\App\Models\CatalogitemRelevantitem;
 use Qcsoft\App\Models\Customer;
 use Qcsoft\App\Models\Customergroup;
-use Qcsoft\App\Models\Filteroption;
 use Qcsoft\App\Models\Genericpage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
@@ -168,6 +166,13 @@ class Plugin extends PluginBase
                     $token = \JWTAuth::getToken();
                     echo $token;
                     die;
+                }
+
+                if (starts_with($url, '/api/catalog'))
+                {
+                    $handler = new CatalogHandler();
+
+                    return $handler->handle();
                 }
 
 //                function fillRandomRelevantCatalogitems()
