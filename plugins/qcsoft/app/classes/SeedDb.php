@@ -13,6 +13,7 @@ use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Filteroption;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
+use Qcsoft\App\Models\View;
 use System\Models\File;
 
 class SeedDb
@@ -61,6 +62,50 @@ class SeedDb
 
                 $filteroption->save();
             }
+        }
+
+    }
+
+    public function seedViews()
+    {
+        $data = [
+            ['genericpage', 'Generic page', 'Genericpage'],
+            ['product', 'Product page', 'ProductPage'],
+            ['bundle', 'Bundle page', 'BundlePage'],
+        ];
+
+        foreach ($data as $item)
+        {
+            $view = new View();
+
+            foreach (['owner_type', 'name', 'code'] as $i => $var)
+            {
+                $view->$var = $item[$i];
+            }
+
+            $view->save();
+        }
+
+    }
+
+    public function seedGenericpages()
+    {
+        $data = [
+            ['genericpage', 'Generic page', 'Genericpage'],
+            ['product', 'Product page', 'ProductPage'],
+            ['bundle', 'Bundle page', 'BundlePage'],
+        ];
+
+        foreach ($data as $item)
+        {
+            $view = new View();
+
+            foreach (['owner_type', 'name', 'code'] as $i => $var)
+            {
+                $view->$var = $item[$i];
+            }
+
+            $view->save();
         }
 
     }

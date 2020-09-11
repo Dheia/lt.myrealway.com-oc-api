@@ -11,222 +11,266 @@ use Qcsoft\App\Models\Product;
 
 class WriteApiCache
 {
-    public function write($type, $offset, $limit)
+    protected $types;
+
+    protected $writeStartTime;
+
+    public function __construct()
     {
-//        $types = collect(['bundle']);
-        $types = collect(['bundle', 'catalogitem', 'product', 'page', 'genericpage']);
+        $this->types = collect(['bundle', 'catalogitem', 'filter', 'filteroption',
+                                'genericpage', 'page', 'pagebypath', 'product']);
+    }
+
+    public function write($type, $offset)
+    {
+//        $this->types = collect(['page']);
+
+        $this->writeStartTime = microtime(true);
+
+        $limit = 100;
 
         if ($type === null)
         {
-            $type = $types->first();
+            $type = $this->types->first();
         }
 
-        $method = 'write' . ucfirst($type) . 'Items';
+        $offset = $offset ?: 0;
 
-        $processedCount = $this->$method($offset, $limit);
-
-        if ($processedCount)
+        for ($i = 0; $i < 1000; $i++)
         {
-            return $type . '/' . ($offset + $limit);
-        }
+            $result = $this->$type($offset, $limit);
 
-        $index = $types->search($type);
+            if (count($result))
+            {
+                $this->writeChunk($type, $result, 0);
 
-        if ($nextType = $types->get($index + 1))
-        {
-            return "$nextType/0";
+                $nextType = $type;
+                $nextOffset = $offset + count($result);
+            }
+            else
+            {
+                $nextType = $this->types->get($this->types->search($type) + 1);
+                $nextOffset = 0;
+            }
+
+            if (!$nextType)
+            {
+                return false;
+            }
+
+            $timePassedTotal = microtime(true) - $this->writeStartTime;
+
+            if ($timePassedTotal > 5)
+            {
+                return "$nextType/$nextOffset";
+            }
+
+            $type = $nextType;
+            $offset = $nextOffset;
         }
 
         return false;
     }
 
-    public function writeBase()
+    protected function writeChunk($type, $data, $debug = 0)
     {
-        if (!\File::exists(storage_path('apicache')))
+        if (!\File::exists(storage_path("apicache/$type")))
         {
-            \File::makeDirectory(storage_path('apicache'), 511, true);
+            \File::makeDirectory(storage_path("apicache/$type"), 511, true);
         }
 
-        $result = [
-            'filter'       => Filter::select([
-                'id', 'name', 'slug', 'sort_order'
-            ])->get()->toArray(),
-            'filteroption' => Filteroption::select([
-                'id', 'filter_id', 'name', 'slug', 'sort_order'
-            ])->get()->toArray(),
-        ];
-
-        file_put_contents(storage_path("apicache/base.json"), json_encode($result));
-    }
-
-    protected function writeBundleItems($offset, $limit)
-    {
-        if (!\File::exists(storage_path('apicache/bundle')))
+        if ($debug)
         {
-            \File::makeDirectory(storage_path('apicache/bundle'), 511, true);
-        }
+            $debugTime = microtime(true) - $this->writeStartTime;
 
-        $items = Bundle::with([
-            'catalogitem'     => function ($query)
+            echo "<pre>Time $debugTime\n\n";
+
+            foreach ($data as $key => $item)
             {
-                $query->select(['id', 'item_type', 'item_id']);
-            },
-            'page'            => function ($query)
-            {
-                $query->select(['id', 'path', 'owner_type', 'owner_id']);
-            },
-            'bundle_products' => function ($query)
-            {
-//                $query->select(['id', 'path', 'owner_type', 'owner_id']);
-            },
-        ])
-            ->orderBy('id')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
-
-        foreach ($items as $item)
-        {
-            $result = $item->toArray();
-
-            $result['catalogitem_id'] = $result['catalogitem']['id'];
-            unset($result['catalogitem']);
-
-            $result['page_path'] = $result['page']['path'];
-            unset($result['page']);
-
-            $result['products'] = [];
-            /** @var BundleProduct $bundle_product */
-            foreach ($item->bundle_products as $bundle_product)
-            {
-                $result['products'] [$bundle_product->product_id] = [$bundle_product->quantity, $bundle_product->price_override];
+                echo $key . ' => ' . json_encode($item, JSON_PRETTY_PRINT) . "\n\n";
             }
-            unset($result['bundle_products']);
 
-            file_put_contents(storage_path("apicache/bundle/{$item->id}.json"), json_encode($result));
-//            return;
+            echo '</pre>';
+
+            die;
         }
-
-        return count($items);
-    }
-
-    protected function writeCatalogitemItems($offset, $limit)
-    {
-        if (!\File::exists(storage_path('apicache/catalogitem')))
+        else
         {
-            \File::makeDirectory(storage_path('apicache/catalogitem'), 511, true);
-        }
-
-        $items = Catalogitem::with(['main_image' => function ($query)
-        {
-//            $query->select(['id','attachment_id']);
-        }, 'catalogitem_relevant_catalogitems'   => function ($query)
-        {
-        }])
-            ->orderBy('id')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
-
-        foreach ($items as $item)
-        {
-            $result = $item->toArray();
-            $result['main_image_id'] = array_get($result['main_image'], 'id');
-            unset($result['main_image']);
-
-            $result['relevant_ids'] = $item->catalogitem_relevant_catalogitems
-                ->pluck('relevant_catalogitem_id')
-                ->toArray();
-            unset($result['catalogitem_relevant_catalogitems']);
-
-            file_put_contents(storage_path("apicache/catalogitem/{$item->id}.json"), json_encode($result));
-//            return;
-        }
-
-        return count($items);
-    }
-
-    protected function writeGenericpageItems($offset, $limit)
-    {
-        if (!\File::exists(storage_path('apicache/genericpage')))
-        {
-            \File::makeDirectory(storage_path('apicache/genericpage'), 511, true);
-        }
-
-        $items = Genericpage
-            ::orderBy('id')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
-
-        foreach ($items as $item)
-        {
-            file_put_contents(storage_path("apicache/genericpage/{$item->id}.json"), $item->toJson());
-//            return;
-        }
-
-        return count($items);
-    }
-
-    protected function writePageItems($offset, $limit)
-    {
-        if (!\File::exists(storage_path('apicache/page')))
-        {
-            \File::makeDirectory(storage_path('apicache/page'), 511, true);
-        }
-
-        $items = Page
-            ::orderBy('id')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
-
-        foreach ($items as $item)
-        {
-            $path = $item->path === '/' ? 'home' : $item->path;
-
-            file_put_contents(storage_path("apicache/page/{$path}.json"), $item->toJson());
-//            return;
-        }
-
-        return count($items);
-    }
-
-    protected function writeProductItems($offset, $limit)
-    {
-        if (!\File::exists(storage_path('apicache/product')))
-        {
-            \File::makeDirectory(storage_path('apicache/product'), 511, true);
-        }
-
-        $items = Product::with([
-            'catalogitem' => function ($query)
+            foreach ($data as $key => $item)
             {
-                $query->select(['id', 'item_type', 'item_id']);
-            },
-            'page'        => function ($query)
+                file_put_contents(storage_path("apicache/$type/{$key}.json"), json_encode($item));
+            }
+        }
+    }
+
+    protected function bundle($offset, $limit)
+    {
+        return Bundle::orderBy('id')->skip($offset)->take($limit)
+            ->with([
+                'catalogitem'     => function ($query)
+                {
+                    $query->select(['id', 'item_type', 'item_id']);
+                },
+                'page'            => function ($query)
+                {
+                    $query->select(['id', 'path', 'owner_type', 'owner_id']);
+                },
+                'bundle_products' => function ($query)
+                {
+//                $query->select(['id', 'path', 'owner_type', 'owner_id']);
+                },
+            ])
+            ->get()
+            ->map(function ($item)
             {
-                $query->select(['id', 'path', 'owner_type', 'owner_id']);
-            },
-        ])
-            ->orderBy('id')
-            ->skip($offset)
-            ->take($limit)
-            ->get();
+                $result = $item->toArray();
 
-        foreach ($items as $item)
+                $result['catalogitem_id'] = $result['catalogitem']['id'];
+                unset($result['catalogitem']);
+
+                $result['page_path'] = $result['page']['path'];
+                unset($result['page']);
+
+                $result['products'] = [];
+                /** @var BundleProduct $bundle_product */
+                foreach ($item->bundle_products as $bundle_product)
+                {
+                    $result['products'] [$bundle_product->product_id] = [$bundle_product->quantity, $bundle_product->price_override];
+                }
+                unset($result['bundle_products']);
+
+                return $result;
+            })
+            ->keyBy('id');
+    }
+
+    protected function catalogitem($offset, $limit)
+    {
+        return Catalogitem::orderBy('id')->skip($offset)->take($limit)
+            ->with([
+                'main_image'                        => function ($query)
+                {
+//                    $query->select(['id', 'attachment_id']);
+                },
+                'catalogitem_relevant_catalogitems' => function ($query)
+                {
+                }
+            ])
+            ->get()
+            ->map(function ($item)
+            {
+                $result = $item->toArray();
+                $result['main_image_id'] = array_get($result['main_image'], 'id');
+                unset($result['main_image']);
+
+                $result['relevant_ids'] = $item->catalogitem_relevant_catalogitems
+                    ->pluck('relevant_catalogitem_id')
+                    ->toArray();
+                unset($result['catalogitem_relevant_catalogitems']);
+
+                return $result;
+            })
+            ->keyBy('id');
+    }
+
+    protected function filter($offset, $limit)
+    {
+        return Filter::orderBy('id')->skip($offset)->take($limit)
+            ->select(['id', 'name', 'slug', 'sort_order'])
+            ->get()
+            ->keyBy('id');
+    }
+
+    protected function filteroption($offset, $limit)
+    {
+        return Filteroption::orderBy('id')->skip($offset)->take($limit)
+            ->select(['id', 'filter_id', 'name', 'slug', 'sort_order'])
+            ->get()
+            ->keyBy('id');
+    }
+
+    protected function genericpage($offset, $limit)
+    {
+        return Genericpage::orderBy('id')->skip($offset)->take($limit)
+            ->get()
+            ->keyBy('id');
+    }
+
+    protected function page($offset, $limit)
+    {
+        $items = Page::orderBy('id')->skip($offset)->take($limit)->get();
+
+        $groups = $items->groupBy('owner_type');
+
+        $resultList = [];
+
+        foreach ($groups as $type => $items)
         {
-            $result = $item->toArray();
-            $result['catalogitem_id'] = $result['catalogitem']['id'];
-            $result['page_path'] = $result['page']['path'];
-            unset($result['catalogitem']);
-            unset($result['page']);
+            $modelclass = [
+                              'bundle'      => Bundle::class,
+                              'genericpage' => Genericpage::class,
+                              'product'     => Product::class,
+                          ][$type];
 
-            file_put_contents(storage_path("apicache/product/{$item->id}.json"), json_encode($result));
-//            return;
+            $require = $modelclass::getPageRequireEntities($items->pluck('owner_id'));
+
+            foreach ($items as $item)
+            {
+                $result = $item->toArray();
+
+                $result['require'] = array_get($require, $item->id, []);
+
+                $resultList[$item->id] = $result;
+            }
         }
 
-        return count($items);
+        return $resultList;
+    }
+
+    protected function pagebypath($offset, $limit)
+    {
+        return Page::orderBy('id')->skip($offset)->take($limit)
+            ->select(['id', 'path'])
+            ->get()
+            ->pluck('id', 'path')
+            ->pipe(function ($result)
+            {
+                if (isset($result['/']))
+                {
+                    $result['home'] = $result['/'];
+                    unset($result['/']);
+                }
+
+                return $result;
+            });
+    }
+
+
+    protected function product($offset, $limit)
+    {
+        return Product::orderBy('id')->skip($offset)->take($limit)
+            ->with([
+                'catalogitem' => function ($query)
+                {
+                    $query->select(['id', 'item_type', 'item_id']);
+                },
+                'page'        => function ($query)
+                {
+                    $query->select(['id', 'owner_type', 'owner_id']);
+                },
+            ])
+            ->get()
+            ->map(function ($item)
+            {
+                $result = $item->toArray();
+                $result['catalogitem_id'] = $result['catalogitem']['id'];
+                $result['page_id'] = $result['page']['id'];
+                unset($result['catalogitem']);
+                unset($result['page']);
+
+                return $result;
+            })
+            ->keyBy('id');
     }
 
 }

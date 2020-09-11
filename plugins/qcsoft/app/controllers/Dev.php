@@ -7,6 +7,9 @@ use Qcsoft\App\Classes\ImportOldSite;
 use Qcsoft\App\Classes\SeedDb;
 use Qcsoft\App\Classes\Webcache\WebCacheWriter;
 use Qcsoft\App\Classes\WriteApiCache;
+use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Page;
+use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Behaviors\MaintenanceController;
 use Qcsoft\App\Classes\RandomBundles;
 
@@ -28,20 +31,21 @@ class Dev extends Controller
     public function step_1_cleanup()
     {
         (new SeedDb())->cleanup();
-        return $this->asExtension(MaintenanceController::class)->index();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_2_import_old_site_and_seed_filters()
+    public function step_2_import_old_site_and_seed_base()
     {
         (new ImportOldSite())->import();
         (new SeedDb())->seedFilters();
-        return $this->asExtension(MaintenanceController::class)->index();
+        (new SeedDb())->seedViews();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
     public function step_3_generate_random_bundles()
     {
         (new RandomBundles())->generate();
-        return $this->asExtension(MaintenanceController::class)->index();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
     public function step_4_make_random_filter_bindings($offset = 0)
@@ -54,7 +58,7 @@ class Dev extends Controller
 
         if ($nextOffset === null)
         {
-            return $this->asExtension(MaintenanceController::class)->index();
+            return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
         }
         else
         {
@@ -72,7 +76,7 @@ class Dev extends Controller
 
         if ($nextOffset === null)
         {
-            return $this->asExtension(MaintenanceController::class)->index();
+            return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
         }
         else
         {
@@ -86,37 +90,39 @@ class Dev extends Controller
 
         $api->writeBase();
 
-        return $this->asExtension(MaintenanceController::class)->index();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_7_write_api_cache($type = null, $offset = null)
+    public function step_7_rm_rf_api_cache($type = null, $offset = null)
+    {
+        system('rm -rf ' . storage_path('apicache'));
+
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
+    }
+
+    public function step_8_write_api_cache($type = null, $offset = null)
     {
         $api = new WriteApiCache();
 
-        if ($nextChunk = $api->write($type, $offset, 1000))
+        if ($next = $api->write($type, $offset))
         {
-            return '<script>location.href="' . $this->actionUrl(__FUNCTION__ . "/$nextChunk") . '"</script>';
+//            dd($next);
+            return '<script>location.href="' . $this->actionUrl(__FUNCTION__ . "/$next") . '"</script>';
         }
 
-        return $this->asExtension(MaintenanceController::class)->index();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-//    public function step_6_write_web_cache($offset = null)
-//    {
-//
-//        die;
-//        $writer = new WebCacheWriter();
-//
-//        $written = $writer->write($offset, 1000);
-//
-//        if ($written > 0)
-//        {
-//            $offset += $written;
-//
-//            return '<script>location.href="' . $this->actionUrl(__FUNCTION__ . "/$offset") . '"</script>';
-//        }
-//
-//        return $this->asExtension(MaintenanceController::class)->index();
-//    }
+    public function step_9_write_page_requires($type = null, $offset = 0)
+    {
+        $types = [
+            'genericpage' => Genericpage::class,
+            'bundle'      => Product::class,
+            'product'     => Product::class,
+        ];
+
+        $requires = (new Product())->getPageRequireEntities(['limit' => 10, 'offset' => $offset]);
+        dd($requires);
+    }
 
 }

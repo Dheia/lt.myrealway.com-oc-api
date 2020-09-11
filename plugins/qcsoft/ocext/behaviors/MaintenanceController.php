@@ -10,12 +10,18 @@ class MaintenanceController extends ControllerBehavior
         parent::__construct($controller);
     }
 
-    public function index()
+    public function index($activeCmd = null)
     {
-        return $this->maintenanceGetActionNames()->map(function ($action)
-        {
-            return '<p><a href="' . $this->controller->actionUrl($action) . '">' . $action . '</a></p>';
-        })
+        return $this->maintenanceGetActionNames()
+            ->map(function ($action) use ($activeCmd)
+            {
+                $url = $this->controller->actionUrl($action);
+                $style = $action === $activeCmd ? 'text-decoration: underline': '';
+
+                return <<<EOT
+<p><a href="$url" style="$style">$action</a></p>
+EOT;
+            })
             ->implode('');
     }
 
