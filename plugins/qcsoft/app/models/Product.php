@@ -4,32 +4,120 @@ use Qcsoft\App\Modelsbase\ProductBase;
 
 class Product extends ProductBase
 {
-    public function __construct(array $attributes = [])
+    public static function getPageRequireEntities($ids)
     {
-        parent::__construct($attributes);
+        $products = static::query()
+            ->whereIn('id', $ids)
+            ->with(['catalogitem', 'page', 'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.item.page'])
+            ->get();
 
+        $resultItems = [];
 
-//        $result = new Product();
-//\Debugbar::info($this->exists);
-//\Debugbar::info($this->catalogitem);
-//        $this->catalogitem = new Catalogitem();
-
-//        return $result;
-    }
-
-    public function getPageApiData()
-    {
-        return [];
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::extend(function ($model)
+        foreach ($products as $product)
         {
-            /** @var static $model */
+            $result = [
+                'bundle'      => [],
+                'catalogitem' => [],
+                'page'        => [],
+                'product'     => [],
+            ];
 
+            $result['catalogitem'][] = $product->catalogitem->id;
+            $result['product'][] = $product->id;
+
+            $relevantItems = $product->catalogitem->catalogitem_relevant_catalogitems;
+
+            foreach ($relevantItems as $relevantItem)
+            {
+                /** @var Catalogitem $relevantCatalogitem */
+                $relevantCatalogitem = $relevantItem->relevant_catalogitem;
+                $result['catalogitem'][] = $relevantCatalogitem->item_id;
+                $result['page'][] = $relevantCatalogitem->item->page->id;
+                $result[$relevantCatalogitem->item_type][] = $relevantCatalogitem->item_id;
+            }
+
+            $resultItems[$product->page->id] = $result;
+        }
+
+        return $resultItems;
+    }
+
+//    public static function getPageRequireEntities($filter)
+//    {
+//        $query = static::query();
+//
+//        if (isset($filter['limit']))
+//        {
+//            $query = $query->orderBy('id')
+//                ->skip(array_get($filter, 'offset', 0))
+//                ->limit($filter['limit']);
+//        }
+//
+//        $query->with(['catalogitem', 'page', 'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.item.page']);
+//
+//        $products = $query->get();
+//
+//        $resultItems = [];
+//
+//        foreach ($products as $product)
+//        {
+//            $result = [
+//                'bundle'      => [],
+//                'catalogitem' => [],
+//                'page'        => [],
+//                'product'     => [],
+//            ];
+//
+//            $result['catalogitem'][] = $product->catalogitem->id;
+//            $result['product'][] = $product->id;
+//
+//            $relevantItems = $product->catalogitem->catalogitem_relevant_catalogitems;
+//
+//            foreach ($relevantItems as $relevantItem)
+//            {
+//                /** @var Catalogitem $relevantCatalogitem */
+//                $relevantCatalogitem = $relevantItem->relevant_catalogitem;
+//                $result['catalogitem'][] = $relevantCatalogitem->item_id;
+//                $result['page'][] = $relevantCatalogitem->item->page->id;
+//                $result[$relevantCatalogitem->item_type][] = $relevantCatalogitem->item_id;
+//            }
+//
+//            $resultItems[$product->page->id] = $result;
+//        }
+//
+//        return $resultItems;
+//    }
+
+    public function getCatalogitemPriceAttribute($value)
+    {
+        return $value / 100;
+    }
+
+    public function setCatalogitemPriceAttribute($value)
+    {
+        return $this->attributes['catalogitem_price'] = $value * 100;
+    }
+
+
+
+//    public function getH1TitleAttribute()
+//    {
+//        return $this->page->custom_h1_title ?: $this->catalogitem->name;
+//    }
+//
+//    public function getPageApiData()
+//    {
+//        return [];
+//    }
+//
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::extend(function ($model)
+//        {
+//            /** @var static $model */
+//
 //            ////////////////////////////////////////////////////////////////////////////////
 //            /// Auto delete related
 //            ////////////////////////////////////////////////////////////////////////////////
@@ -43,7 +131,7 @@ class Product extends ProductBase
 //            /// Sellable
 //            ////////////////////////////////////////////////////////////////////////////////
 //            $model->morphMany['cartitems'] = [Cartitem::class, 'name' => 'sellable'];
-
+//
 //            ////////////////////////////////////////////////////////////////////////////////
 //            /// Convert array of text inputs to related model records
 //            ////////////////////////////////////////////////////////////////////////////////
@@ -59,24 +147,9 @@ class Product extends ProductBase
 //                    $model->saveCustomergroupPrices(array_get($productRequest, 'customergroup_price', []));
 //                }
 //            });
-        });
-    }
-
-    public function getH1TitleAttribute()
-    {
-        return $this->page->custom_h1_title ?: $this->catalogitem->name;
-    }
-
-    public function getCatalogitemPriceAttribute($value)
-    {
-        return $value / 100;
-    }
-
-    public function setCatalogitemPriceAttribute($value)
-    {
-        return $this->attributes['catalogitem_price'] = $value * 100;
-    }
-
+//        });
+//    }
+//
 //    public function getNameAttribute()
 //    {
 //        return $this->catalogitem_name;
@@ -86,7 +159,7 @@ class Product extends ProductBase
 //    {
 //        return $this->catalogitem_name = $value;
 //    }
-
+//
 //    public function saveCustomergroupPrices($requestedItems)
 //    {
 //        /** @var Collection $existingItems */

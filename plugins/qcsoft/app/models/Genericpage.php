@@ -8,6 +8,11 @@ class Genericpage extends GenericpageBase
 
     public $rules = [];
 
+    public static function getPageRequireEntities()
+    {
+        return [];
+    }
+
     public function getPageApiData()
     {
         $data = [
@@ -24,4 +29,8 @@ class Genericpage extends GenericpageBase
         return $result;
     }
 
+    public function getPageApiDataHome()
+    {
+
+    }
 }

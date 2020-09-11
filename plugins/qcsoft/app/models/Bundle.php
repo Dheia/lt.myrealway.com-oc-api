@@ -9,6 +9,11 @@ class Bundle extends BundleBase
 
     public $rules = [];
 
+    public static function getPageRequireEntities()
+    {
+        return [];
+    }
+
     public function getH1TitleAttribute()
     {
         return $this->page->custom_h1_title ?: $this->catalogitem->name;
