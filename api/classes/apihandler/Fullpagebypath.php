@@ -3,11 +3,10 @@
 use ApiResponse;
 use ApiStorage;
 
-class Page
+class Fullpagebypath
 {
     public function handle($params, ApiStorage $storage, ApiResponse $response)
     {
-        print_r('qwer');
         print_r($params);die;
         if (!$page = $response->addObject('page', $params))
         {

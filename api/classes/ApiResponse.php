@@ -47,10 +47,11 @@ class ApiResponse
         $this->data = $data;
     }
 
-    public function json()
+    public function json($debug = 0)
     {
-//        return is_array($this->data) ? json_encode($this->data) : $this->data;
-        return is_array($this->data) ? json_encode($this->data, JSON_PRETTY_PRINT) : $this->data;
+        return $debug ?
+            '<pre>' . (is_array($this->data) ? json_encode($this->data, JSON_PRETTY_PRINT) : $this->data) . '</pre>' :
+            is_array($this->data) ? json_encode($this->data) : $this->data;
     }
 
 }

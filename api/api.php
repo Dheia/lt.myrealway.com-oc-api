@@ -18,20 +18,32 @@ $storage = ApiStorage::getDefault();
 
 $response = new ApiResponse($storage);
 
-$handler = new ApiHandler();
-
 $path = $_SERVER['REQUEST_URI'];
 
-if ($handler->handle($path, $storage, $response) === false)
+$time = microtime(true);
+
+if (
+    preg_match('/^\/api\/([a-z]+)(.+)?/', $path, $matches) &&
+    count($matches) >= 2 &&
+    class_exists($classname = 'ApiHandler\\' . ucfirst($matches[1])) &&
+    (new $classname)->handle(isset($matches[2]) ? $matches[2] : '', $storage, $response) !== false
+)
+{
+    header('Access-Control-Allow-Origin: *');
+
+    if (1)
+    {
+        echo 'Time: ' . (microtime(true) - $time) . '<hr/>';
+
+        echo $response->json(1);
+    }
+    else
+    {
+        echo $response->json();
+    }
+//echo '<br/><br/><br/><br/><br/>'.(microtime(true) - $time);
+}
+else
 {
     header('Not found', true, 404);
-
-    return;
 }
-
-header('Access-Control-Allow-Origin: *');
-
-//echo '<pre>';
-echo $response->json();
-//echo '</pre>';
-//echo '<br/><br/><br/><br/><br/>'.(microtime(true) - $time);
