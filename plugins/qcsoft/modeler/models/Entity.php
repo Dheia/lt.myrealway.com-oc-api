@@ -6,7 +6,7 @@ class Entity extends Model
 {
     public $timestamps = false;
 
-    public $table = 's_e';
+    public $table = 'qcsoft_apprefl_entity';
 
     public $hasMany = [
         'options' => [EntityOption::class],

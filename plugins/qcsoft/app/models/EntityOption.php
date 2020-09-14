@@ -1,4 +1,4 @@
-<?php namespace Qcsoft\Modeler\Models;
+<?php namespace Qcsoft\App\Models;
 
 use October\Rain\Database\Model;
 
