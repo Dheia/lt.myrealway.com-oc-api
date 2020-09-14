@@ -4,11 +4,37 @@ use Qcsoft\App\Modelsbase\ProductBase;
 
 class Product extends ProductBase
 {
+//    public function getCatalogitemAttribute()
+//    {
+//        if (!$result = $this->getRelationValue('catalogitem'))
+//        {
+//            $this->setRelation('catalogitem', $result = new Catalogitem());
+//        }
+//
+//        return $result;
+//    }
+
     public static function getPageRequireEntities($ids)
     {
         $products = static::query()
             ->whereIn('id', $ids)
-            ->with(['catalogitem', 'page', 'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.item.page'])
+            ->with([
+                'catalogitem',
+                'page',
+                'catalogitem.catalogitem_relevant_catalogitems',
+                'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem'            => function ($query)
+                {
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
+                },
+                'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.owner'      => function ($query)
+                {
+                    $query->select(['id']);
+                },
+                'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.owner.page' => function ($query)
+                {
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
+                },
+            ])
             ->get();
 
         $resultItems = [];
@@ -18,6 +44,7 @@ class Product extends ProductBase
             $result = [
                 'bundle'      => [],
                 'catalogitem' => [],
+                'image'       => [],
                 'page'        => [],
                 'product'     => [],
             ];
@@ -29,16 +56,17 @@ class Product extends ProductBase
 
             foreach ($relevantItems as $relevantItem)
             {
+//                dump($relevantItem->toArray());
                 /** @var Catalogitem $relevantCatalogitem */
                 $relevantCatalogitem = $relevantItem->relevant_catalogitem;
-                $result['catalogitem'][] = $relevantCatalogitem->item_id;
-                $result['page'][] = $relevantCatalogitem->item->page->id;
-                $result[$relevantCatalogitem->item_type][] = $relevantCatalogitem->item_id;
+                $result['catalogitem'][] = $relevantCatalogitem->id;
+                $result['page'][] = $relevantCatalogitem->owner->page->id;
+                $result[Entity::typeById($relevantCatalogitem->owner_type_id)][] = $relevantCatalogitem->owner_id;
             }
 
             $resultItems[$product->page->id] = $result;
         }
-
+//        dd($resultItems);
         return $resultItems;
     }
 
