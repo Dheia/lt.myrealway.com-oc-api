@@ -128,7 +128,7 @@ class WriteApiCache
                 $resultList[$item->id] = $result;
             }
         }
-
+//dd($resultList);
         return $resultList;
     }
 

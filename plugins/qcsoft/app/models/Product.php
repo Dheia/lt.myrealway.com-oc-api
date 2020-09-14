@@ -4,16 +4,6 @@ use Qcsoft\App\Modelsbase\ProductBase;
 
 class Product extends ProductBase
 {
-//    public function getCatalogitemAttribute()
-//    {
-//        if (!$result = $this->getRelationValue('catalogitem'))
-//        {
-//            $this->setRelation('catalogitem', $result = new Catalogitem());
-//        }
-//
-//        return $result;
-//    }
-
     public static function getPageRequireEntities($ids)
     {
         $products = static::query()
@@ -36,6 +26,7 @@ class Product extends ProductBase
                 },
             ])
             ->get();
+//        dd($products->toArray());
 
         $resultItems = [];
 
@@ -70,52 +61,6 @@ class Product extends ProductBase
         return $resultItems;
     }
 
-//    public static function getPageRequireEntities($filter)
-//    {
-//        $query = static::query();
-//
-//        if (isset($filter['limit']))
-//        {
-//            $query = $query->orderBy('id')
-//                ->skip(array_get($filter, 'offset', 0))
-//                ->limit($filter['limit']);
-//        }
-//
-//        $query->with(['catalogitem', 'page', 'catalogitem.catalogitem_relevant_catalogitems.relevant_catalogitem.item.page']);
-//
-//        $products = $query->get();
-//
-//        $resultItems = [];
-//
-//        foreach ($products as $product)
-//        {
-//            $result = [
-//                'bundle'      => [],
-//                'catalogitem' => [],
-//                'page'        => [],
-//                'product'     => [],
-//            ];
-//
-//            $result['catalogitem'][] = $product->catalogitem->id;
-//            $result['product'][] = $product->id;
-//
-//            $relevantItems = $product->catalogitem->catalogitem_relevant_catalogitems;
-//
-//            foreach ($relevantItems as $relevantItem)
-//            {
-//                /** @var Catalogitem $relevantCatalogitem */
-//                $relevantCatalogitem = $relevantItem->relevant_catalogitem;
-//                $result['catalogitem'][] = $relevantCatalogitem->item_id;
-//                $result['page'][] = $relevantCatalogitem->item->page->id;
-//                $result[$relevantCatalogitem->item_type][] = $relevantCatalogitem->item_id;
-//            }
-//
-//            $resultItems[$product->page->id] = $result;
-//        }
-//
-//        return $resultItems;
-//    }
-
     public function getCatalogitemPriceAttribute($value)
     {
         return $value / 100;
@@ -131,11 +76,6 @@ class Product extends ProductBase
 //    public function getH1TitleAttribute()
 //    {
 //        return $this->page->custom_h1_title ?: $this->catalogitem->name;
-//    }
-//
-//    public function getPageApiData()
-//    {
-//        return [];
 //    }
 //
 //    protected static function boot()
