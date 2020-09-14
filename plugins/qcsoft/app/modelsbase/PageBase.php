@@ -16,12 +16,14 @@ use Qcsoft\App\Models\Product;
  * @property int $id
  * @property mixed $owner
  * @property int $owner_id
- * @property string $owner_type
+ * @property int $owner_type_id
  * @property string $path
  * @property string $seo_desc
  */
 class PageBase extends Model
 {
+    public static $type_id;
+
     use Sluggable;
 
     public $slugs = ['path' => 'owner.name'];
@@ -31,7 +33,7 @@ class PageBase extends Model
     public $table = 'qcsoft_app_page';
 
     public $morphTo = [
-        'owner' => [],
+        'owner' => ['type' => 'owner_type_id'],
     ];
 
     public $morphMany = [

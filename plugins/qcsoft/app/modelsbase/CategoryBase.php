@@ -21,6 +21,8 @@ use Qcsoft\App\Models\CatalogitemCategory;
  */
 class CategoryBase extends Model
 {
+    public static $type_id;
+
     use NestedTree;
 
     public $timestamps = false;

@@ -13,6 +13,8 @@
 {{ (' */') }}
 {{ ('class ' ~ model.getClassName() ~ 'Base extends Model') }}
 {{ ('{') }}
+{{  '    public static $type_id;' }}
+{{ ('') }}
 {% for name in model.traits %}
 {{ ('    use ' ~ name ~ ';') }}
 {{ ('') }}

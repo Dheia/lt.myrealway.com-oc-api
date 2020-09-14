@@ -15,11 +15,13 @@ use Qcsoft\App\Traits\CompositeModel;
  */
 class GenericpageBase extends Model
 {
-    use CompositeModel;
+    public static $type_id;
 
-    public $compositeModel = [
-        'page' => [],
-    ];
+//    use CompositeModel;
+//
+//    public $compositeModel = [
+//        'page' => [],
+//    ];
 
     public $timestamps = false;
 

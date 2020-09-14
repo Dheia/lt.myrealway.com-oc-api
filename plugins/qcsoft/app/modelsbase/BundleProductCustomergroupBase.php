@@ -17,6 +17,8 @@ use Qcsoft\App\Models\Customergroup;
  */
 class BundleProductCustomergroupBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_bundle_product_customergroup';

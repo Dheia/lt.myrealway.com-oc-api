@@ -20,6 +20,8 @@ use Qcsoft\App\Traits\CompositeModel;
  */
 class BundleBase extends Model
 {
+    public static $type_id;
+
     use CompositeModel;
 
     public $compositeModel = [
@@ -36,8 +38,8 @@ class BundleBase extends Model
     ];
 
     public $morphOne = [
-        'page' => [Page::class, 'name' => 'owner', 'delete' => true],
-        'catalogitem' => [Catalogitem::class, 'name' => 'item', 'delete' => true],
+        'page'        => [Page::class, 'type' => 'owner_type_id', 'name' => 'owner', 'delete' => true],
+        'catalogitem' => [Catalogitem::class, 'type' => 'owner_type_id', 'name' => 'owner', 'delete' => true],
     ];
 
 }

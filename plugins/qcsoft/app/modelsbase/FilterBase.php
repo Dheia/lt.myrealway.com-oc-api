@@ -17,6 +17,8 @@ use Qcsoft\App\Models\Filteroption;
  */
 class FilterBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_filter';

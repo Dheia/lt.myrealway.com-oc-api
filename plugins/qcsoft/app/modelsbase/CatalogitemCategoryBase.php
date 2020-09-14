@@ -15,6 +15,8 @@ use Qcsoft\App\Models\Category;
  */
 class CatalogitemCategoryBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_catalogitem_category';

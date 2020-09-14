@@ -10,6 +10,8 @@ use October\Rain\Database\Model;
  */
 class OrderstatusBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_orderstatus';

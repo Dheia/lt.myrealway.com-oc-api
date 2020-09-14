@@ -16,6 +16,8 @@ use Qcsoft\App\Models\Customergroup;
  */
 class CatalogitemCustomergroupBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_catalogitem_customergroup';

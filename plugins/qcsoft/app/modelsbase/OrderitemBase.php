@@ -12,6 +12,8 @@ use October\Rain\Database\Model;
  */
 class OrderitemBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_orderitem';

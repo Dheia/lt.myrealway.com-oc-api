@@ -15,6 +15,8 @@ use Qcsoft\App\Models\Cart;
  */
 class CartitemBase extends Model
 {
+    public static $type_id;
+
     public $timestamps = false;
 
     public $table = 'qcsoft_app_cartitem';

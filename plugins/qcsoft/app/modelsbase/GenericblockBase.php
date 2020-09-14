@@ -43,6 +43,8 @@ use System\Models\File;
  */
 class GenericblockBase extends Model
 {
+    public static $type_id;
+
     use NestedTree;
 
     public $timestamps = false;
