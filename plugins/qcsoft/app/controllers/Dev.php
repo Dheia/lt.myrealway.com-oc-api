@@ -3,15 +3,18 @@
 use Backend\Classes\Controller;
 use BackendMenu;
 use Illuminate\Database\Events\StatementPrepared;
-use Qcsoft\App\Classes\ImportOldSite;
-use Qcsoft\App\Classes\SeedDb;
-use Qcsoft\App\Classes\Webcache\WebCacheWriter;
+use October\Rain\Database\Relations\Relation;
+use Qcsoft\App\Dev\ImportOldSite;
+use Qcsoft\App\Dev\SeedHelper;
 use Qcsoft\App\Classes\WriteApiCache;
+use Qcsoft\App\Models\Bundle;
+use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Behaviors\MaintenanceController;
-use Qcsoft\App\Classes\RandomBundles;
+use Qcsoft\App\Dev\RandomBundles;
 
 class Dev extends Controller
 {
@@ -30,21 +33,21 @@ class Dev extends Controller
 
     public function step_1_cleanup()
     {
-        (new SeedDb())->cleanup();
+        (new SeedHelper())->step1_cleanup();
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_2_import_old_site_and_seed_base()
+    public function step_2_seed_base_and_import_old_site()
     {
-        (new ImportOldSite())->import();
-        (new SeedDb())->seedFilters();
-        (new SeedDb())->seedViews();
+        (new SeedHelper())->step2_seedGenericpages();
+        (new SeedHelper())->step3_importOldSite();
+        (new SeedHelper())->step4_seedFilters();
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
     public function step_3_generate_random_bundles()
     {
-        (new RandomBundles())->generate();
+        (new RandomBundles())->generate(20);
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
@@ -52,9 +55,9 @@ class Dev extends Controller
     {
         \Debugbar::disable();
 
-        $seedDb = new SeedDb();
+        $seedHelper = new SeedHelper();
 
-        $nextOffset = $seedDb->makeRandomFilterBindings($offset);
+        $nextOffset = $seedHelper->makeRandomFilterBindings($offset);
 
         if ($nextOffset === null)
         {
@@ -70,9 +73,9 @@ class Dev extends Controller
     {
         \Debugbar::disable();
 
-        $seedDb = new SeedDb();
+        $seedHelper = new SeedHelper();
 
-        $nextOffset = $seedDb->makeRandomCatalogitemRelevantItems($offset);
+        $nextOffset = $seedHelper->makeRandomCatalogitemRelevantItems($offset);
 
         if ($nextOffset === null)
         {
@@ -84,14 +87,14 @@ class Dev extends Controller
         }
     }
 
-    public function step_6_write_api_base()
-    {
-        $api = new WriteApiCache();
-
-        $api->writeBase();
-
-        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
-    }
+//    public function step_6_write_api_base()
+//    {
+//        $api = new WriteApiCache();
+//
+//        $api->writeBase();
+//
+//        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
+//    }
 
     public function step_7_rm_rf_api_cache($type = null, $offset = null)
     {

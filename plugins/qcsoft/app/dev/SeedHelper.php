@@ -1,4 +1,4 @@
-<?php namespace Qcsoft\App\Classes;
+<?php namespace Qcsoft\App\Dev;
 
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
@@ -11,14 +11,14 @@ use Qcsoft\App\Models\CatalogitemRelevantitem;
 use Qcsoft\App\Models\Category;
 use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Filteroption;
+use Qcsoft\App\Models\Genericpage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
-use Qcsoft\App\Models\View;
 use System\Models\File;
 
-class SeedDb
+class SeedHelper
 {
-    public function cleanup()
+    public function step1_cleanup()
     {
         Bundle::truncate();
         BundleProduct::truncate();
@@ -31,12 +31,44 @@ class SeedDb
         Category::truncate();
         Filter::truncate();
         Filteroption::truncate();
-        Page::where('owner_type', '!=', 'genericpage')->delete();
+        Genericpage::truncate();
+        Page::truncate();
         Product::truncate();
         File::truncate();
     }
 
-    public function seedFilters()
+    public function step2_seedGenericpages()
+    {
+        $data = [
+            ['home', '/', 'Home', '<p>Home page</p>'],
+            ['catalog', 'product-catalog', 'Product catalog', '""'],
+            ['404', '404', '404', '""'],
+            ['cart', 'cart', 'Cart', '""'],
+            ['aboutus', 'about-us', 'About us', 'About us'],
+            ['information', 'information', 'Information', 'Information'],
+            ['contacts', 'contacts', 'Contacts', 'Contacts'],
+        ];
+
+        foreach ($data as $item)
+        {
+            $page = new Page();
+            $page->owner = new Genericpage();
+            $page->owner->name = $item[2];
+            $page->owner->code = $item[0];
+            $page->owner->content = $item[3];
+            $page->path = $item[1];
+            $page->owner->save();
+            $page->save();
+        }
+
+    }
+
+    public function step3_importOldSite()
+    {
+        (new ImportOldSite())->import();
+    }
+
+    public function step4_seedFilters()
     {
         $filtersData = [
             'Color'    => ['Red', 'Green', 'Blue', 'Yellow', 'Cyan', 'Magenta', 'Black', 'Grey', 'White'],
@@ -62,50 +94,6 @@ class SeedDb
 
                 $filteroption->save();
             }
-        }
-
-    }
-
-    public function seedViews()
-    {
-        $data = [
-            ['genericpage', 'Generic page', 'Genericpage'],
-            ['product', 'Product page', 'ProductPage'],
-            ['bundle', 'Bundle page', 'BundlePage'],
-        ];
-
-        foreach ($data as $item)
-        {
-            $view = new View();
-
-            foreach (['owner_type', 'name', 'code'] as $i => $var)
-            {
-                $view->$var = $item[$i];
-            }
-
-            $view->save();
-        }
-
-    }
-
-    public function seedGenericpages()
-    {
-        $data = [
-            ['genericpage', 'Generic page', 'Genericpage'],
-            ['product', 'Product page', 'ProductPage'],
-            ['bundle', 'Bundle page', 'BundlePage'],
-        ];
-
-        foreach ($data as $item)
-        {
-            $view = new View();
-
-            foreach (['owner_type', 'name', 'code'] as $i => $var)
-            {
-                $view->$var = $item[$i];
-            }
-
-            $view->save();
         }
 
     }

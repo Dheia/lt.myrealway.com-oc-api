@@ -1,6 +1,8 @@
-<?php namespace Qcsoft\App\Classes;
+<?php namespace Qcsoft\App\Dev;
 
+use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\App\Models\Category;
+use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Classes\Util;
 
@@ -37,23 +39,56 @@ class ImportOldSite
         {
             $desc = html_entity_decode($ocItem->description);
 
-            $product = new Product();
-            $product->catalogitem_name = $ocItem->name;
-            $product->page_path = \Str::slug($ocItem->name);
-            $product->product_code = $ocItem->model;
-            $product->mini_desc = \Str::words(strip_tags($desc), 30);
-            $product->description = $desc;
-            $product->ingredients = html_entity_decode($ocItem->ingredients);
-            $product->default_price = $ocItem->price;
+//            $catalogitem = new Catalogitem();
+//            $catalogitem->owner = new Product();
+//            $catalogitem->name = $ocItem->name;
+//            $catalogitem->owner->mini_desc = \Str::words(strip_tags($desc), 30);
+//            $catalogitem->owner->product_code = $ocItem->model;
+//            $catalogitem->owner->description = $desc;
+//            $catalogitem->owner->ingredients = html_entity_decode($ocItem->ingredients);
+//            $catalogitem->owner->default_price = $ocItem->price;
+//            $catalogitem->owner->save();
+//            $catalogitem->save();
+//            dump($catalogitem->toArray());
 
+            $product = new Product();
+            $product->catalogitem = new Catalogitem();
+            $product->catalogitem->name = $ocItem->name;
             if ($oldSiteItem = $itemsFromOldSideHtml->firstWhere('product_name', $ocItem->name))
             {
                 $productImageFileExtension = preg_replace('/^.+(\.\w{3})$/', '$1', $oldSiteItem->image_url);
                 $productImageFilePath = base_path("$this->htmlPath/products/images/{$oldSiteItem->wwwpath}{$productImageFileExtension}");
-                $product->catalogitem_main_image = $productImageFilePath;
+                $product->catalogitem->main_image = $productImageFilePath;
             }
-
+            $product->mini_desc = \Str::words(strip_tags($desc), 30);
+            $product->product_code = $ocItem->model;
+            $product->description = $desc;
+            $product->ingredients = html_entity_decode($ocItem->ingredients);
+            $product->default_price = $ocItem->price;
+            $product->page = new Page();
+            $product->page->path = \Str::slug($ocItem->name);
             $product->save();
+            $product->catalogitem->save();
+            $product->page->save();
+//            dump($product->toArray());
+
+//            die;
+
+//            $product->page_path = \Str::slug($ocItem->name);
+//            $product->product_code = $ocItem->model;
+//            $product->mini_desc = \Str::words(strip_tags($desc), 30);
+//            $product->description = $desc;
+//            $product->ingredients = html_entity_decode($ocItem->ingredients);
+//            $product->default_price = $ocItem->price;
+//
+//            if ($oldSiteItem = $itemsFromOldSideHtml->firstWhere('product_name', $ocItem->name))
+//            {
+//                $productImageFileExtension = preg_replace('/^.+(\.\w{3})$/', '$1', $oldSiteItem->image_url);
+//                $productImageFilePath = base_path("$this->htmlPath/products/images/{$oldSiteItem->wwwpath}{$productImageFileExtension}");
+//                $product->catalogitem_main_image = $productImageFilePath;
+//            }
+//
+//            $product->save();
         }
 
     }

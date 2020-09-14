@@ -1,5 +1,6 @@
 <?php namespace Qcsoft\App\Classes;
 
+use October\Rain\Database\Relations\Relation;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
 use Qcsoft\App\Models\Catalogitem;
@@ -23,7 +24,7 @@ class WriteApiCache
 
     public function write($type, $offset)
     {
-//        $this->types = collect(['page']);
+        $this->types = collect(['page']);
 
         $this->writeStartTime = microtime(true);
 
@@ -103,21 +104,69 @@ class WriteApiCache
         }
     }
 
+
+    protected function page($offset, $limit)
+    {
+        $items = Page::orderBy('id')->skip($offset)->take($limit)->get();
+
+        $groups = $items->groupBy('owner_type_id');
+
+        $resultList = [];
+
+        foreach ($groups as $type_id => $items)
+        {
+            $modelclass = Relation::getMorphedModel($type_id);
+
+            $require = $modelclass::getPageRequireEntities($items->pluck('owner_id'));
+
+            foreach ($items as $item)
+            {
+                $result = $item->toArray();
+
+                $result['require'] = array_get($require, $item->id, []);
+
+                $resultList[$item->id] = $result;
+            }
+        }
+
+        return $resultList;
+    }
+
+
+    protected function pagebypath($offset, $limit)
+    {
+        return Page::orderBy('id')->skip($offset)->take($limit)
+            ->select(['id', 'path'])
+            ->get()
+            ->pluck('id', 'path')
+            ->pipe(function ($result)
+            {
+                if (isset($result['/']))
+                {
+                    $result['home'] = $result['/'];
+                    unset($result['/']);
+                }
+
+                return $result;
+            });
+    }
+
+
     protected function bundle($offset, $limit)
     {
         return Bundle::orderBy('id')->skip($offset)->take($limit)
             ->with([
                 'catalogitem'     => function ($query)
                 {
-                    $query->select(['id', 'item_type', 'item_id']);
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
                 },
                 'page'            => function ($query)
                 {
-                    $query->select(['id', 'path', 'owner_type', 'owner_id']);
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
                 },
                 'bundle_products' => function ($query)
                 {
-//                $query->select(['id', 'path', 'owner_type', 'owner_id']);
+                    $query->select(['id', 'bundle_id', 'product_id', 'quantity', 'sort_order', 'price_override']);
                 },
             ])
             ->get()
@@ -128,7 +177,7 @@ class WriteApiCache
                 $result['catalogitem_id'] = $result['catalogitem']['id'];
                 unset($result['catalogitem']);
 
-                $result['page_path'] = $result['page']['path'];
+                $result['page_id'] = $result['page']['id'];
                 unset($result['page']);
 
                 $result['products'] = [];
@@ -196,67 +245,17 @@ class WriteApiCache
             ->keyBy('id');
     }
 
-    protected function page($offset, $limit)
-    {
-        $items = Page::orderBy('id')->skip($offset)->take($limit)->get();
-
-        $groups = $items->groupBy('owner_type');
-
-        $resultList = [];
-
-        foreach ($groups as $type => $items)
-        {
-            $modelclass = [
-                              'bundle'      => Bundle::class,
-                              'genericpage' => Genericpage::class,
-                              'product'     => Product::class,
-                          ][$type];
-
-            $require = $modelclass::getPageRequireEntities($items->pluck('owner_id'));
-
-            foreach ($items as $item)
-            {
-                $result = $item->toArray();
-
-                $result['require'] = array_get($require, $item->id, []);
-
-                $resultList[$item->id] = $result;
-            }
-        }
-
-        return $resultList;
-    }
-
-    protected function pagebypath($offset, $limit)
-    {
-        return Page::orderBy('id')->skip($offset)->take($limit)
-            ->select(['id', 'path'])
-            ->get()
-            ->pluck('id', 'path')
-            ->pipe(function ($result)
-            {
-                if (isset($result['/']))
-                {
-                    $result['home'] = $result['/'];
-                    unset($result['/']);
-                }
-
-                return $result;
-            });
-    }
-
-
     protected function product($offset, $limit)
     {
         return Product::orderBy('id')->skip($offset)->take($limit)
             ->with([
                 'catalogitem' => function ($query)
                 {
-                    $query->select(['id', 'item_type', 'item_id']);
+                    $query->select(['id', 'owner_type_id', 'item_id']);
                 },
                 'page'        => function ($query)
                 {
-                    $query->select(['id', 'owner_type', 'owner_id']);
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
                 },
             ])
             ->get()

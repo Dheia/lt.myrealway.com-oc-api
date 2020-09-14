@@ -1,4 +1,4 @@
-<?php namespace Qcsoft\App\Classes;
+<?php namespace Qcsoft\App\Dev;
 
 use Illuminate\Support\Collection;
 use Qcsoft\App\Models\Bundle;
@@ -24,7 +24,7 @@ class RandomBundles
 
             foreach ($catalogitems as $item)
             {
-                $bundle = $bundles->find($item->item_id);
+                $bundle = $bundles->find($item->owner_id);
 
                 $bundle->catalogitem = $item;
             }
@@ -116,18 +116,18 @@ class RandomBundles
     protected function makeRandomCatalogitem(Bundle $bundle)
     {
         return [
-            'item_type' => 'bundle',
-            'item_id'   => $bundle->id,
-            'name'      => $this->randomText(rand(2, 5), [3, 10]),
+            'owner_type_id' => Bundle::$type_id,
+            'owner_id'      => $bundle->id,
+            'name'          => $this->randomText(rand(2, 5), [3, 10]),
         ];
     }
 
     protected function makeRandomPage(Bundle $bundle)
     {
         return [
-            'owner_type' => 'bundle',
-            'owner_id'   => $bundle->id,
-            'path'       => \Str::slug($bundle->catalogitem->name) . '-' . $bundle->catalogitem->id,
+            'owner_type_id' => Bundle::$type_id,
+            'owner_id'      => $bundle->id,
+            'path'          => \Str::slug($bundle->catalogitem->name) . '-' . $bundle->catalogitem->id,
         ];
     }
 
