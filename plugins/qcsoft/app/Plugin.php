@@ -10,6 +10,7 @@ use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\App\Models\Customer;
 use Qcsoft\App\Models\Customergroup;
+use Qcsoft\App\Models\Entity;
 use Qcsoft\App\Models\Genericpage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
@@ -40,6 +41,20 @@ class Plugin extends PluginBase
 
     public function boot()
     {
+        Entity::loadAll();
+
+        Relation::morphMap(Entity::$all->pluck('classname', 'id')->toArray());
+
+        foreach (Entity::$all as $type)
+        {
+            $classname = $type->classname;
+
+            if (property_exists($classname, 'type_id'))
+            {
+                $classname::$type_id = $type->id;
+            }
+        }
+
 //        \Route::get('/api/qwer', function ()
 //        {
 //            dump(\JWTAuth::toUser('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIxLCJpc3MiOiJodHRwOi8vbXJ3c2hvcC50ay9hcGkvcXdlciIsImlhdCI6MTU5NzM4MzgzNSwiZXhwIjoxNTk3Mzg3NDM1LCJuYmYiOjE1OTczODM4MzUsImp0aSI6IkhudjJjbElIa25UTGQ0M1oifQ.C4IpC6GeBysjMRj60hi8vRdyG6zzIOBnZH1Z6LINFOQ'));
@@ -56,12 +71,12 @@ class Plugin extends PluginBase
             \File::cleanDirectory(storage_path('cms/twig'));
         });
 
-        Relation::morphMap([
-            'catalogitem' => Catalogitem::class,
-            'genericpage' => Genericpage::class,
-            'bundle'      => Bundle::class,
-            'product'     => Product::class,
-        ]);
+//        Relation::morphMap([
+//            'catalogitem' => Catalogitem::class,
+//            'genericpage' => Genericpage::class,
+//            'bundle'      => Bundle::class,
+//            'product'     => Product::class,
+//        ]);
 
 //        \Event::listen('qcsoft.cms.registerPageTypes', function ()
 //        {
