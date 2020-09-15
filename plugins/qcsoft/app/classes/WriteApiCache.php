@@ -1,5 +1,6 @@
 <?php namespace Qcsoft\App\Classes;
 
+use October\Rain\Database\Collection;
 use October\Rain\Database\Relations\Relation;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
@@ -16,58 +17,62 @@ class WriteApiCache
 
     protected $writeStartTime;
 
+    protected $defaultBlockSize = 100;
+
+    protected $blockSize = [
+        'bundle_product' => 5,
+    ];
+
     public function __construct()
     {
-        $this->types = collect(['bundle', 'catalogitem', 'filter', 'filteroption',
+        $this->types = collect(['bundle', 'bundle_product', 'catalogitem', 'filter', 'filteroption',
                                 'genericpage', 'page', 'pagebypath', 'product']);
     }
 
     public function write($type, $offset)
     {
-        $this->types = collect(['page']);
+//        $this->types = collect(['page']);
+//        $this->types = collect(['bundle_product']);
 
         $this->writeStartTime = microtime(true);
-
-        $limit = 100;
 
         if ($type === null)
         {
             $type = $this->types->first();
         }
 
-        $offset = $offset ?: 0;
+        $offset = (int)$offset;
 
         for ($i = 0; $i < 1000; $i++)
         {
+            $limit = array_get($this->blockSize, $type, $this->defaultBlockSize);
+
+            $prevOffset = $offset;
+
             $result = $this->$type($offset, $limit);
 
-            if (count($result))
+            if ($prevOffset !== $offset)
             {
                 $this->writeChunk($type, $result, 0);
-
-                $nextType = $type;
-                $nextOffset = $offset + count($result);
             }
             else
             {
-                $nextType = $this->types->get($this->types->search($type) + 1);
-                $nextOffset = 0;
-            }
+                $type = $this->types->get($this->types->search($type) + 1);
 
-            if (!$nextType)
-            {
-                return false;
+                if (!$type)
+                {
+                    return false;
+                }
+
+                $offset = 0;
             }
 
             $timePassedTotal = microtime(true) - $this->writeStartTime;
 
             if ($timePassedTotal > 5)
             {
-                return "$nextType/$nextOffset";
+                return "$type/$offset";
             }
-
-            $type = $nextType;
-            $offset = $nextOffset;
         }
 
         return false;
@@ -105,7 +110,7 @@ class WriteApiCache
     }
 
 
-    protected function page($offset, $limit)
+    protected function page(&$offset, $limit)
     {
         $items = Page::orderBy('id')->skip($offset)->take($limit)->get();
 
@@ -129,13 +134,16 @@ class WriteApiCache
             }
         }
 //dd($resultList);
+
+        $offset += count($resultList);
+
         return $resultList;
     }
 
 
-    protected function pagebypath($offset, $limit)
+    protected function pagebypath(&$offset, $limit)
     {
-        return Page::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Page::orderBy('id')->skip($offset)->take($limit)
             ->select(['id', 'path'])
             ->get()
             ->pluck('id', 'path')
@@ -149,12 +157,16 @@ class WriteApiCache
 
                 return $result;
             });
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
 
-    protected function bundle($offset, $limit)
+    protected function bundle(&$offset, $limit)
     {
-        return Bundle::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Bundle::orderBy('id')->skip($offset)->take($limit)
             ->with([
                 'catalogitem'     => function ($query)
                 {
@@ -166,7 +178,7 @@ class WriteApiCache
                 },
                 'bundle_products' => function ($query)
                 {
-                    $query->select(['id', 'bundle_id', 'product_id', 'quantity', 'sort_order', 'price_override']);
+                    $query->select(['id', 'bundle_id']);
                 },
             ])
             ->get()
@@ -180,22 +192,53 @@ class WriteApiCache
                 $result['page_id'] = $result['page']['id'];
                 unset($result['page']);
 
-                $result['products'] = [];
+                $result['bundle_product'] = [];
                 /** @var BundleProduct $bundle_product */
                 foreach ($item->bundle_products as $bundle_product)
                 {
-                    $result['products'] [$bundle_product->product_id] = [$bundle_product->quantity, $bundle_product->price_override];
+                    $result['bundle_product'][] = $bundle_product->id;
                 }
                 unset($result['bundle_products']);
 
                 return $result;
             })
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
-    protected function catalogitem($offset, $limit)
+    protected function bundle_product(&$offset, $limit)
     {
-        return Catalogitem::orderBy('id')->skip($offset)->take($limit)
+        $pageSize = 10;
+
+        $maxId = BundleProduct::max('id');
+
+        $fromId = $offset * $pageSize;
+
+        $toId = ($offset + $limit) * $pageSize - 1;
+
+        $items = BundleProduct::orderBy('id')
+            ->where('id', '>=', $fromId)
+            ->where('id', '<=', $toId)
+            ->get()
+            ->groupBy(function ($item) use ($pageSize)
+            {
+                return (int)($item->id / $pageSize);
+            });
+
+        if ($fromId <= $maxId)
+        {
+            $offset += $limit;
+        }
+
+        return $items;
+    }
+
+    protected function catalogitem(&$offset, $limit)
+    {
+        $resultList = Catalogitem::orderBy('id')->skip($offset)->take($limit)
             ->with([
                 'main_image'                        => function ($query)
                 {
@@ -220,56 +263,90 @@ class WriteApiCache
                 return $result;
             })
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
-    protected function filter($offset, $limit)
+    protected function filter(&$offset, $limit)
     {
-        return Filter::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Filter::orderBy('id')->skip($offset)->take($limit)
             ->select(['id', 'name', 'slug', 'sort_order'])
             ->get()
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
-    protected function filteroption($offset, $limit)
+    protected function filteroption(&$offset, $limit)
     {
-        return Filteroption::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Filteroption::orderBy('id')->skip($offset)->take($limit)
             ->select(['id', 'filter_id', 'name', 'slug', 'sort_order'])
             ->get()
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
-    protected function genericpage($offset, $limit)
+    protected function genericpage(&$offset, $limit)
     {
-        return Genericpage::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Genericpage::orderBy('id')->skip($offset)->take($limit)
             ->get()
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
-    protected function product($offset, $limit)
+    protected function product(&$offset, $limit)
     {
-        return Product::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Product::orderBy('id')->skip($offset)->take($limit)
             ->with([
-                'catalogitem' => function ($query)
-                {
-                    $query->select(['id', 'owner_type_id', 'item_id']);
-                },
-                'page'        => function ($query)
+                'catalogitem'     => function ($query)
                 {
                     $query->select(['id', 'owner_type_id', 'owner_id']);
+                },
+                'page'            => function ($query)
+                {
+                    $query->select(['id', 'owner_type_id', 'owner_id']);
+                },
+                'product_bundles' => function ($query)
+                {
+                    $query->select(['id', 'product_id']);
                 },
             ])
             ->get()
             ->map(function ($item)
             {
                 $result = $item->toArray();
+
                 $result['catalogitem_id'] = $result['catalogitem']['id'];
-                $result['page_id'] = $result['page']['id'];
                 unset($result['catalogitem']);
+
+                $result['page_id'] = $result['page']['id'];
                 unset($result['page']);
+
+                $result['bundle_product'] = [];
+                /** @var BundleProduct $bundle_product */
+                foreach ($item->product_bundles as $bundle_product)
+                {
+                    $result['bundle_product'][] = $bundle_product->id;
+                }
+                unset($result['product_bundles']);
 
                 return $result;
             })
             ->keyBy('id');
+
+        $offset += count($resultList);
+
+        return $resultList;
     }
 
 }
