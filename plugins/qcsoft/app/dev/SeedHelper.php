@@ -100,7 +100,7 @@ class SeedHelper
 
     public function makeRandomFilterBindings($offset)
     {
-        $limit = 500;
+        $limit = 1000;
 
         $allFilteroptions = Filteroption::all();
 
@@ -111,22 +111,20 @@ class SeedHelper
             return null;
         }
 
-        $toInsert = [];
-
         foreach ($catalogitems as $catalogitem)
         {
-            $filteroptionIds = $allFilteroptions->pluck('id')->shuffle();
+            $toInsert = $allFilteroptions->shuffle()->take(rand(10, 20))
+                ->map(function ($filteroption) use ($catalogitem)
+                {
+                    return [
+                        'catalogitem_id'  => $catalogitem->id,
+                        'filteroption_id' => $filteroption->id,
+                    ];
+                })
+                ->toArray();
 
-            foreach (range(0, rand(10, 20)) as $i)
-            {
-                $toInsert[] = [
-                    'catalogitem_id'  => $catalogitem->id,
-                    'filteroption_id' => $filteroptionIds[$i],
-                ];
-            }
+            CatalogitemFilteroption::insert($toInsert);
         }
-
-        CatalogitemFilteroption::insert($toInsert);
 
         $offset += $limit;
 
@@ -140,7 +138,7 @@ class SeedHelper
             CatalogitemRelevantitem::truncate();
         }
 
-        $limit = 200;
+        $limit = 1000;
 
         $mainItems = Catalogitem::orderBy('id')->skip($offset)->limit($limit)->select(['id'])->pluck('id');
 
@@ -151,15 +149,20 @@ class SeedHelper
 
         foreach ($mainItems as $mainItemId)
         {
-            $relevantItems = Catalogitem::orderByRaw('rand()')->limit(rand(3, 10))->select(['id'])->pluck('id');
+            $insertItems = Catalogitem::orderByRaw('rand()')
+                ->limit(rand(3, 10))
+                ->select(['id'])
+                ->get()
+                ->map(function ($relevantItem) use ($mainItemId)
+                {
+                    return [
+                        'main_catalogitem_id'     => $mainItemId,
+                        'relevant_catalogitem_id' => $relevantItem->id,
+                    ];
+                })
+                ->toArray();
 
-            foreach ($relevantItems as $relevantItemId)
-            {
-                CatalogitemRelevantitem::insert([
-                    'main_catalogitem_id'     => $mainItemId,
-                    'relevant_catalogitem_id' => $relevantItemId,
-                ]);
-            }
+            CatalogitemRelevantitem::insert($insertItems);
         }
 
         return $offset + count($mainItems);
