@@ -30,9 +30,9 @@ navigation:
                 label: Filters
                 url: qcsoft/app/filters
                 icon: icon-sitemap
-            side-menu-genericpages:
+            side-menu-custompages:
                 label: Pages
-                url: qcsoft/app/genericpages
+                url: qcsoft/app/custompages
                 icon: icon-sitemap
             side-menu-pages:
                 label: Sitemap
@@ -66,9 +66,9 @@ navigation:
 #                label: Filters
 #                url: qcsoft/app/filters
 #                icon: icon-sitemap
-#            side-menu-genericpages:
+#            side-menu-custompages:
 #                label: Pages
-#                url: qcsoft/app/genericpages
+#                url: qcsoft/app/custompages
 #                icon: icon-sitemap
 #            side-menu-pages:
 #                label: Sitemap

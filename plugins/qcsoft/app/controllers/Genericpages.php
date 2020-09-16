@@ -4,7 +4,7 @@ use Backend\Classes\Controller;
 use BackendMenu;
 use Qcsoft\Ocext\Behaviors\MakeSlugController;
 
-class Genericpages extends Controller
+class Custompage extends Controller
 {
     public $implement = [
         'Backend\Behaviors\ListController',
@@ -18,6 +18,6 @@ class Genericpages extends Controller
     public function __construct()
     {
         parent::__construct();
-        BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-genericpages');
+        BackendMenu::setContext('Qcsoft.App', 'main-menu-app', 'side-menu-custompages');
     }
 }

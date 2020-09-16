@@ -1,5 +1,5 @@
 {
-    page(selectWhereIn: ["owner_type", "bundle", "product", "genericpage"]) {
+    page(selectWhereIn: ["owner_type", "bundle", "product", "custompage"]) {
         id
         path
         custom_h1_title
@@ -42,7 +42,7 @@
                     }
                 }
             }
-            ... on Genericpage {
+            ... on Custompage {
                 id
                 name
                 content

@@ -51,8 +51,8 @@
             this.ocRequest('onGetListData', {
                 query: `
 {
-    page_count (selectWhereIn: ["owner_type", "genericpage", "bundle"])
-    page (selectWhereIn: ["owner_type", "genericpage", "bundle"]) {
+    page_count (selectWhereIn: ["owner_type", "custompage", "bundle"])
+    page (selectWhereIn: ["owner_type", "custompage", "bundle"]) {
         id
         path
         owner {
@@ -75,7 +75,7 @@
                     name
                 }
             }
-            ... on Genericpage {
+            ... on Custompage {
                 id
                 name
                 content

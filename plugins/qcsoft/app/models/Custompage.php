@@ -1,15 +1,19 @@
 <?php namespace Qcsoft\App\Models;
 
-use Qcsoft\App\Modelsbase\GenericpageBase;
+use Qcsoft\App\Modelsbase\CustompageBase;
 
-class Genericpage extends GenericpageBase
+class Custompage extends CustompageBase
 {
     use \October\Rain\Database\Traits\Validation;
 
     public $rules = [];
 
-    public static function getPageRequireEntities()
+    public static function getPageRequireEntities($ids)
     {
+//        $gpages=static::query()
+//            ->whereIn('id', $ids)
+//            ->with('')
+
         return [];
     }
 
@@ -24,7 +28,7 @@ class Genericpage extends GenericpageBase
 
         $result = array_get($data, $this->code);
 
-        $result['genericpage_code'] = $this->code;
+        $result['custompage_code'] = $this->code;
 
         return $result;
     }

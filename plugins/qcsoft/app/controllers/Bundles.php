@@ -45,8 +45,8 @@ class Bundles extends Controller
 //EOT;
         return <<<EOT
 {
-    page_count (selectWhereIn: ["owner_type", "genericpage", "bundle"])
-    page (selectWhereIn: ["owner_type", "genericpage", "bundle"]) {
+    page_count (selectWhereIn: ["owner_type", "custompage", "bundle"])
+    page (selectWhereIn: ["owner_type", "custompage", "bundle"]) {
         id
         path
         owner {
@@ -65,7 +65,7 @@ class Bundles extends Controller
                     name
                 }
             }
-            ... on Genericpage {
+            ... on Custompage {
                 id
                 name
                 content

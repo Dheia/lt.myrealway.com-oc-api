@@ -1,5 +1,5 @@
 {
-    page(selectWhereIn: ["owner_type", "genericpage", "product", "bundle"]) {
+    page(selectWhereIn: ["owner_type", "custompage", "product", "bundle"]) {
         id
         path
         owner {
@@ -30,7 +30,7 @@
                     }
                 }
             }
-            ... on Genericpage {
+            ... on Custompage {
                 id
                 name
                 content

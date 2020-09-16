@@ -5,7 +5,7 @@ namespace Qcsoft\App\GraphQL\Type;
 use Qcsoft\App\GraphQL\Types;
 use GraphQL\Type\Definition\UnionType;
 use Qcsoft\App\Models\Bundle;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Product;
 
 class CatalogitemItemType extends UnionType

@@ -34,7 +34,7 @@
                     },
                     {
                         title: 'Pages',
-                        url  : '/genericpages',
+                        url  : '/custompages',
                     },
                     {
                         title: 'Sitemap',

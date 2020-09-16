@@ -11,7 +11,7 @@ use Qcsoft\App\Models\Catalogitem;
 use Qcsoft\App\Models\Customer;
 use Qcsoft\App\Models\Customergroup;
 use Qcsoft\App\Models\Entity;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 use RainLab\User\Models\User;
@@ -73,7 +73,7 @@ class Plugin extends PluginBase
 
 //        Relation::morphMap([
 //            'catalogitem' => Catalogitem::class,
-//            'genericpage' => Genericpage::class,
+//            'custompage' => Custompage::class,
 //            'bundle'      => Bundle::class,
 //            'product'     => Product::class,
 //        ]);
@@ -81,7 +81,7 @@ class Plugin extends PluginBase
 //        \Event::listen('qcsoft.cms.registerPageTypes', function ()
 //        {
 //            return [
-//                Genericpage::class,
+//                Custompage::class,
 //                Product::class,
 //                Category::class,
 //            ];
@@ -381,7 +381,7 @@ class Plugin extends PluginBase
                 {
                     $filename = 'home';
                 }
-                elseif (get_class($pageObj) !== Genericpage::class)
+                elseif (get_class($pageObj) !== Custompage::class)
                 {
                     $filename = \Str::snake(class_basename($pageObj), '-');
                 }

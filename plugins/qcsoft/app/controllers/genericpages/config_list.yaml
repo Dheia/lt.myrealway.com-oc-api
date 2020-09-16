@@ -1,6 +1,6 @@
-list: $/qcsoft/app/models/genericpage/columns.yaml
-modelClass: Qcsoft\App\Models\Genericpage
-title: Genericpages
+list: $/qcsoft/app/models/custompage/columns.yaml
+modelClass: Qcsoft\App\Models\Custompage
+title: Custompages
 noRecordsMessage: 'backend::lang.list.no_records'
 showSetup: true
 showCheckboxes: true
@@ -9,4 +9,4 @@ toolbar:
     buttons: list_toolbar
     search:
         prompt: 'backend::lang.list.search_prompt'
-recordUrl: 'qcsoft/app/genericpages/update/:id'
+recordUrl: 'qcsoft/app/custompages/update/:id'

@@ -5,9 +5,11 @@ use October\Rain\Database\Relations\Relation;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
 use Qcsoft\App\Models\Catalogitem;
+use Qcsoft\App\Models\Entity;
 use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Filteroption;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
+use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 
@@ -26,12 +28,19 @@ class WriteApiCache
     public function __construct()
     {
         $this->types = collect(['bundle', 'bundle_product', 'catalogitem', 'filter', 'filteroption',
-                                'genericpage', 'page', 'pagebypath', 'product']);
+                                'custompage', 'page', 'pagebypath', 'product']);
     }
 
     public function write($type, $offset)
     {
-//        $this->types = collect(['page']);
+        $pages = Page::orderBy('id')->take(100)
+            ->with('layout', 'owner')
+            ->withOwnerTypeId()
+            ->get();
+        dump($pages->toArray());
+        return false;
+        die;
+        $this->types = collect(['page']);
 //        $this->types = collect(['bundle_product']);
 
         $this->writeStartTime = microtime(true);
@@ -120,7 +129,8 @@ class WriteApiCache
 
         foreach ($groups as $type_id => $items)
         {
-            $modelclass = Relation::getMorphedModel($type_id);
+//            $modelclass = Relation::getMorphedModel($type_id);
+            $modelclass = Entity::classnameById($type_id);
 
             $require = $modelclass::getPageRequireEntities($items->pluck('owner_id'));
 
@@ -293,9 +303,9 @@ class WriteApiCache
         return $resultList;
     }
 
-    protected function genericpage(&$offset, $limit)
+    protected function custompage(&$offset, $limit)
     {
-        $resultList = Genericpage::orderBy('id')->skip($offset)->take($limit)
+        $resultList = Custompage::orderBy('id')->skip($offset)->take($limit)
             ->get()
             ->keyBy('id');
 

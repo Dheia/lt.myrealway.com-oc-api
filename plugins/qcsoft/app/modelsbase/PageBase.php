@@ -3,8 +3,9 @@
 use October\Rain\Database\Model;
 use October\Rain\Database\Traits\Sluggable;
 use Qcsoft\App\Models\Bundle;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Genericblock;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Product;
 
 /**
@@ -14,9 +15,10 @@ use Qcsoft\App\Models\Product;
  * @property string $custom_seo_title
  * @property Genericblock $genericblocks
  * @property int $id
+ * @property Layout $layout
+ * @property int $layout_id
  * @property mixed $owner
  * @property int $owner_id
- * @property int $owner_type_id
  * @property string $path
  * @property string $seo_desc
  */
@@ -34,6 +36,10 @@ class PageBase extends Model
 
     public $morphTo = [
         'owner' => ['type' => 'owner_type_id'],
+    ];
+
+    public $belongsTo = [
+        'layout' => [Layout::class],
     ];
 
     public $morphMany = [

@@ -29,7 +29,7 @@ import BundleList from './lists/Bundle.vue'
 import ProductList from './lists/Product.vue'
 import FilterList from './lists/Filter.vue'
 import CategoryList from './lists/Category.vue'
-import GenericpageList from './lists/Genericpage.vue'
+import CustompageList from './lists/Custompage.vue'
 import PageList from './lists/Page.vue'
 import CatalogitemList from './lists/Catalogitem.vue'
 
@@ -74,8 +74,8 @@ const router = new VueRouter({
             component: CategoryList,
         },
         {
-            path     : '/genericpages',
-            component: GenericpageList,
+            path     : '/custompages',
+            component: CustompageList,
         },
         {
             path     : '/pages',

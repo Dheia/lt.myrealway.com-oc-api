@@ -5,7 +5,7 @@ use Qcsoft\App\Models\Page;
 use Qcsoft\App\Traits\CompositeModel;
 
 /**
- * Class GenericpageBase
+ * Class CustompageBase
  * @package Qcsoft\App\Modelsbase
  * @property string $code
  * @property string $content
@@ -13,19 +13,19 @@ use Qcsoft\App\Traits\CompositeModel;
  * @property string $name
  * @property Page $page
  */
-class GenericpageBase extends Model
+class CustompageBase extends Model
 {
     public static $type_id;
 
-//    use CompositeModel;
-//
-//    public $compositeModel = [
-//        'page' => [],
-//    ];
+    use CompositeModel;
+
+    public $compositeModel = [
+        'page' => [],
+    ];
 
     public $timestamps = false;
 
-    public $table = 'qcsoft_app_genericpage';
+    public $table = 'qcsoft_app_custompage';
 
     public $morphOne = [
         'page' => [Page::class, 'name' => 'owner', 'delete' => true],

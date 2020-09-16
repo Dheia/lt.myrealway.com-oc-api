@@ -6,7 +6,7 @@ schema {
 
 union CatalogitemItem = Bundle | Product
 
-union PageOwner = Bundle | Genericpage | Product
+union PageOwner = Bundle | Custompage | Product
 
 "Catalog product bundles"
 type Bundle {
@@ -78,8 +78,8 @@ type File {
     updated_at: String
 }
 
-"Genericpage"
-type Genericpage {
+"Custompage"
+type Custompage {
     content: String
     id: ID
     name: String

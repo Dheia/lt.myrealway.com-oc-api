@@ -5,7 +5,7 @@ namespace Qcsoft\App\GraphQL\Type;
 use Qcsoft\App\GraphQL\Types;
 use GraphQL\Type\Definition\UnionType;
 use Qcsoft\App\Models\Bundle;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Product;
 
 class PageOwnerType extends UnionType
@@ -17,16 +17,16 @@ class PageOwnerType extends UnionType
             'types'       => function ()
             {
                 return [
-                    Types::genericpage(),
+                    Types::custompage(),
                     Types::bundle(),
                     Types::product(),
                 ];
             },
             'resolveType' => function ($value)
             {
-                if ($value instanceof Genericpage)
+                if ($value instanceof Custompage)
                 {
-                    return Types::genericpage();
+                    return Types::custompage();
                 }
                 elseif ($value instanceof Bundle)
                 {

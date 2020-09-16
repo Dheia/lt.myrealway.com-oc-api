@@ -11,7 +11,7 @@ use Qcsoft\App\Models\CatalogitemRelevantitem;
 use Qcsoft\App\Models\Category;
 use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Filteroption;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 use System\Models\File;
@@ -31,13 +31,13 @@ class SeedHelper
         Category::truncate();
         Filter::truncate();
         Filteroption::truncate();
-        Genericpage::truncate();
+        Custompage::truncate();
         Page::truncate();
         Product::truncate();
         File::truncate();
     }
 
-    public function step2_seedGenericpages()
+    public function step2_seedCustompages()
     {
         $data = [
             ['home', '/', 'Home', '<p>Home page</p>'],
@@ -52,7 +52,7 @@ class SeedHelper
         foreach ($data as $item)
         {
             $page = new Page();
-            $page->owner = new Genericpage();
+            $page->owner = new Custompage();
             $page->owner->name = $item[2];
             $page->owner->code = $item[0];
             $page->owner->content = $item[3];

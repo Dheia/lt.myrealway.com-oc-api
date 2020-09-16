@@ -9,7 +9,8 @@ use Qcsoft\App\Dev\SeedHelper;
 use Qcsoft\App\Classes\WriteApiCache;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\Catalogitem;
-use Qcsoft\App\Models\Genericpage;
+use Qcsoft\App\Models\Custompage;
+use Qcsoft\App\Models\Custompage;
 use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
@@ -34,24 +35,46 @@ class Dev extends Controller
     public function step_1_cleanup()
     {
         (new SeedHelper())->step1_cleanup();
+$layout=Layout::first();
+        $page = new Page();
+        $page->layout = $layout;
+        $page->owner = new Custompage();
+        $page->owner->name = 'qwer123';
+        $page->owner->code = 'asdf234';
+        $page->owner->content = '3 8gh834q0 gh34q08gh 83q04hg34q';
+        $page->path = 'asdfzxcv';
+        $page->owner->save();
+        $page->save();
+
+
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_2_seed_base_and_import_old_site()
+    public function step_2_seed_custompages()
     {
-        (new SeedHelper())->step2_seedGenericpages();
+        (new SeedHelper())->step2_seedCustompages();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
+    }
+
+    public function step_3_import_old_site()
+    {
         (new SeedHelper())->step3_importOldSite();
+        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
+    }
+
+    public function step_4_seed_filters()
+    {
         (new SeedHelper())->step4_seedFilters();
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_3_generate_random_bundles()
+    public function step_5_generate_random_bundles()
     {
-        (new RandomBundles())->generate(20);
+        (new RandomBundles())->generate(5000);
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_4_make_random_filter_bindings($offset = 0)
+    public function step_6_make_random_filter_bindings($offset = 0)
     {
         \Debugbar::disable();
 
@@ -69,7 +92,7 @@ class Dev extends Controller
         }
     }
 
-    public function step_5_make_random_catalogitem_relevant_items($offset = 0)
+    public function step_7_make_random_catalogitem_relevant_items($offset = 0)
     {
         \Debugbar::disable();
 
@@ -87,23 +110,14 @@ class Dev extends Controller
         }
     }
 
-//    public function step_6_write_api_base()
-//    {
-//        $api = new WriteApiCache();
-//
-//        $api->writeBase();
-//
-//        return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
-//    }
-
-    public function step_7_rm_rf_api_cache($type = null, $offset = null)
+    public function step_8_rm_rf_api_cache($type = null, $offset = null)
     {
         system('rm -rf ' . storage_path('apicache'));
 
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_8_write_api_cache($type = null, $offset = null)
+    public function step_9_write_api_cache($type = null, $offset = null)
     {
         $api = new WriteApiCache();
 
@@ -114,18 +128,6 @@ class Dev extends Controller
         }
 
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
-    }
-
-    public function step_9_write_page_requires($type = null, $offset = 0)
-    {
-        $types = [
-            'genericpage' => Genericpage::class,
-            'bundle'      => Product::class,
-            'product'     => Product::class,
-        ];
-
-        $requires = (new Product())->getPageRequireEntities(['limit' => 10, 'offset' => $offset]);
-        dd($requires);
     }
 
 }

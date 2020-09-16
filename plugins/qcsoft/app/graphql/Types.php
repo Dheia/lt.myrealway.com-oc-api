@@ -12,7 +12,7 @@ use Qcsoft\App\GraphQL\Type\CategoryType;
 use Qcsoft\App\GraphQL\Type\FileType;
 use Qcsoft\App\GraphQL\Type\FilteroptionType;
 use Qcsoft\App\GraphQL\Type\FilterType;
-use Qcsoft\App\GraphQL\Type\GenericpageType;
+use Qcsoft\App\GraphQL\Type\CustompageType;
 use Qcsoft\App\GraphQL\Type\PageOwnerType;
 use Qcsoft\App\GraphQL\Type\PageType;
 use Qcsoft\App\GraphQL\Type\ProductType;
@@ -41,7 +41,7 @@ class Types
     public static function file() { return static::get(FileType::class); }
     public static function filter() { return static::get(FilterType::class); }
     public static function filteroption() { return static::get(FilteroptionType::class); }
-    public static function genericpage() { return static::get(GenericpageType::class); }
+    public static function custompage() { return static::get(CustompageType::class); }
     public static function pageOwner() { return static::get(PageOwnerType::class); }
     public static function page() { return static::get(PageType::class); }
     public static function product() { return static::get(ProductType::class); }
