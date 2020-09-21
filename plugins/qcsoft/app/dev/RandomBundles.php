@@ -5,12 +5,20 @@ use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
 use Qcsoft\App\Models\BundleProductCustomergroup;
 use Qcsoft\App\Models\Catalogitem;
+use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 
 class RandomBundles
 {
     protected $allProducts;
+
+    protected $layout_id;
+
+    public function __construct()
+    {
+        $this->layout_id = Layout::cached()->firstWhere('code', 'bundle_page_default')->id;
+    }
 
     public function generate($count = 1000)
     {
@@ -125,9 +133,9 @@ class RandomBundles
     protected function makeRandomPage(Bundle $bundle)
     {
         return [
-            'owner_type_id' => Bundle::$type_id,
-            'owner_id'      => $bundle->id,
-            'path'          => \Str::slug($bundle->catalogitem->name) . '-' . $bundle->catalogitem->id,
+            'layout_id' => $this->layout_id,
+            'owner_id'  => $bundle->id,
+            'path'      => \Str::slug($bundle->catalogitem->name) . '-' . $bundle->catalogitem->id,
         ];
     }
 

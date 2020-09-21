@@ -27,20 +27,28 @@ class WriteApiCache
 
     public function __construct()
     {
-        $this->types = collect(['bundle', 'bundle_product', 'catalogitem', 'filter', 'filteroption',
-                                'custompage', 'page', 'pagebypath', 'product']);
+        $this->types = collect([
+            'entity',
+            'layout',
+            'bundle', 'bundle_product', 'catalogitem',
+            'filter', 'filteroption',
+            'custompage', 'page', 'pagebypath', 'product']);
     }
 
     public function write($type, $offset)
     {
-        $pages = Page::orderBy('id')->take(100)
-            ->with('layout', 'owner')
-            ->withOwnerTypeId()
-            ->get();
-        dump($pages->toArray());
-        return false;
-        die;
-        $this->types = collect(['page']);
+//        $query = Page::orderBy('id')->take(100)
+//            ->with('layout', 'owner')//            ->withOwnerTypeId()
+//        ;
+////        echo($query->toSql());die;
+//        $pages = $query->get();
+//        dump($pages->toArray());
+//        return false;
+//        die;
+
+
+        $this->types = collect(['entity']);
+//        $this->types = collect(['page']);
 //        $this->types = collect(['bundle_product']);
 
         $this->writeStartTime = microtime(true);
@@ -116,6 +124,19 @@ class WriteApiCache
                 file_put_contents(storage_path("apicache/$type/{$key}.json"), json_encode($item));
             }
         }
+    }
+
+
+    protected function entity(&$offset, $limit)
+    {
+        if ($offset)
+        {
+            return [];
+        }
+
+        $offset++;
+
+        return ['all' => Entity::where('is_exposed', true)->select(['id', 'name'])->get()->toArray()];
     }
 
 

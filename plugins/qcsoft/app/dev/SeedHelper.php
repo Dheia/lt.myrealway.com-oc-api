@@ -9,9 +9,11 @@ use Qcsoft\App\Models\CatalogitemCustomergroup;
 use Qcsoft\App\Models\CatalogitemFilteroption;
 use Qcsoft\App\Models\CatalogitemRelevantitem;
 use Qcsoft\App\Models\Category;
+use Qcsoft\App\Models\Entity;
 use Qcsoft\App\Models\Filter;
 use Qcsoft\App\Models\Filteroption;
 use Qcsoft\App\Models\Custompage;
+use Qcsoft\App\Models\Layout;
 use Qcsoft\App\Models\Page;
 use Qcsoft\App\Models\Product;
 use System\Models\File;
@@ -29,15 +31,34 @@ class SeedHelper
         CatalogitemFilteroption::truncate();
         CatalogitemRelevantitem::truncate();
         Category::truncate();
+        Custompage::truncate();
         Filter::truncate();
         Filteroption::truncate();
-        Custompage::truncate();
+        Layout::truncate();
         Page::truncate();
         Product::truncate();
         File::truncate();
     }
 
-    public function step2_seedCustompages()
+    public function step2_seedLayouts()
+    {
+        $data = [
+            [Entity::idByClassname(Custompage::class), 'Custom page', 'custom_page'],
+            [Entity::idByClassname(Product::class), 'Product page', 'product_page_default'],
+            [Entity::idByClassname(Bundle::class), 'Bundle page', 'bundle_page_default'],
+        ];
+
+        foreach ($data as $item)
+        {
+            $record = new Layout();
+            $record->owner_type_id = $item[0];
+            $record->name = $item[1];
+            $record->code = $item[2];
+            $record->save();
+        }
+    }
+
+    public function step3_seedCustompages()
     {
         $data = [
             ['home', '/', 'Home', '<p>Home page</p>'],
@@ -49,26 +70,31 @@ class SeedHelper
             ['contacts', 'contacts', 'Contacts', 'Contacts'],
         ];
 
+        $layout = Layout::all()->firstWhere('code', 'custom_page');
+
         foreach ($data as $item)
         {
+            $owner = new Custompage();
+            $owner->name = $item[2];
+            $owner->code = $item[0];
+            $owner->content = $item[3];
+            $owner->save();
+
             $page = new Page();
-            $page->owner = new Custompage();
-            $page->owner->name = $item[2];
-            $page->owner->code = $item[0];
-            $page->owner->content = $item[3];
+            $page->layout_id = $layout->id;
+            $page->owner_id = $owner->id;
             $page->path = $item[1];
-            $page->owner->save();
             $page->save();
         }
 
     }
 
-    public function step3_importOldSite()
+    public function step4_importOldSite()
     {
         (new ImportOldSite())->import();
     }
 
-    public function step4_seedFilters()
+    public function step5_seedFilters()
     {
         $filtersData = [
             'Color'    => ['Red', 'Green', 'Blue', 'Yellow', 'Cyan', 'Magenta', 'Black', 'Grey', 'White'],
