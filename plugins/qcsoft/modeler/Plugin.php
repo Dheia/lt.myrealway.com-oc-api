@@ -34,7 +34,9 @@ class Plugin extends PluginBase
         \Event::listen('qcsoft.modeler.generateMigration',
             function (DatabaseTableModel $dbTableModel, OrmModel $model)
             {
-                $hasNestedTree = collect($model->entity->options)->firstWhere('type', 'nested_tree');
+                $hasNestedTree = collect($model->entity->options)
+                    ->where('is_enabled', 1)
+                    ->firstWhere('type', 'nested_tree');
 
                 $fieldsWithColumn = $model->fields
                     ->filter(function ($field)
@@ -86,9 +88,6 @@ class Plugin extends PluginBase
             /** @var OrmField $field */
             foreach ($model->fields as $field)
             {
-//                \Debugbar::info();
-
-
                 switch ($field->attribute->type)
                 {
                     case 'bool':
@@ -230,6 +229,11 @@ class Plugin extends PluginBase
             {
                 $option = (object)$option;
 
+                if (!$option->is_enabled)
+                {
+                    continue;
+                }
+                
                 if ($option->type === 'composite')
                 {
                     $model
