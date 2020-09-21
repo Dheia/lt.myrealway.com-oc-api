@@ -8,4 +8,16 @@ class Layout extends LayoutBase
 
     public $rules = [];
 
+    protected static $cached;
+
+    public static function cached()
+    {
+        if (!static::$cached)
+        {
+            static::$cached = static::all();
+        }
+
+        return static::$cached;
+    }
+
 }

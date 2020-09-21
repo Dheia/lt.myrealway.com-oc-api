@@ -17,11 +17,11 @@ class CustompageBase extends Model
 {
     public static $type_id;
 
-    use CompositeModel;
-
-    public $compositeModel = [
-        'page' => [],
-    ];
+//    use CompositeModel;
+//
+//    public $compositeModel = [
+//        'page' => [],
+//    ];
 
     public $timestamps = false;
 

@@ -24,12 +24,12 @@ class ProductBase extends Model
 {
     public static $type_id;
 
-    use CompositeModel;
-
-    public $compositeModel = [
-        'catalogitem' => [],
-        'page' => [],
-    ];
+//    use CompositeModel;
+//
+//    public $compositeModel = [
+//        'catalogitem' => [],
+//        'page' => [],
+//    ];
 
     public $timestamps = false;
 
