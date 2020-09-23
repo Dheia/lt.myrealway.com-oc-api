@@ -1,5 +1,6 @@
 <?php namespace Qcsoft\App\Models;
 
+use October\Rain\Database\Collection;
 use Qcsoft\App\Modelsbase\LayoutBase;
 
 class Layout extends LayoutBase
@@ -10,7 +11,7 @@ class Layout extends LayoutBase
 
     protected static $cached;
 
-    public static function cached()
+    public static function cached(): Collection
     {
         if (!static::$cached)
         {

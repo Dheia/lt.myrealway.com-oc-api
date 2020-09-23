@@ -63,7 +63,7 @@ class Dev extends Controller
 
     public function step_6_generate_random_bundles()
     {
-        (new RandomBundles())->generate(20);
+        (new RandomBundles())->generate(2000);
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
@@ -110,11 +110,11 @@ class Dev extends Controller
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_10_write_api_cache($type = null, $offset = null)
+    public function step_10_write_api_cache($type = null, $contextStr = '')
     {
         $api = new WriteApiCache();
 
-        if ($next = $api->write($type, $offset))
+        if ($next = $api->write(2, $type, $contextStr))
         {
 //            dd($next);
             return '<script>location.href="' . $this->actionUrl(__FUNCTION__ . "/$next") . '"</script>';

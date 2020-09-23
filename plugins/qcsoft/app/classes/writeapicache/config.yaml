@@ -1,0 +1,31 @@
+types:
+  bundle:
+    storeType: 'onebyone'
+    limit: 100
+  bundle_product:
+    storeType: 'paged'
+    pageSize: 5
+    pagesLimit: 5
+  catalogitem:
+    storeType: 'onebyone'
+    limit: 100
+  custompage:
+    storeType: 'onebyone'
+    limit: 100
+  entity:
+    storeType: 'all'
+  filter:
+    storeType: 'all'
+  filteroption:
+    storeType: 'all'
+  layout:
+    storeType: 'all'
+  page:
+    storeType: 'onebyone'
+    limit: 100
+  pagebypath:
+    storeType: 'onebyone'
+    limit: 100
+  product:
+    storeType: 'onebyone'
+    limit: 100
