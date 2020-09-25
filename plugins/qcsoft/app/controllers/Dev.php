@@ -2,17 +2,8 @@
 
 use Backend\Classes\Controller;
 use BackendMenu;
-use Illuminate\Database\Events\StatementPrepared;
-use October\Rain\Database\Relations\Relation;
-use Qcsoft\App\Dev\ImportOldSite;
+use Qcsoft\App\Classes\Writeapicache\WriteApiCache;
 use Qcsoft\App\Dev\SeedHelper;
-use Qcsoft\App\Classes\WriteApiCache;
-use Qcsoft\App\Models\Bundle;
-use Qcsoft\App\Models\Catalogitem;
-use Qcsoft\App\Models\Custompage;
-use Qcsoft\App\Models\Layout;
-use Qcsoft\App\Models\Page;
-use Qcsoft\App\Models\Product;
 use Qcsoft\Ocext\Behaviors\MaintenanceController;
 use Qcsoft\App\Dev\RandomBundles;
 
@@ -110,16 +101,16 @@ class Dev extends Controller
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 
-    public function step_10_write_api_cache($type = null, $contextStr = '')
+    public function step_10_write_api_cache($type = null, $innerOffset = '')
     {
         $api = new WriteApiCache();
 
-        if ($next = $api->write(2, $type, $contextStr))
+        if ($next = $api->write(0.3, $type, $innerOffset))
         {
 //            dd($next);
             return '<script>location.href="' . $this->actionUrl(__FUNCTION__ . "/$next") . '"</script>';
         }
-
+die;
         return $this->asExtension(MaintenanceController::class)->index(__FUNCTION__);
     }
 

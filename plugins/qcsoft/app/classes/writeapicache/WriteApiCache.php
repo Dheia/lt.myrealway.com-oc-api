@@ -1,7 +1,6 @@
-<?php namespace Qcsoft\App\Classes;
+<?php namespace Qcsoft\App\Classes\Writeapicache;
 
 use October\Rain\Support\Facades\Yaml;
-use Qcsoft\App\Classes\Writeapicache\TypeHandler;
 use Qcsoft\App\Models\Bundle;
 use Qcsoft\App\Models\BundleProduct;
 use Qcsoft\App\Models\Catalogitem;
@@ -16,10 +15,10 @@ class WriteApiCache
 
     public function __construct()
     {
-        $this->config = Yaml::parseFile(__DIR__ . '/writeapicache/config.yaml');
+        $this->config = Yaml::parseFile(__DIR__ . '/config.yaml');
     }
 
-    public function write($maxTimeSeconds, $type = null, $contextStr = '')
+    public function write($maxTimeSeconds, $type = null, $innerOffset = null)
     {
         $timeStart = microtime(true);
 
@@ -27,86 +26,52 @@ class WriteApiCache
         $allTypeKeys = array_keys($allTypes);
         $type = $type ?: array_first($allTypeKeys);
 
-        $type = 'entity';
-        $type = 'filter';
-        $type = 'filteroption';
-        $type = 'layout';
-        $type = 'page';
-        $type = 'bundle';
+//        $type = 'entity';
+//        $type = 'filter';
+//        $type = 'filteroption';
+//        $type = 'layout';
+//        $type = 'page';
+//        $type = 'bundle';
 
         $this->makeTypeDir($type);
 
-        $typeHandler = $this->makeTypeHandler($type, $allTypes[$type], $contextStr);
+        $typeHandler = $this->makeTypeHandler($type, $allTypes[$type], $innerOffset);
 
         for ($i = 0; $i < 100; $i++)
         {
-            if ($typeHandler->isFinished())
+            if (!$typeHandler->valid())
             {
-//                dd($typeHandler);
-                $nextType = array_get($allTypeKeys, array_search($type, $allTypeKeys) + 1);
-                dd($nextType);
-//                if (!$type)
-//                {
-//                    return false;
-//                }
-//
-//                $offset = 0;
+                $type = array_get($allTypeKeys, array_search($type, $allTypeKeys) + 1);
 
-                continue;
+                if (!$type)
+                {
+                    return false;
+                }
+
+                $innerOffset = 0;
+
+                $typeHandler = $this->makeTypeHandler($type, $allTypes[$type], $innerOffset);
             }
 
-            $result = $typeHandler->getCurrentBlock();
+            $items = $typeHandler->current();
 
-            foreach ($result as $key => $item)
+            foreach ($items as $key => $item)
             {
                 file_put_contents(storage_path("apicache/$type/$key.json"), json_encode($item));
             }
 
-            $typeHandler->moveToNextBlock();
-
-            sleep(1);
+            $typeHandler->next();
 
             $timePassedTotal = microtime(true) - $timeStart;
 
-            if (microtime(true) - $timeStart > $maxTimeSeconds)
+            if ($timePassedTotal > $maxTimeSeconds)
             {
-                return "$type/" . $typeHandler->contextToStr();
+                return "$type/$innerOffset";
             }
 
-            dump($typeHandler->context);
-//
-//            if ($prevOffset !== $offset)
-//            {
-//                $this->writeChunk($type, $result);
-//            }
-//            else
-//            {
-//                $type = $this->typesConfig->get($this->typesConfig->search($type) + 1);
-//
-//                if (!$type)
-//                {
-//                    return false;
-//                }
-//
-//                $offset = 0;
-//            }
-//
-//            $timePassedTotal = microtime(true) - $timeStart;
-//
-//            if ($timePassedTotal > $maxTimeSeconds)
-//            {
-//                return "$type/$offset";
-//            }
         }
 
         return false;
-    }
-
-    public function lastWriteStatus()
-    {
-        return [
-            'isFinished' => true
-        ];
     }
 
     protected function makeTypeDir($type)
@@ -117,11 +82,11 @@ class WriteApiCache
         }
     }
 
-    protected function makeTypeHandler($type, $config, $contextStr): TypeHandler
+    protected function makeTypeHandler($type, $config, $innerOffset): TypeHandler
     {
-        $classname = __NAMESPACE__ . '\\writeapicache\\types\\' . \Str::studly($type);
+        $classname = __NAMESPACE__ . '\\Types\\' . \Str::studly($type);
 
-        return $classname::fromContextStr($config, $contextStr);
+        return new $classname($config, (int)$innerOffset);
     }
 
     protected function page($offset, $limit)

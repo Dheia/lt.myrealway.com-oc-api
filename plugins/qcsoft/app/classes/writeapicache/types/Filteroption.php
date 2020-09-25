@@ -1,8 +1,8 @@
 <?php namespace Qcsoft\App\Classes\Writeapicache\Types;
 
-use Qcsoft\App\Classes\Writeapicache\TypeHandlerAll;
+use Qcsoft\App\Classes\Writeapicache\Storagetypes\AllInOneHandler;
 
-class Filteroption extends TypeHandlerAll
+class Filteroption extends AllInOneHandler
 {
     public function getById($id)
     {

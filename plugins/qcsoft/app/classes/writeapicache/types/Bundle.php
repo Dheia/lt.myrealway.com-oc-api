@@ -1,9 +1,8 @@
 <?php namespace Qcsoft\App\Classes\Writeapicache\Types;
 
-use Qcsoft\App\Classes\Writeapicache\TypeHandlerOneByOne;
-use Qcsoft\App\Models\BundleProduct;
+use Qcsoft\App\Classes\Writeapicache\Storagetypes\OneByOneHandler;
 
-class Bundle extends TypeHandlerOneByOne
+class Bundle extends OneByOneHandler
 {
     public function getRange()
     {

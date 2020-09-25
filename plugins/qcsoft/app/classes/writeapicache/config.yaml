@@ -1,31 +1,31 @@
 types:
   bundle:
-    storeType: 'onebyone'
+    storeType: 'oneByOne'
     limit: 100
-  bundle_product:
-    storeType: 'paged'
-    pageSize: 5
-    pagesLimit: 5
-  catalogitem:
-    storeType: 'onebyone'
-    limit: 100
-  custompage:
-    storeType: 'onebyone'
-    limit: 100
+#  bundle_product:
+#    storeType: 'paged'
+#    pageSize: 5
+#    pagesLimit: 5
+#  catalogitem:
+#    storeType: 'oneByOne'
+#    limit: 100
+#  custompage:
+#    storeType: 'oneByOne'
+#    limit: 100
   entity:
-    storeType: 'all'
+    storeType: 'allInOne'
   filter:
-    storeType: 'all'
+    storeType: 'allInOne'
   filteroption:
-    storeType: 'all'
+    storeType: 'allInOne'
   layout:
-    storeType: 'all'
-  page:
-    storeType: 'onebyone'
-    limit: 100
-  pagebypath:
-    storeType: 'onebyone'
-    limit: 100
-  product:
-    storeType: 'onebyone'
-    limit: 100
+    storeType: 'allInOne'
+#  page:
+#    storeType: 'oneByOne'
+#    limit: 100
+#  pagebypath:
+#    storeType: 'oneByOne'
+#    limit: 100
+#  product:
+#    storeType: 'oneByOne'
+#    limit: 100
